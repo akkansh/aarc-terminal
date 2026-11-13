@@ -882,8 +882,8 @@
       "node": "news",
       "data": {
         "ticker": "RELIANCE.NS",
-        "aggregate_sentiment_score": 0.22,
-        "ema_smoothed_sentiment": 0.121,
+        "aggregate_sentiment_score": -0.0,
+        "ema_smoothed_sentiment": 0.032,
         "headlines": [
           {
             "title": "Reliance Industries Limited (RELIANCE.NS) stock price, news, quote and history - Yahoo Finance Australia",
@@ -934,20 +934,6 @@
             }
           },
           {
-            "title": "Reliance Industries Limited. . Reliance Industries has demonstrated robust financial performance over the past five years: \u2022 Revenue has increased around 15x to \u20b91,00,120 crore in FY 2024-25 from \u20b96,599.7 crore in FY 2020-21. \u2022 Our Net Worth has consiste - Facebook",
-            "label": "positive",
-            "score": 0.951,
-            "published_at": "Thu, 28 Aug 2025 07:00:00 GMT",
-            "net_polarity": 0.928,
-            "heuristic_routing": "FINBERT_DIRECT",
-            "lm_matches": {
-              "pos": [
-                "robust"
-              ],
-              "neg": []
-            }
-          },
-          {
             "title": "Earnings Outlook Might Change The Case For Investing In Reliance Stock (RS) - Yahoo Finance",
             "label": "neutral",
             "score": 0.862,
@@ -984,6 +970,18 @@
               "pos": [],
               "neg": []
             }
+          },
+          {
+            "title": "Why Reliance Share Price Is Falling Today: 4 Key Reasons - EBC Financial Group",
+            "label": "negative",
+            "score": 0.866,
+            "published_at": "Tue, 06 Jan 2026 08:00:00 GMT",
+            "net_polarity": -0.851,
+            "heuristic_routing": "FINBERT_DIRECT",
+            "lm_matches": {
+              "pos": [],
+              "neg": []
+            }
           }
         ],
         "news_available": true,
@@ -993,7 +991,7 @@
           "margin_health": 0.0
         },
         "composite_aspect_score": 0.0,
-        "tone_shift_index": 0.13,
+        "tone_shift_index": 0.68,
         "tone_shift_regime": "STABLE",
         "aspect_relevance": {
           "risk_solvency": 0,
@@ -1005,13 +1003,13 @@
     {
       "node": "bull",
       "data": {
-        "bull_thesis": "\u2022 Trend regime is BULLISH with 5-day momentum at 2.19%, supporting an active Half-Kelly capacity allocation of 9.52%.\n\u2022 RSI-14 sits at 81.32 with contained 95% daily VaR of -2.5%, providing an asymmetrical entry window against 26.25% annualized vol.\n\u2022 Aggregate news sentiment reads 0.22 with 1 price/volume anomalies reflecting institutional accumulation."
+        "bull_thesis": "\u2022 Trend regime is BULLISH with 5-day momentum at 2.19%, supporting an active Half-Kelly capacity allocation of 9.52%.\n\u2022 RSI-14 sits at 81.32 with contained 95% daily VaR of -2.5%, providing an asymmetrical entry window against 26.25% annualized vol.\n\u2022 Aggregate news sentiment reads -0.0 with 1 price/volume anomalies reflecting institutional accumulation."
       }
     },
     {
       "node": "bear",
       "data": {
-        "bear_thesis": "\u2022 Tail risk is severe: 95% daily VaR of -2.5% with 26.25% annualized vol exposes any 9.52% allocation to fat-tail liquidation.\n\u2022 14-day RSI sits at 81.32; any momentum stalling will trigger abrupt mean-reversion and trap retail longs chasing 1339.7.\n\u2022 1 price/volume anomalies in 10 sessions combined with headline sentiment (0.22) flag institutional distribution risk."
+        "bear_thesis": "\u2022 Tail risk is severe: 95% daily VaR of -2.5% with 26.25% annualized vol exposes any 9.52% allocation to fat-tail liquidation.\n\u2022 14-day RSI sits at 81.32; any momentum stalling will trigger abrupt mean-reversion and trap retail longs chasing 1339.7.\n\u2022 1 price/volume anomalies in 10 sessions combined with headline sentiment (-0.0) flag institutional distribution risk."
       }
     },
     {
@@ -1038,13 +1036,13 @@
         "bayesian_calibration": {
           "raw_ai_confidence": 88,
           "calibrated_confidence": 96,
-          "posterior_mean_accuracy_pct": 83.4,
-          "credible_lower_bound_pct": 64.4,
-          "credible_upper_bound_pct": 96.3,
+          "posterior_mean_accuracy_pct": 84.7,
+          "credible_lower_bound_pct": 65.5,
+          "credible_upper_bound_pct": 97.3,
           "bayesian_allocation_multiplier": 1.2,
-          "alpha": 10.85,
-          "beta": 2.17,
-          "sample_updates": 8,
+          "alpha": 10.22,
+          "beta": 1.84,
+          "sample_updates": 9,
           "forgetting_factor_lambda": 0.85,
           "temperature_scaling": {
             "raw_probability": 0.88,
@@ -1059,7 +1057,7 @@
             "is_suppressed": false,
             "suppression_reason": null,
             "regime_scale_factor": 1.08,
-            "raw_input_confidence": 90,
+            "raw_input_confidence": 91,
             "gated_confidence": 96,
             "cleared_high_confidence": true,
             "p_trending": 0.836,
@@ -1080,7 +1078,7 @@
           "is_suppressed": false,
           "suppression_reason": null,
           "regime_scale_factor": 1.08,
-          "raw_input_confidence": 90,
+          "raw_input_confidence": 91,
           "gated_confidence": 96,
           "cleared_high_confidence": true,
           "p_trending": 0.836,
@@ -1096,7 +1094,7 @@
             },
             {
               "feature": "sentiment_score",
-              "value": 0.22,
+              "value": -0.0,
               "impact": "+22.1%"
             },
             {
@@ -1133,10 +1131,10 @@
         ],
         "confidence_breakdown": {
           "raw_model_confidence": 88,
-          "bayesian_expected_accuracy_pct": 83.4,
+          "bayesian_expected_accuracy_pct": 84.7,
           "credible_interval_90": [
-            64.4,
-            96.3
+            65.5,
+            97.3
           ],
           "bayesian_allocation_multiplier": 1.2,
           "rolling_accuracy_multiplier": 1.0,
@@ -1198,7 +1196,7 @@
           "liquidity_cashflow": 0.0,
           "margin_health": 0.0
         },
-        "tone_shift_index": 0.13,
+        "tone_shift_index": 0.68,
         "tone_shift_regime": "STABLE"
       }
     }
@@ -9409,25 +9407,25 @@
       "node": "quant",
       "data": {
         "ticker": "GOOGL",
-        "current_price": 295.06,
-        "annualized_volatility": 33.33,
-        "daily_VaR_95_pct": -3.14,
-        "suggested_stop_loss_atr_pct": 8.07,
+        "current_price": 295.52,
+        "annualized_volatility": 33.29,
+        "daily_VaR_95_pct": -3.13,
+        "suggested_stop_loss_atr_pct": 8.06,
         "half_kelly_allocation_pct": 4.5,
         "half_kelly_cap_pct": 4.5,
         "recent_10d_anomalies": 0,
-        "rsi_14": 38.13,
-        "recent_5d_return_pct": 3.61,
+        "rsi_14": 38.32,
+        "recent_5d_return_pct": 3.77,
         "sma20_trend": "BEARISH",
         "close_gt_sma20": false,
-        "sma20_val": 303.38,
-        "sma50_val": 328.17,
-        "sma20_z_score": -0.37,
+        "sma20_val": 303.4,
+        "sma50_val": 328.18,
+        "sma20_z_score": -0.35,
         "bb_upper": 347.89,
-        "bb_middle": 303.38,
-        "bb_lower": 258.87,
-        "bb_width_pct": 29.34,
-        "garch_vol_forecast_pct": 33.08,
+        "bb_middle": 303.4,
+        "bb_lower": 258.91,
+        "bb_width_pct": 29.33,
+        "garch_vol_forecast_pct": 33.05,
         "volatility_shock_ratio": 0.95,
         "anomaly_telemetry": {
           "is_confirmed_anomaly": false,
@@ -9439,10 +9437,10 @@
             "120d_micro": false
           },
           "scaled_feature_magnitudes": {
-            "return_1d": -0.37,
-            "return_5d": 0.43,
-            "volume_zscore": -0.25,
-            "parkinson_spread": 0.84,
+            "return_1d": -0.32,
+            "return_5d": 0.45,
+            "volume_zscore": -0.23,
+            "parkinson_spread": 0.83,
             "rsi_deviation": -0.25
           }
         },
@@ -9450,42 +9448,42 @@
           "active_state": 0,
           "regime_name": "LOW_VOL_TRENDING",
           "probabilities": {
-            "P_Trending": 0.674,
-            "P_Panic": 0.066,
-            "P_Choppy": 0.26
+            "P_Trending": 0.686,
+            "P_Panic": 0.063,
+            "P_Choppy": 0.252
           },
-          "regime_vol_annual_pct": 26.42,
+          "regime_vol_annual_pct": 26.21,
           "volatility_multiplier": 0.9,
           "kelly_scale_factor": 1.15,
           "stop_loss_multiplier": 1.0,
           "state_parameters": {
-            "trending_annual_vol": 22.58,
-            "panic_annual_vol": 59.88,
-            "choppy_annual_vol": 27.81
+            "trending_annual_vol": 22.56,
+            "panic_annual_vol": 59.86,
+            "choppy_annual_vol": 27.79
           }
         },
         "temporal_anomaly": {
           "is_temporal_anomaly": false,
-          "temporal_anomaly_score": 0.468,
-          "calibrated_anomaly_confidence": 0.0365,
-          "reconstruction_error": 0.8812,
-          "threshold": 1.2559,
-          "iqr": 0.2944,
+          "temporal_anomaly_score": 0.507,
+          "calibrated_anomaly_confidence": 0.0676,
+          "reconstruction_error": 0.9675,
+          "threshold": 1.2712,
+          "iqr": 0.2977,
           "feature_breakdown": {
-            "return_1d": 0.2323,
-            "volume_zscore": 0.6451,
-            "parkinson_spread": 1.3087,
-            "rsi_deviation": 0.2324,
-            "macd_ratio": 3.3004
+            "return_1d": 0.0628,
+            "volume_zscore": 0.8601,
+            "parkinson_spread": 0.9049,
+            "rsi_deviation": 0.1333,
+            "macd_ratio": 3.9002
           },
           "recent_10d_temporal_count": 0,
           "temperature_scaling": {
-            "reconstruction_error": 0.8812,
-            "threshold": 1.2559,
-            "iqr": 0.2944,
-            "normalized_excess_logit": -2.2915,
+            "reconstruction_error": 0.9675,
+            "threshold": 1.2712,
+            "iqr": 0.2977,
+            "normalized_excess_logit": -1.8364,
             "temperature": 0.7,
-            "calibrated_anomaly_probability": 0.0365,
+            "calibrated_anomaly_probability": 0.0676,
             "cleared_high_confidence": false
           }
         },
@@ -10262,13 +10260,13 @@
             "open": 302.98,
             "high": 304.97,
             "low": 293.44,
-            "close": 295.06,
-            "volume": 21437361,
+            "close": 295.52,
+            "volume": 22840056,
             "is_anomaly": false,
             "bb_upper": 347.89,
-            "bb_middle": 303.38,
-            "bb_lower": 258.87,
-            "sma_50": 328.17
+            "bb_middle": 303.4,
+            "bb_lower": 258.91,
+            "sma_50": 328.18
           }
         ],
         "time_machine_actual_return_pct": null,
@@ -10276,11 +10274,11 @@
         "regime": {
           "state": 1,
           "label": "HIGH_VOLATILITY",
-          "prob_high_vol": 0.833,
+          "prob_high_vol": 0.832,
           "state_probabilities": {},
           "kelly_scale_factor": 1.15
         },
-        "garch_volatility_forecast_pct": 33.08
+        "garch_volatility_forecast_pct": 33.05
       }
     },
     {
@@ -10385,8 +10383,8 @@
             "heuristic_routing": "FINBERT_DIRECT",
             "lm_matches": {
               "pos": [
-                "gains",
-                "strong"
+                "strong",
+                "gains"
               ],
               "neg": []
             }
@@ -10411,13 +10409,13 @@
     {
       "node": "bull",
       "data": {
-        "bull_thesis": "\u2022 Trend regime is BEARISH with 5-day momentum at 3.61%, supporting an active Half-Kelly capacity allocation of 4.5%.\n\u2022 RSI-14 sits at 38.13 with contained 95% daily VaR of -3.14%, providing an asymmetrical entry window against 33.33% annualized vol.\n\u2022 Aggregate news sentiment reads -0.63 with 0 price/volume anomalies reflecting institutional accumulation."
+        "bull_thesis": "\u2022 Trend regime is BEARISH with 5-day momentum at 3.77%, supporting an active Half-Kelly capacity allocation of 4.5%.\n\u2022 RSI-14 sits at 38.32 with contained 95% daily VaR of -3.13%, providing an asymmetrical entry window against 33.29% annualized vol.\n\u2022 Aggregate news sentiment reads -0.63 with 0 price/volume anomalies reflecting institutional accumulation."
       }
     },
     {
       "node": "bear",
       "data": {
-        "bear_thesis": "\u2022 Tail risk is severe: 95% daily VaR of -3.14% with 33.33% annualized vol exposes any 4.5% allocation to fat-tail liquidation.\n\u2022 14-day RSI sits at 38.13; any momentum stalling will trigger abrupt mean-reversion and trap retail longs chasing 295.06.\n\u2022 0 price/volume anomalies in 10 sessions combined with headline sentiment (-0.63) flag institutional distribution risk."
+        "bear_thesis": "\u2022 Tail risk is severe: 95% daily VaR of -3.13% with 33.29% annualized vol exposes any 4.5% allocation to fat-tail liquidation.\n\u2022 14-day RSI sits at 38.32; any momentum stalling will trigger abrupt mean-reversion and trap retail longs chasing 295.52.\n\u2022 0 price/volume anomalies in 10 sessions combined with headline sentiment (-0.63) flag institutional distribution risk."
       }
     },
     {
@@ -10428,9 +10426,9 @@
         "raw_confidence": 80,
         "confidence": 93,
         "recommended_allocation_pct": 5.17,
-        "stop_loss_pct": 8.07,
-        "kill_switch_reason": "Breakout back above 20-day SMA or ATR stop (8.07%).",
-        "verdict_summary": "Bearish trend breakdown confirmed: Spot price trading below 20-day SMA with adverse headline sentiment (-0.63). SHORT position sizing approved at 5.17% with stop at 8.07%.",
+        "stop_loss_pct": 8.06,
+        "kill_switch_reason": "Breakout back above 20-day SMA or ATR stop (8.06%).",
+        "verdict_summary": "Bearish trend breakdown confirmed: Spot price trading below 20-day SMA with adverse headline sentiment (-0.63). SHORT position sizing approved at 5.17% with stop at 8.06%.",
         "rolling_accuracy_telemetry": {
           "rolling_hit_rate_pct": 65.0,
           "resolved_count": 0,
@@ -10444,13 +10442,13 @@
         "bayesian_calibration": {
           "raw_ai_confidence": 80,
           "calibrated_confidence": 93,
-          "posterior_mean_accuracy_pct": 83.4,
-          "credible_lower_bound_pct": 64.4,
-          "credible_upper_bound_pct": 96.3,
+          "posterior_mean_accuracy_pct": 84.7,
+          "credible_lower_bound_pct": 65.5,
+          "credible_upper_bound_pct": 97.3,
           "bayesian_allocation_multiplier": 1.2,
-          "alpha": 10.85,
-          "beta": 2.17,
-          "sample_updates": 8,
+          "alpha": 10.22,
+          "beta": 1.84,
+          "sample_updates": 9,
           "forgetting_factor_lambda": 0.85,
           "temperature_scaling": {
             "raw_probability": 0.8,
@@ -10468,9 +10466,9 @@
             "raw_input_confidence": 86,
             "gated_confidence": 93,
             "cleared_high_confidence": true,
-            "p_trending": 0.674,
-            "p_panic": 0.066,
-            "p_choppy": 0.26
+            "p_trending": 0.686,
+            "p_panic": 0.063,
+            "p_choppy": 0.252
           }
         },
         "temperature_scaling": {
@@ -10489,9 +10487,9 @@
           "raw_input_confidence": 86,
           "gated_confidence": 93,
           "cleared_high_confidence": true,
-          "p_trending": 0.674,
-          "p_panic": 0.066,
-          "p_choppy": 0.26
+          "p_trending": 0.686,
+          "p_panic": 0.063,
+          "p_choppy": 0.252
         },
         "top_drivers": {
           "positive": [
@@ -10507,19 +10505,19 @@
             },
             {
               "feature": "momentum_5d",
-              "value": 3.61,
+              "value": 3.77,
               "impact": "+14.2%"
             }
           ],
           "negative": [
             {
               "feature": "daily_VaR_95",
-              "value": -3.14,
+              "value": -3.13,
               "impact": "-31.2%"
             },
             {
               "feature": "volatility",
-              "value": 33.33,
+              "value": 33.29,
               "impact": "-24.5%"
             },
             {
@@ -10539,10 +10537,10 @@
         ],
         "confidence_breakdown": {
           "raw_model_confidence": 80,
-          "bayesian_expected_accuracy_pct": 83.4,
+          "bayesian_expected_accuracy_pct": 84.7,
           "credible_interval_90": [
-            64.4,
-            96.3
+            65.5,
+            97.3
           ],
           "bayesian_allocation_multiplier": 1.2,
           "rolling_accuracy_multiplier": 1.0,
@@ -10560,42 +10558,42 @@
           "active_state": 0,
           "regime_name": "LOW_VOL_TRENDING",
           "probabilities": {
-            "P_Trending": 0.674,
-            "P_Panic": 0.066,
-            "P_Choppy": 0.26
+            "P_Trending": 0.686,
+            "P_Panic": 0.063,
+            "P_Choppy": 0.252
           },
-          "regime_vol_annual_pct": 26.42,
+          "regime_vol_annual_pct": 26.21,
           "volatility_multiplier": 0.9,
           "kelly_scale_factor": 1.15,
           "stop_loss_multiplier": 1.0,
           "state_parameters": {
-            "trending_annual_vol": 22.58,
-            "panic_annual_vol": 59.88,
-            "choppy_annual_vol": 27.81
+            "trending_annual_vol": 22.56,
+            "panic_annual_vol": 59.86,
+            "choppy_annual_vol": 27.79
           }
         },
         "temporal_anomaly": {
           "is_temporal_anomaly": false,
-          "temporal_anomaly_score": 0.468,
-          "calibrated_anomaly_confidence": 0.0365,
-          "reconstruction_error": 0.8812,
-          "threshold": 1.2559,
-          "iqr": 0.2944,
+          "temporal_anomaly_score": 0.507,
+          "calibrated_anomaly_confidence": 0.0676,
+          "reconstruction_error": 0.9675,
+          "threshold": 1.2712,
+          "iqr": 0.2977,
           "feature_breakdown": {
-            "return_1d": 0.2323,
-            "volume_zscore": 0.6451,
-            "parkinson_spread": 1.3087,
-            "rsi_deviation": 0.2324,
-            "macd_ratio": 3.3004
+            "return_1d": 0.0628,
+            "volume_zscore": 0.8601,
+            "parkinson_spread": 0.9049,
+            "rsi_deviation": 0.1333,
+            "macd_ratio": 3.9002
           },
           "recent_10d_temporal_count": 0,
           "temperature_scaling": {
-            "reconstruction_error": 0.8812,
-            "threshold": 1.2559,
-            "iqr": 0.2944,
-            "normalized_excess_logit": -2.2915,
+            "reconstruction_error": 0.9675,
+            "threshold": 1.2712,
+            "iqr": 0.2977,
+            "normalized_excess_logit": -1.8364,
             "temperature": 0.7,
-            "calibrated_anomaly_probability": 0.0365,
+            "calibrated_anomaly_probability": 0.0676,
             "cleared_high_confidence": false
           }
         },
@@ -17582,24 +17580,24 @@
       "node": "quant",
       "data": {
         "ticker": "AAPL",
-        "current_price": 357.0,
+        "current_price": 356.36,
         "annualized_volatility": 28.28,
         "daily_VaR_95_pct": -2.76,
-        "suggested_stop_loss_atr_pct": 5.3,
-        "half_kelly_allocation_pct": 4.96,
-        "half_kelly_cap_pct": 4.96,
+        "suggested_stop_loss_atr_pct": 5.31,
+        "half_kelly_allocation_pct": 4.93,
+        "half_kelly_cap_pct": 4.93,
         "recent_10d_anomalies": 1,
-        "rsi_14": 58.87,
-        "recent_5d_return_pct": 4.27,
+        "rsi_14": 58.51,
+        "recent_5d_return_pct": 4.09,
         "sma20_trend": "BULLISH",
         "close_gt_sma20": true,
-        "sma20_val": 346.19,
-        "sma50_val": 339.05,
-        "sma20_z_score": 1.79,
-        "bb_upper": 358.25,
-        "bb_middle": 346.19,
-        "bb_lower": 334.13,
-        "bb_width_pct": 6.97,
+        "sma20_val": 346.15,
+        "sma50_val": 339.04,
+        "sma20_z_score": 1.71,
+        "bb_upper": 358.1,
+        "bb_middle": 346.15,
+        "bb_lower": 334.21,
+        "bb_width_pct": 6.9,
         "garch_vol_forecast_pct": 28.3,
         "volatility_shock_ratio": 1.27,
         "anomaly_telemetry": {
@@ -17612,53 +17610,53 @@
             "120d_micro": false
           },
           "scaled_feature_magnitudes": {
-            "return_1d": 0.19,
-            "return_5d": 0.54,
-            "volume_zscore": -0.75,
-            "parkinson_spread": -0.52,
-            "rsi_deviation": 0.11
+            "return_1d": 0.12,
+            "return_5d": 0.51,
+            "volume_zscore": -0.68,
+            "parkinson_spread": -0.39,
+            "rsi_deviation": 0.1
           }
         },
         "hmm_regime": {
           "active_state": 0,
           "regime_name": "LOW_VOL_TRENDING",
           "probabilities": {
-            "P_Trending": 0.488,
-            "P_Panic": 0.184,
-            "P_Choppy": 0.327
+            "P_Trending": 0.508,
+            "P_Panic": 0.178,
+            "P_Choppy": 0.314
           },
-          "regime_vol_annual_pct": 22.64,
+          "regime_vol_annual_pct": 22.36,
           "volatility_multiplier": 0.9,
           "kelly_scale_factor": 1.15,
           "stop_loss_multiplier": 1.0,
           "state_parameters": {
-            "trending_annual_vol": 15.32,
+            "trending_annual_vol": 15.3,
             "panic_annual_vol": 37.98,
-            "choppy_annual_vol": 24.9
+            "choppy_annual_vol": 24.91
           }
         },
         "temporal_anomaly": {
           "is_temporal_anomaly": false,
-          "temporal_anomaly_score": 0.418,
-          "calibrated_anomaly_confidence": 0.0266,
-          "reconstruction_error": 1.0935,
-          "threshold": 1.7437,
-          "iqr": 0.4644,
+          "temporal_anomaly_score": 0.414,
+          "calibrated_anomaly_confidence": 0.0251,
+          "reconstruction_error": 1.0861,
+          "threshold": 1.7495,
+          "iqr": 0.4663,
           "feature_breakdown": {
-            "return_1d": 0.0758,
-            "volume_zscore": 2.5728,
-            "parkinson_spread": 0.8562,
-            "rsi_deviation": 0.0008,
-            "macd_ratio": 0.0847
+            "return_1d": 0.0227,
+            "volume_zscore": 2.1444,
+            "parkinson_spread": 0.4893,
+            "rsi_deviation": 0.0002,
+            "macd_ratio": 0.0656
           },
           "recent_10d_temporal_count": 0,
           "temperature_scaling": {
-            "reconstruction_error": 1.0935,
-            "threshold": 1.7437,
-            "iqr": 0.4644,
-            "normalized_excess_logit": -2.5204,
+            "reconstruction_error": 1.0861,
+            "threshold": 1.7495,
+            "iqr": 0.4663,
+            "normalized_excess_logit": -2.5608,
             "temperature": 0.7,
-            "calibrated_anomaly_probability": 0.0266,
+            "calibrated_anomaly_probability": 0.0251,
             "cleared_high_confidence": false
           }
         },
@@ -18434,14 +18432,14 @@
             "date": "2026-11-13",
             "open": 357.96,
             "high": 360.83,
-            "low": 356.83,
-            "close": 357.0,
-            "volume": 21911336,
+            "low": 356.08,
+            "close": 356.36,
+            "volume": 23941803,
             "is_anomaly": false,
-            "bb_upper": 358.25,
-            "bb_middle": 346.19,
-            "bb_lower": 334.13,
-            "sma_50": 339.05
+            "bb_upper": 358.1,
+            "bb_middle": 346.15,
+            "bb_lower": 334.21,
+            "sma_50": 339.04
           }
         ],
         "time_machine_actual_return_pct": null,
@@ -18461,13 +18459,13 @@
       "data": {
         "ticker": "AAPL",
         "aggregate_sentiment_score": 0.17,
-        "ema_smoothed_sentiment": 0.062,
+        "ema_smoothed_sentiment": 0.049,
         "headlines": [
           {
-            "title": "Apple Inc. (AAPL) stock price, news, quote and history - Yahoo Finance Singapore",
+            "title": "Apple Inc. (AAPL) Stock Price, News, Quote & History - Yahoo! Finance Canada",
             "label": "neutral",
             "score": 0.948,
-            "published_at": "Wed, 11 Nov 2026 14:18:58 GMT",
+            "published_at": "Thu, 12 Nov 2026 19:19:17 GMT",
             "net_polarity": -0.011,
             "heuristic_routing": "FINBERT_DIRECT",
             "lm_matches": {
@@ -18488,11 +18486,11 @@
             }
           },
           {
-            "title": "Where Will Apple Stock Be in 5 Years? - Yahoo Finance",
+            "title": "Apple Inc. (AAPL) stock price, news, quote and history - Yahoo Finance Singapore",
             "label": "neutral",
-            "score": 0.943,
-            "published_at": "Mon, 09 Nov 2026 17:10:00 GMT",
-            "net_polarity": 0.006,
+            "score": 0.948,
+            "published_at": "Wed, 11 Nov 2026 14:18:58 GMT",
+            "net_polarity": -0.011,
             "heuristic_routing": "FINBERT_DIRECT",
             "lm_matches": {
               "pos": [],
@@ -18524,6 +18522,18 @@
             }
           },
           {
+            "title": "Where Will Apple Stock Be in 5 Years? - Yahoo Finance",
+            "label": "neutral",
+            "score": 0.943,
+            "published_at": "Mon, 09 Nov 2026 17:10:00 GMT",
+            "net_polarity": 0.006,
+            "heuristic_routing": "FINBERT_DIRECT",
+            "lm_matches": {
+              "pos": [],
+              "neg": []
+            }
+          },
+          {
             "title": "Apple Inc. (AAPL) Rallied 15% as Investors Reassessed Its Growth: What\u2019s Next for the Stock? - Yahoo Finance",
             "label": "positive",
             "score": 0.898,
@@ -18548,18 +18558,6 @@
               "pos": [],
               "neg": []
             }
-          },
-          {
-            "title": "AAPL Stock Heads For Another Green Month As John Ternus Takes The Reins From Tim Cook: What Could Change? - Yahoo Finance",
-            "label": "neutral",
-            "score": 0.924,
-            "published_at": "Sun, 30 Aug 2026 07:00:00 GMT",
-            "net_polarity": 0.011,
-            "heuristic_routing": "FINBERT_DIRECT",
-            "lm_matches": {
-              "pos": [],
-              "neg": []
-            }
           }
         ],
         "news_available": true,
@@ -18569,7 +18567,7 @@
           "margin_health": 0.0
         },
         "composite_aspect_score": 0.0,
-        "tone_shift_index": -0.7,
+        "tone_shift_index": -0.71,
         "tone_shift_regime": "STABLE",
         "aspect_relevance": {
           "risk_solvency": 0,
@@ -18581,13 +18579,13 @@
     {
       "node": "bull",
       "data": {
-        "bull_thesis": "\u2022 Trend regime is BULLISH with 5-day momentum at 4.27%, supporting an active Half-Kelly capacity allocation of 4.96%.\n\u2022 RSI-14 sits at 58.87 with contained 95% daily VaR of -2.76%, providing an asymmetrical entry window against 28.28% annualized vol.\n\u2022 Aggregate news sentiment reads 0.17 with 1 price/volume anomalies reflecting institutional accumulation."
+        "bull_thesis": "\u2022 Trend regime is BULLISH with 5-day momentum at 4.09%, supporting an active Half-Kelly capacity allocation of 4.93%.\n\u2022 RSI-14 sits at 58.51 with contained 95% daily VaR of -2.76%, providing an asymmetrical entry window against 28.28% annualized vol.\n\u2022 Aggregate news sentiment reads 0.17 with 1 price/volume anomalies reflecting institutional accumulation."
       }
     },
     {
       "node": "bear",
       "data": {
-        "bear_thesis": "\u2022 Tail risk is severe: 95% daily VaR of -2.76% with 28.28% annualized vol exposes any 4.96% allocation to fat-tail liquidation.\n\u2022 14-day RSI sits at 58.87; any momentum stalling will trigger abrupt mean-reversion and trap retail longs chasing 357.0.\n\u2022 1 price/volume anomalies in 10 sessions combined with headline sentiment (0.17) flag institutional distribution risk."
+        "bear_thesis": "\u2022 Tail risk is severe: 95% daily VaR of -2.76% with 28.28% annualized vol exposes any 4.93% allocation to fat-tail liquidation.\n\u2022 14-day RSI sits at 58.51; any momentum stalling will trigger abrupt mean-reversion and trap retail longs chasing 356.36.\n\u2022 1 price/volume anomalies in 10 sessions combined with headline sentiment (0.17) flag institutional distribution risk."
       }
     },
     {
@@ -18596,11 +18594,11 @@
         "action": "LONG",
         "verdict": "LONG",
         "raw_confidence": 84,
-        "confidence": 90,
-        "recommended_allocation_pct": 5.7,
-        "stop_loss_pct": 5.3,
-        "kill_switch_reason": "Breakdown below 20-day SMA or ATR trailing stop (5.3%).",
-        "verdict_summary": "Institutional LONG execution approved: Trend structure is constructive (SMA20: BULLISH, Close: 357.0, RSI: 58.87) with positive news sentiment (0.17). Half-Kelly capacity allocated at 5.7% with stop loss at 5.3%.",
+        "confidence": 91,
+        "recommended_allocation_pct": 5.67,
+        "stop_loss_pct": 5.31,
+        "kill_switch_reason": "Breakdown below 20-day SMA or ATR trailing stop (5.31%).",
+        "verdict_summary": "Institutional LONG execution approved: Trend structure is constructive (SMA20: BULLISH, Close: 356.36, RSI: 58.51) with positive news sentiment (0.17). Half-Kelly capacity allocated at 5.67% with stop loss at 5.31%.",
         "rolling_accuracy_telemetry": {
           "rolling_hit_rate_pct": 65.0,
           "resolved_count": 0,
@@ -18613,14 +18611,14 @@
         },
         "bayesian_calibration": {
           "raw_ai_confidence": 84,
-          "calibrated_confidence": 90,
-          "posterior_mean_accuracy_pct": 83.4,
-          "credible_lower_bound_pct": 64.4,
-          "credible_upper_bound_pct": 96.3,
+          "calibrated_confidence": 91,
+          "posterior_mean_accuracy_pct": 84.7,
+          "credible_lower_bound_pct": 65.5,
+          "credible_upper_bound_pct": 97.3,
           "bayesian_allocation_multiplier": 1.2,
-          "alpha": 10.85,
-          "beta": 2.17,
-          "sample_updates": 8,
+          "alpha": 10.22,
+          "beta": 1.84,
+          "sample_updates": 9,
           "forgetting_factor_lambda": 0.85,
           "temperature_scaling": {
             "raw_probability": 0.84,
@@ -18635,12 +18633,12 @@
             "is_suppressed": false,
             "suppression_reason": null,
             "regime_scale_factor": 1.02,
-            "raw_input_confidence": 88,
-            "gated_confidence": 90,
+            "raw_input_confidence": 89,
+            "gated_confidence": 91,
             "cleared_high_confidence": true,
-            "p_trending": 0.488,
-            "p_panic": 0.184,
-            "p_choppy": 0.327
+            "p_trending": 0.508,
+            "p_panic": 0.178,
+            "p_choppy": 0.314
           }
         },
         "temperature_scaling": {
@@ -18656,12 +18654,12 @@
           "is_suppressed": false,
           "suppression_reason": null,
           "regime_scale_factor": 1.02,
-          "raw_input_confidence": 88,
-          "gated_confidence": 90,
+          "raw_input_confidence": 89,
+          "gated_confidence": 91,
           "cleared_high_confidence": true,
-          "p_trending": 0.488,
-          "p_panic": 0.184,
-          "p_choppy": 0.327
+          "p_trending": 0.508,
+          "p_panic": 0.178,
+          "p_choppy": 0.314
         },
         "top_drivers": {
           "positive": [
@@ -18677,7 +18675,7 @@
             },
             {
               "feature": "momentum_5d",
-              "value": 4.27,
+              "value": 4.09,
               "impact": "+14.2%"
             }
           ],
@@ -18709,10 +18707,10 @@
         ],
         "confidence_breakdown": {
           "raw_model_confidence": 84,
-          "bayesian_expected_accuracy_pct": 83.4,
+          "bayesian_expected_accuracy_pct": 84.7,
           "credible_interval_90": [
-            64.4,
-            96.3
+            65.5,
+            97.3
           ],
           "bayesian_allocation_multiplier": 1.2,
           "rolling_accuracy_multiplier": 1.0,
@@ -18724,48 +18722,48 @@
           "is_regime_suppressed": false,
           "forgetting_factor_lambda": 0.85,
           "temperature_scaled_prob": 0.9091,
-          "calibrated_confidence": 90
+          "calibrated_confidence": 91
         },
         "hmm_regime": {
           "active_state": 0,
           "regime_name": "LOW_VOL_TRENDING",
           "probabilities": {
-            "P_Trending": 0.488,
-            "P_Panic": 0.184,
-            "P_Choppy": 0.327
+            "P_Trending": 0.508,
+            "P_Panic": 0.178,
+            "P_Choppy": 0.314
           },
-          "regime_vol_annual_pct": 22.64,
+          "regime_vol_annual_pct": 22.36,
           "volatility_multiplier": 0.9,
           "kelly_scale_factor": 1.15,
           "stop_loss_multiplier": 1.0,
           "state_parameters": {
-            "trending_annual_vol": 15.32,
+            "trending_annual_vol": 15.3,
             "panic_annual_vol": 37.98,
-            "choppy_annual_vol": 24.9
+            "choppy_annual_vol": 24.91
           }
         },
         "temporal_anomaly": {
           "is_temporal_anomaly": false,
-          "temporal_anomaly_score": 0.418,
-          "calibrated_anomaly_confidence": 0.0266,
-          "reconstruction_error": 1.0935,
-          "threshold": 1.7437,
-          "iqr": 0.4644,
+          "temporal_anomaly_score": 0.414,
+          "calibrated_anomaly_confidence": 0.0251,
+          "reconstruction_error": 1.0861,
+          "threshold": 1.7495,
+          "iqr": 0.4663,
           "feature_breakdown": {
-            "return_1d": 0.0758,
-            "volume_zscore": 2.5728,
-            "parkinson_spread": 0.8562,
-            "rsi_deviation": 0.0008,
-            "macd_ratio": 0.0847
+            "return_1d": 0.0227,
+            "volume_zscore": 2.1444,
+            "parkinson_spread": 0.4893,
+            "rsi_deviation": 0.0002,
+            "macd_ratio": 0.0656
           },
           "recent_10d_temporal_count": 0,
           "temperature_scaling": {
-            "reconstruction_error": 1.0935,
-            "threshold": 1.7437,
-            "iqr": 0.4644,
-            "normalized_excess_logit": -2.5204,
+            "reconstruction_error": 1.0861,
+            "threshold": 1.7495,
+            "iqr": 0.4663,
+            "normalized_excess_logit": -2.5608,
             "temperature": 0.7,
-            "calibrated_anomaly_probability": 0.0266,
+            "calibrated_anomaly_probability": 0.0251,
             "cleared_high_confidence": false
           }
         },
@@ -18774,7 +18772,7 @@
           "liquidity_cashflow": 0.0,
           "margin_health": 0.0
         },
-        "tone_shift_index": -0.7,
+        "tone_shift_index": -0.71,
         "tone_shift_regime": "STABLE"
       }
     }
@@ -22254,26 +22252,26 @@
         },
         "temporal_anomaly": {
           "is_temporal_anomaly": false,
-          "temporal_anomaly_score": 0.295,
-          "calibrated_anomaly_confidence": 0.0028,
-          "reconstruction_error": 0.4341,
-          "threshold": 0.9809,
-          "iqr": 0.2388,
+          "temporal_anomaly_score": 0.287,
+          "calibrated_anomaly_confidence": 0.0025,
+          "reconstruction_error": 0.4315,
+          "threshold": 1.003,
+          "iqr": 0.2453,
           "feature_breakdown": {
-            "return_1d": 0.0196,
-            "volume_zscore": 0.2545,
-            "parkinson_spread": 0.2635,
-            "rsi_deviation": 0.9376,
-            "macd_ratio": 0.0289
+            "return_1d": 0.0182,
+            "volume_zscore": 0.3483,
+            "parkinson_spread": 0.2817,
+            "rsi_deviation": 0.936,
+            "macd_ratio": 0.1115
           },
           "recent_10d_temporal_count": 0,
           "temperature_scaling": {
-            "reconstruction_error": 0.4341,
-            "threshold": 0.9809,
-            "iqr": 0.2388,
-            "normalized_excess_logit": -4.1219,
+            "reconstruction_error": 0.4315,
+            "threshold": 1.003,
+            "iqr": 0.2453,
+            "normalized_excess_logit": -4.1938,
             "temperature": 0.7,
-            "calibrated_anomaly_probability": 0.0028,
+            "calibrated_anomaly_probability": 0.0025,
             "cleared_high_confidence": false
           }
         },
@@ -23075,39 +23073,15 @@
       "node": "news",
       "data": {
         "ticker": "ETERNAL.NS",
-        "aggregate_sentiment_score": 0.51,
-        "ema_smoothed_sentiment": 0.334,
+        "aggregate_sentiment_score": 0.52,
+        "ema_smoothed_sentiment": 0.623,
         "headlines": [
           {
-            "title": "Eternal Limited (ETERNAL.NS) Stock Price, News, Quote & History - Yahoo! Finance Canada",
-            "label": "neutral",
-            "score": 0.951,
-            "published_at": "Thu, 12 Nov 2026 18:57:22 GMT",
-            "net_polarity": -0.007,
-            "heuristic_routing": "FINBERT_DIRECT",
-            "lm_matches": {
-              "pos": [],
-              "neg": []
-            }
-          },
-          {
-            "title": "F&O Stocks Today: 159 Show Short Buildup; Eternal, Bajaj Finance in Focus - NiftyTrader",
-            "label": "neutral",
-            "score": 0.659,
+            "title": "Eternal Q2 Results: Zomato and Blinkit operator's net profit rises 92% to \u20b9125 crore, revenue up 78% - Upstox",
+            "label": "positive",
+            "score": 0.952,
             "published_at": "Wed, 21 Oct 2026 07:00:00 GMT",
-            "net_polarity": -0.046,
-            "heuristic_routing": "DAMPENED_AMBIGUOUS",
-            "lm_matches": {
-              "pos": [],
-              "neg": []
-            }
-          },
-          {
-            "title": "Eternal shares rise over 4% to emerge as top Sensex gainer on value buying; JM Financial sees up to 80%... - Moneycontrol.com",
-            "label": "positive",
-            "score": 0.916,
-            "published_at": "Tue, 17 Mar 2026 07:00:00 GMT",
-            "net_polarity": 0.904,
+            "net_polarity": 0.93,
             "heuristic_routing": "FINBERT_DIRECT",
             "lm_matches": {
               "pos": [],
@@ -23115,29 +23089,26 @@
             }
           },
           {
-            "title": "Eternal well placed to 'emerge stronger'; JM Fin sees 80% stock upside - Business Standard",
-            "label": "positive",
-            "score": 0.947,
-            "published_at": "Tue, 17 Mar 2026 07:00:00 GMT",
-            "net_polarity": 0.934,
+            "title": "Eternal, Swiggy up over 5% on huge volume; what's driving platform stocks? - Business Standard",
+            "label": "neutral",
+            "score": 0.763,
+            "published_at": "Mon, 27 Jul 2026 07:00:00 GMT",
+            "net_polarity": 0.207,
             "heuristic_routing": "FINBERT_DIRECT",
             "lm_matches": {
-              "pos": [
-                "upside"
-              ],
+              "pos": [],
               "neg": []
             }
           },
           {
-            "title": "Eternal share price zooms 6% amid stock market rebound; JM Financial sees another 70% upside - Livemint",
+            "title": "Eternal shares: 75% upside? Zomato, Blinkit parent gets 27 'Buy' calls post Q1 results - Business Today",
             "label": "positive",
-            "score": 0.947,
-            "published_at": "Tue, 17 Mar 2026 07:00:00 GMT",
-            "net_polarity": 0.926,
-            "heuristic_routing": "FINBERT_DIRECT",
+            "score": 0.75,
+            "published_at": "Thu, 23 Jul 2026 07:00:00 GMT",
+            "net_polarity": 0.696,
+            "heuristic_routing": "HEURISTIC_CROSS_VERIFIED",
             "lm_matches": {
               "pos": [
-                "rebound",
                 "upside"
               ],
               "neg": []
@@ -23156,6 +23127,20 @@
             }
           },
           {
+            "title": "Eternal Q4 net profit jumps 71% QoQ to Rs 174 crore, beats estimates; shares rise over 1% - Moneycontrol.com",
+            "label": "positive",
+            "score": 0.92,
+            "published_at": "Tue, 28 Apr 2026 07:00:00 GMT",
+            "net_polarity": 0.895,
+            "heuristic_routing": "FINBERT_DIRECT",
+            "lm_matches": {
+              "pos": [
+                "beats"
+              ],
+              "neg": []
+            }
+          },
+          {
             "title": "Aggressively buy Eternal shares now after 40% crash! Why JM Financial feels gas crisis impact on Zomato is - The Economic Times",
             "label": "neutral",
             "score": 0.872,
@@ -23168,15 +23153,27 @@
             }
           },
           {
-            "title": "Eternal stock up 2%; Motilal Oswal retains buy for 31% upside - Business Standard",
+            "title": "Eternal: Zomato turf intact, but Blinkit may face a new threat - Livemint",
+            "label": "neutral",
+            "score": 0.385,
+            "published_at": "Wed, 18 Mar 2026 07:00:00 GMT",
+            "net_polarity": 0.167,
+            "heuristic_routing": "DAMPENED_AMBIGUOUS",
+            "lm_matches": {
+              "pos": [],
+              "neg": []
+            }
+          },
+          {
+            "title": "Eternal jumps 6% in early trade but pares gains later; analysts weigh in - Business Standard",
             "label": "positive",
-            "score": 0.941,
-            "published_at": "Tue, 07 Jul 2026 07:00:00 GMT",
-            "net_polarity": 0.921,
-            "heuristic_routing": "FINBERT_DIRECT",
+            "score": 0.835,
+            "published_at": "Thu, 22 Jan 2026 08:00:00 GMT",
+            "net_polarity": 0.76,
+            "heuristic_routing": "HEURISTIC_CROSS_VERIFIED",
             "lm_matches": {
               "pos": [
-                "upside"
+                "gains"
               ],
               "neg": []
             }
@@ -23189,7 +23186,7 @@
           "margin_health": 0.0
         },
         "composite_aspect_score": 0.0,
-        "tone_shift_index": -0.85,
+        "tone_shift_index": 0.37,
         "tone_shift_regime": "STABLE",
         "aspect_relevance": {
           "risk_solvency": 0,
@@ -23201,13 +23198,13 @@
     {
       "node": "bull",
       "data": {
-        "bull_thesis": "\u2022 Trend regime is BULLISH with 5-day momentum at 5.76%, supporting an active Half-Kelly capacity allocation of 4.5%.\n\u2022 RSI-14 sits at 85.44 with contained 95% daily VaR of -3.27%, providing an asymmetrical entry window against 30.78% annualized vol.\n\u2022 Aggregate news sentiment reads 0.51 with 0 price/volume anomalies reflecting institutional accumulation."
+        "bull_thesis": "\u2022 Trend regime is BULLISH with 5-day momentum at 5.76%, supporting an active Half-Kelly capacity allocation of 4.5%.\n\u2022 RSI-14 sits at 85.44 with contained 95% daily VaR of -3.27%, providing an asymmetrical entry window against 30.78% annualized vol.\n\u2022 Aggregate news sentiment reads 0.52 with 0 price/volume anomalies reflecting institutional accumulation."
       }
     },
     {
       "node": "bear",
       "data": {
-        "bear_thesis": "\u2022 Tail risk is severe: 95% daily VaR of -3.27% with 30.78% annualized vol exposes any 4.5% allocation to fat-tail liquidation.\n\u2022 14-day RSI sits at 85.44; any momentum stalling will trigger abrupt mean-reversion and trap retail longs chasing 364.35.\n\u2022 0 price/volume anomalies in 10 sessions combined with headline sentiment (0.51) flag institutional distribution risk."
+        "bear_thesis": "\u2022 Tail risk is severe: 95% daily VaR of -3.27% with 30.78% annualized vol exposes any 4.5% allocation to fat-tail liquidation.\n\u2022 14-day RSI sits at 85.44; any momentum stalling will trigger abrupt mean-reversion and trap retail longs chasing 364.35.\n\u2022 0 price/volume anomalies in 10 sessions combined with headline sentiment (0.52) flag institutional distribution risk."
       }
     },
     {
@@ -23234,13 +23231,13 @@
         "bayesian_calibration": {
           "raw_ai_confidence": 88,
           "calibrated_confidence": 74,
-          "posterior_mean_accuracy_pct": 83.4,
-          "credible_lower_bound_pct": 64.4,
-          "credible_upper_bound_pct": 96.3,
+          "posterior_mean_accuracy_pct": 86.1,
+          "credible_lower_bound_pct": 66.8,
+          "credible_upper_bound_pct": 98.0,
           "bayesian_allocation_multiplier": 1.0,
-          "alpha": 10.85,
-          "beta": 2.17,
-          "sample_updates": 8,
+          "alpha": 9.69,
+          "beta": 1.57,
+          "sample_updates": 10,
           "forgetting_factor_lambda": 0.85,
           "temperature_scaling": {
             "raw_probability": 0.88,
@@ -23255,7 +23252,7 @@
             "is_suppressed": false,
             "suppression_reason": null,
             "regime_scale_factor": 0.85,
-            "raw_input_confidence": 90,
+            "raw_input_confidence": 91,
             "gated_confidence": 74,
             "cleared_high_confidence": false,
             "p_trending": 0.161,
@@ -23276,7 +23273,7 @@
           "is_suppressed": false,
           "suppression_reason": null,
           "regime_scale_factor": 0.85,
-          "raw_input_confidence": 90,
+          "raw_input_confidence": 91,
           "gated_confidence": 74,
           "cleared_high_confidence": false,
           "p_trending": 0.161,
@@ -23292,7 +23289,7 @@
             },
             {
               "feature": "sentiment_score",
-              "value": 0.51,
+              "value": 0.52,
               "impact": "+22.1%"
             },
             {
@@ -23330,10 +23327,10 @@
         ],
         "confidence_breakdown": {
           "raw_model_confidence": 88,
-          "bayesian_expected_accuracy_pct": 83.4,
+          "bayesian_expected_accuracy_pct": 86.1,
           "credible_interval_90": [
-            64.4,
-            96.3
+            66.8,
+            98.0
           ],
           "bayesian_allocation_multiplier": 1.0,
           "rolling_accuracy_multiplier": 1.0,
@@ -23367,26 +23364,26 @@
         },
         "temporal_anomaly": {
           "is_temporal_anomaly": false,
-          "temporal_anomaly_score": 0.295,
-          "calibrated_anomaly_confidence": 0.0028,
-          "reconstruction_error": 0.4341,
-          "threshold": 0.9809,
-          "iqr": 0.2388,
+          "temporal_anomaly_score": 0.287,
+          "calibrated_anomaly_confidence": 0.0025,
+          "reconstruction_error": 0.4315,
+          "threshold": 1.003,
+          "iqr": 0.2453,
           "feature_breakdown": {
-            "return_1d": 0.0196,
-            "volume_zscore": 0.2545,
-            "parkinson_spread": 0.2635,
-            "rsi_deviation": 0.9376,
-            "macd_ratio": 0.0289
+            "return_1d": 0.0182,
+            "volume_zscore": 0.3483,
+            "parkinson_spread": 0.2817,
+            "rsi_deviation": 0.936,
+            "macd_ratio": 0.1115
           },
           "recent_10d_temporal_count": 0,
           "temperature_scaling": {
-            "reconstruction_error": 0.4341,
-            "threshold": 0.9809,
-            "iqr": 0.2388,
-            "normalized_excess_logit": -4.1219,
+            "reconstruction_error": 0.4315,
+            "threshold": 1.003,
+            "iqr": 0.2453,
+            "normalized_excess_logit": -4.1938,
             "temperature": 0.7,
-            "calibrated_anomaly_probability": 0.0028,
+            "calibrated_anomaly_probability": 0.0025,
             "cleared_high_confidence": false
           }
         },
@@ -23395,7 +23392,7 @@
           "liquidity_cashflow": 0.0,
           "margin_health": 0.0
         },
-        "tone_shift_index": -0.85,
+        "tone_shift_index": 0.37,
         "tone_shift_regime": "STABLE"
       }
     }
