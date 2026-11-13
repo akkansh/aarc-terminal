@@ -42,12 +42,10 @@ backend/.venv/bin/pip install \
   google-genai scipy lightgbm optuna arch shap pytest
 ```
 
-Install the frontend dependencies:
+Install the JavaScript dependencies (root scripts and the frontend workspace):
 
 ```bash
-cd frontend
 npm ci
-cd ..
 ```
 
 For Gemini-generated narratives, create a root `.env` file containing:
@@ -60,21 +58,22 @@ The app can run without this key, but uses its built-in deterministic narrative/
 
 ## Run the application
 
-From the repository root:
+From the repository root, use the npm scripts to run both services together:
 
 ```bash
-./start.sh
+npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000). The API runs at [http://localhost:8000](http://localhost:8000), with a health endpoint at `/health` and the SSE analysis endpoint at `/api/stream?ticker=NVDA`.
 
-`start.sh` frees ports **8000** and **3000** before starting the backend and the built Next.js production server. Build the frontend first if needed:
+For a production build and run:
 
 ```bash
-cd frontend && npm run build
+npm run build
+npm start
 ```
 
-For frontend development with hot reload, run the backend separately and start Next.js with `cd frontend && npm run dev`.
+`npm run dev` starts FastAPI with reload and the Next.js development server. `npm start` starts both production servers; run `npm run build` first. To run only one service, use `npm run dev:backend` / `npm run dev:frontend`, or `npm run start:backend` / `npm run start:frontend`. The scripts expect the Python environment at `backend/.venv` (created in the setup steps above).
 
 ## Custom stock search
 
@@ -115,6 +114,7 @@ backend/
 frontend/
   src/app/             Dashboard page
   src/components/      Charts and UI components
+package.json          Root npm scripts for the API and frontend
 ```
 
 ## Data and limitations

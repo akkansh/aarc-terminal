@@ -1,0 +1,20 @@
+{
+  "name": "aarc-quant-terminal",
+  "private": true,
+  "workspaces": [
+    "frontend"
+  ],
+  "scripts": {
+    "dev": "concurrently --kill-others-on-fail -n api,web -c cyan,green \"npm:dev:backend\" \"npm:dev:frontend\"",
+    "dev:backend": "PYTHONPATH=. backend/.venv/bin/uvicorn backend.main:app --host 0.0.0.0 --port 8000 --reload",
+    "dev:frontend": "npm run dev --workspace aarc-frontend",
+    "build": "npm run build --workspace aarc-frontend",
+    "start": "concurrently --kill-others-on-fail -n api,web -c cyan,green \"npm:start:backend\" \"npm:start:frontend\"",
+    "start:backend": "PYTHONPATH=. backend/.venv/bin/uvicorn backend.main:app --host 0.0.0.0 --port 8000",
+    "start:frontend": "npm run start --workspace aarc-frontend",
+    "test": "backend/.venv/bin/python -m pytest backend/tests -q"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
