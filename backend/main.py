@@ -283,6 +283,7 @@ async def get_sentiment_aspects(
         return {
             "ticker": clean_t,
             "aggregate_sentiment_score": news_data.get("aggregate_sentiment_score"),
+            "ema_smoothed_sentiment": news_data.get("ema_smoothed_sentiment", news_data.get("aggregate_sentiment_score")),
             "aspect_scores": news_data.get("aspect_sentiment", {}),
             "composite_aspect_score": news_data.get("composite_aspect_score", 0.0),
             "tone_shift_index": news_data.get("tone_shift_index", 0.0),

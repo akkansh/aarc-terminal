@@ -24,9 +24,10 @@ class GARCHVolatilityEngine:
         returns_series: pd.Series,
         confidence_level: float = 0.95,
         horizon_days: int = 5,
+        lookback_window: int = 252,
     ) -> Dict[str, Any]:
         """
-        Fits GARCH(1,1) on percentage returns.
+        Fits GARCH(1,1) with Student's t-distribution on rolling lookback window (default 252 trading days).
         Computes:
         - current_conditional_vol_daily: % daily volatility sigma_t
         - current_conditional_vol_annual: % annualized volatility sigma_t * sqrt(252)
@@ -34,7 +35,9 @@ class GARCHVolatilityEngine:
         - forward_vol_forecast_annual: annualized horizon-day volatility forecast
         - volatility_shock_ratio: sigma_t / rolling_historical_std (regime stress metric)
         """
-        clean_ret = returns_series.dropna().replace([np.inf, -np.inf], np.nan).dropna()
+        raw_clean = returns_series.dropna().replace([np.inf, -np.inf], np.nan).dropna()
+        # Enforce exact 252-day lookback window if history is longer
+        clean_ret = raw_clean.tail(lookback_window) if len(raw_clean) > lookback_window else raw_clean
         n_obs = len(clean_ret)
 
         # Baseline fallback metrics if series is too short

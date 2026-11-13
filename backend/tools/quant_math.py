@@ -116,9 +116,14 @@ def analyze_ticker_quant(ticker: str, cutoff_date: Optional[str] = None) -> Dict
     if len(valid_returns) == 0:
         valid_returns = history_df["Returns"]
 
-    # 2. Dynamic GARCH(1,1) Conditional Volatility & Value-at-Risk (VaR 95%)
+    # 2. Dynamic GARCH(1,1) Conditional Volatility & Value-at-Risk (VaR 95%) with Student-t distribution
     garch_engine = GARCHVolatilityEngine(p=1, q=1, dist="StudentsT")
-    garch_metrics = garch_engine.compute_dynamic_volatility_and_var(valid_returns, confidence_level=0.95, horizon_days=5)
+    garch_metrics = garch_engine.compute_dynamic_volatility_and_var(
+        valid_returns,
+        confidence_level=0.95,
+        horizon_days=5,
+        lookback_window=252,
+    )
 
     # Dynamic GARCH-derived parameters
     ann_vol = _clean_number(garch_metrics["conditional_vol_annual_pct"])

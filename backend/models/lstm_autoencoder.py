@@ -8,6 +8,16 @@ import torch.nn as nn
 from sklearn.preprocessing import RobustScaler
 
 
+def _winsorize_series(s: pd.Series, lower_q: float = 0.01, upper_q: float = 0.99) -> pd.Series:
+    """Clips extreme outlier spikes to protect neural sequence latent representations."""
+    clean = s.replace([np.inf, -np.inf], np.nan).dropna()
+    if clean.empty or len(clean) < 10:
+        return s.fillna(0.0)
+    low_val = float(clean.quantile(lower_q))
+    high_val = float(clean.quantile(upper_q))
+    return s.clip(lower=low_val, upper=high_val).fillna(0.0)
+
+
 class _LSTMEncoder(nn.Module):
     def __init__(self, input_dim: int, hidden_dim: int = 32, latent_dim: int = 16, num_layers: int = 2):
         super().__init__()
@@ -125,6 +135,10 @@ class LSTMTemporalAnomalyDetector:
         macd = ema12 - ema26
         signal = macd.ewm(span=9, adjust=False).mean()
         feat["macd_ratio"] = ((macd - signal) / (close + 1e-6) * 100.0).replace([np.inf, -np.inf], np.nan).fillna(0.0)
+
+        # Apply robust winsorization across all input features before RobustScaler
+        for col in self.feature_names:
+            feat[col] = _winsorize_series(feat[col], 0.01, 0.99)
 
         return feat[self.feature_names].fillna(0.0)
 

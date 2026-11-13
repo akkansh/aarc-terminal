@@ -146,6 +146,19 @@ class AspectBasedSentimentAnalyzer:
             + ASPECT_LEXICONS["margin_health"]["weight"] * aspect_results["margin_health"]
         )
 
+        # Exponential Moving Average (EMA) smoothing of sequential sentiment outputs (alpha=0.35)
+        ema_scores = []
+        alpha_ema = 0.35
+        curr_ema = None
+        # Forward pass: oldest to newest
+        for s in reversed(temporal_scores):
+            if curr_ema is None:
+                curr_ema = s
+            else:
+                curr_ema = (alpha_ema * s) + ((1.0 - alpha_ema) * curr_ema)
+            ema_scores.append(curr_ema)
+        ema_smoothed_polarity = round(float(ema_scores[-1]), 3) if ema_scores else 0.0
+
         # Tone Shift Index (TSI): Recent 3 items vs. Remaining Baseline items
         # Headlines are typically ordered chronologically (newest first)
         n = len(temporal_scores)
@@ -174,6 +187,8 @@ class AspectBasedSentimentAnalyzer:
         return {
             "aspect_scores": aspect_results,
             "composite_aspect_score": round(composite_score, 3),
+            "ema_smoothed_sentiment": ema_smoothed_polarity,
+            "sentiment_ema_trajectory": [round(float(x), 3) for x in ema_scores],
             "tone_shift_index": round(tsi, 2),
             "tone_shift_regime": regime,
             "aspect_relevance": {

@@ -116,6 +116,7 @@ class FinBertSentimentAnalyzer:
 
         return {
             "aggregate_sentiment_score": aggregate_score,
+            "ema_smoothed_sentiment": absa_result.get("ema_smoothed_sentiment", aggregate_score),
             "headlines": results,
             "aspect_sentiment": absa_result["aspect_scores"],
             "composite_aspect_score": absa_result["composite_aspect_score"],
@@ -151,6 +152,7 @@ def _unavailable(ticker: str, reason: str) -> Dict[str, Any]:
     return {
         "ticker": ticker,
         "aggregate_sentiment_score": None,
+        "ema_smoothed_sentiment": None,
         "headlines": [],
         "news_available": False,
         "news_error": reason,
@@ -269,6 +271,7 @@ def analyze_ticker_sentiment(
     return {
         "ticker": ticker,
         "aggregate_sentiment_score": scored["aggregate_sentiment_score"],
+        "ema_smoothed_sentiment": scored.get("ema_smoothed_sentiment", scored["aggregate_sentiment_score"]),
         "headlines": scored["headlines"],
         "news_available": True,
         "aspect_sentiment": scored.get("aspect_sentiment", {}),

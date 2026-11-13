@@ -7,11 +7,22 @@ from sklearn.ensemble import IsolationForest
 from sklearn.preprocessing import RobustScaler
 
 
+def _winsorize_series(s: pd.Series, lower_q: float = 0.01, upper_q: float = 0.99) -> pd.Series:
+    """Clips extreme market outlier fat-tails outside [lower_q, upper_q] percentiles."""
+    clean = s.replace([np.inf, -np.inf], np.nan).dropna()
+    if clean.empty or len(clean) < 10:
+        return s.fillna(0.0)
+    low_val = float(clean.quantile(lower_q))
+    high_val = float(clean.quantile(upper_q))
+    return s.clip(lower=low_val, upper=high_val).fillna(0.0)
+
+
 class MultiTimeframeEnsembleIsolationForest:
     """
     Ensemble anomaly detection pipeline that:
     1. Preprocesses multi-factor features (RSI, returns, volume spikes, Parkinson vol)
-       using RobustScaler (median-centered, IQR-scaled) to prevent outlier contamination.
+       with winsorization (1%/99%) and RobustScaler (median-centered, IQR-scaled)
+       to handle extreme market outliers and volume spikes cleanly.
     2. Runs multi-timeframe Isolation Forest estimators (Micro 15d, Tactical 45d, Structural 120d)
        to cross-verify anomalies across short, medium, and long horizons.
     3. Requires multi-timeframe confirmation (consensus >= 2 votes) before firing alerts,
@@ -65,6 +76,10 @@ class MultiTimeframeEnsembleIsolationForest:
         rs = roll_gain / roll_loss.replace(0, 1e-6)
         rsi = 100.0 - (100.0 / (1.0 + rs))
         feat_df["rsi_deviation"] = ((rsi - 50.0) / 25.0).replace([np.inf, -np.inf], np.nan).fillna(0.0)
+
+        # 5. Apply robust winsorization across all input features (1% / 99% quantiles)
+        for col in self.feature_names:
+            feat_df[col] = _winsorize_series(feat_df[col], 0.01, 0.99)
 
         return feat_df[self.feature_names].fillna(0.0)
 

@@ -22,7 +22,7 @@ class BetaBinomialConfidenceCalibrator:
         self,
         alpha_0: float = 7.0,
         beta_0: float = 3.0,
-        gamma: float = 0.98,
+        gamma: float = 0.95,
         storage_path: str = "backend/data_cache/bayesian_calibration.json",
     ):
         self.alpha_0 = alpha_0

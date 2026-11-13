@@ -5,11 +5,11 @@
       "data": {
         "ticker": "RELIANCE.NS",
         "current_price": 1339.7,
-        "annualized_volatility": 26.3,
+        "annualized_volatility": 26.25,
         "daily_VaR_95_pct": -2.5,
         "suggested_stop_loss_atr_pct": 5.07,
-        "half_kelly_allocation_pct": 9.51,
-        "half_kelly_cap_pct": 9.51,
+        "half_kelly_allocation_pct": 9.52,
+        "half_kelly_cap_pct": 9.52,
         "recent_10d_anomalies": 1,
         "rsi_14": 81.32,
         "recent_5d_return_pct": 2.19,
@@ -22,7 +22,7 @@
         "bb_middle": 1241.32,
         "bb_lower": 1106.84,
         "bb_width_pct": 21.67,
-        "garch_vol_forecast_pct": 26.31,
+        "garch_vol_forecast_pct": 26.25,
         "volatility_shock_ratio": 0.84,
         "anomaly_telemetry": {
           "is_confirmed_anomaly": false,
@@ -35,11 +35,43 @@
           },
           "scaled_feature_magnitudes": {
             "return_1d": 0.14,
-            "return_5d": 0.41,
+            "return_5d": 0.4,
             "volume_zscore": -0.2,
             "parkinson_spread": -0.5,
-            "rsi_deviation": 1.08
+            "rsi_deviation": 1.09
           }
+        },
+        "hmm_regime": {
+          "active_state": 0,
+          "regime_name": "LOW_VOL_TRENDING",
+          "probabilities": {
+            "P_Trending": 0.836,
+            "P_Panic": 0.025,
+            "P_Choppy": 0.139
+          },
+          "regime_vol_annual_pct": 19.6,
+          "volatility_multiplier": 0.9,
+          "kelly_scale_factor": 1.15,
+          "stop_loss_multiplier": 1.0,
+          "state_parameters": {
+            "trending_annual_vol": 17.65,
+            "panic_annual_vol": 54.25,
+            "choppy_annual_vol": 24.96
+          }
+        },
+        "temporal_anomaly": {
+          "is_temporal_anomaly": true,
+          "temporal_anomaly_score": 0.845,
+          "reconstruction_error": 1.7901,
+          "threshold": 1.4121,
+          "feature_breakdown": {
+            "return_1d": 0.0024,
+            "volume_zscore": 0.096,
+            "parkinson_spread": 1.8495,
+            "rsi_deviation": 0.5323,
+            "macd_ratio": 0.6424
+          },
+          "recent_10d_temporal_count": 8
         },
         "chart_data": [
           {
@@ -828,16 +860,18 @@
         "regime": {
           "state": 1,
           "label": "HIGH_VOLATILITY",
-          "prob_high_vol": 0.657
+          "prob_high_vol": 0.656,
+          "state_probabilities": {},
+          "kelly_scale_factor": 1.15
         },
-        "garch_volatility_forecast_pct": 26.83
+        "garch_volatility_forecast_pct": 26.25
       }
     },
     {
       "node": "news",
       "data": {
         "ticker": "RELIANCE.NS",
-        "aggregate_sentiment_score": -0.0,
+        "aggregate_sentiment_score": 0.22,
         "headlines": [
           {
             "title": "Reliance Industries Limited (RELIANCE.NS) stock price, news, quote and history - Yahoo Finance Australia",
@@ -888,6 +922,20 @@
             }
           },
           {
+            "title": "Reliance Industries Limited. . Reliance Industries has demonstrated robust financial performance over the past five years: \u2022 Revenue has increased around 15x to \u20b91,00,120 crore in FY 2024-25 from \u20b96,599.7 crore in FY 2020-21. \u2022 Our Net Worth has consiste - Facebook",
+            "label": "positive",
+            "score": 0.951,
+            "published_at": "Thu, 28 Aug 2025 07:00:00 GMT",
+            "net_polarity": 0.928,
+            "heuristic_routing": "FINBERT_DIRECT",
+            "lm_matches": {
+              "pos": [
+                "robust"
+              ],
+              "neg": []
+            }
+          },
+          {
             "title": "Earnings Outlook Might Change The Case For Investing In Reliance Stock (RS) - Yahoo Finance",
             "label": "neutral",
             "score": 0.862,
@@ -924,32 +972,34 @@
               "pos": [],
               "neg": []
             }
-          },
-          {
-            "title": "Why Reliance Share Price Is Falling Today: 4 Key Reasons - EBC Financial Group",
-            "label": "negative",
-            "score": 0.866,
-            "published_at": "Tue, 06 Jan 2026 08:00:00 GMT",
-            "net_polarity": -0.851,
-            "heuristic_routing": "FINBERT_DIRECT",
-            "lm_matches": {
-              "pos": [],
-              "neg": []
-            }
           }
-        ]
+        ],
+        "news_available": true,
+        "aspect_sentiment": {
+          "risk_solvency": 0.0,
+          "liquidity_cashflow": 0.0,
+          "margin_health": 0.0
+        },
+        "composite_aspect_score": 0.0,
+        "tone_shift_index": 0.13,
+        "tone_shift_regime": "STABLE",
+        "aspect_relevance": {
+          "risk_solvency": 0,
+          "liquidity_cashflow": 0,
+          "margin_health": 0
+        }
       }
     },
     {
       "node": "bull",
       "data": {
-        "bull_thesis": "\u2022 Trend regime is BULLISH with 5-day momentum at 2.19%, supporting an active Half-Kelly capacity allocation of 9.51%.\n\u2022 RSI-14 sits at 81.32 with contained 95% daily VaR of -2.5%, providing an asymmetrical entry window against 26.3% annualized vol.\n\u2022 Aggregate news sentiment reads -0.0 with 1 price/volume anomalies reflecting institutional accumulation."
+        "bull_thesis": "\u2022 Trend regime is BULLISH with 5-day momentum at 2.19%, supporting an active Half-Kelly capacity allocation of 9.52%.\n\u2022 RSI-14 sits at 81.32 with contained 95% daily VaR of -2.5%, providing an asymmetrical entry window against 26.25% annualized vol.\n\u2022 Aggregate news sentiment reads 0.22 with 1 price/volume anomalies reflecting institutional accumulation."
       }
     },
     {
       "node": "bear",
       "data": {
-        "bear_thesis": "\u2022 Tail risk is severe: 95% daily VaR of -2.5% with 26.3% annualized vol exposes any 9.51% allocation to fat-tail liquidation.\n\u2022 14-day RSI sits at 81.32; any momentum stalling will trigger abrupt mean-reversion and trap retail longs chasing 1339.7.\n\u2022 1 price/volume anomalies in 10 sessions combined with headline sentiment (-0.0) flag institutional distribution risk."
+        "bear_thesis": "\u2022 Tail risk is severe: 95% daily VaR of -2.5% with 26.25% annualized vol exposes any 9.52% allocation to fat-tail liquidation.\n\u2022 14-day RSI sits at 81.32; any momentum stalling will trigger abrupt mean-reversion and trap retail longs chasing 1339.7.\n\u2022 1 price/volume anomalies in 10 sessions combined with headline sentiment (0.22) flag institutional distribution risk."
       }
     },
     {
@@ -958,11 +1008,11 @@
         "action": "SHORT",
         "verdict": "SHORT",
         "raw_confidence": 88,
-        "confidence": 88,
-        "recommended_allocation_pct": 9.51,
+        "confidence": 67,
+        "recommended_allocation_pct": 9.31,
         "stop_loss_pct": 5.07,
-        "kill_switch_reason": "Continuation of parabolic squeeze above 2x ATR trailing stop (5.07%).",
-        "verdict_summary": "Parabolic overbought exhaustion detected (14-day RSI: 81.32 >= 75, 5-day Return: 2.19%). Mean reversion to historical trend lines expected; tactical SHORT sizing approved at 9.51% with ATR stop at 5.07%.",
+        "kill_switch_reason": "Continuation of parabolic squeeze above 2x ATR trailing stop (5.07%). [LSTM Autoencoder Alert: Sequential anomaly flagged with reconstruction error 1.790]",
+        "verdict_summary": "Parabolic overbought exhaustion detected (14-day RSI: 81.32 >= 75, 5-day Return: 2.19%). Mean reversion to historical trend lines expected; tactical SHORT sizing approved at 10.95% with ATR stop at 5.07%.",
         "rolling_accuracy_telemetry": {
           "rolling_hit_rate_pct": 65.0,
           "resolved_count": 0,
@@ -973,6 +1023,17 @@
           "raw_confidence": 88,
           "calibrated_confidence": 88
         },
+        "bayesian_calibration": {
+          "raw_ai_confidence": 88,
+          "calibrated_confidence": 67,
+          "posterior_mean_accuracy_pct": 78.4,
+          "credible_lower_bound_pct": 58.7,
+          "credible_upper_bound_pct": 93.3,
+          "bayesian_allocation_multiplier": 1.0,
+          "alpha": 10.88,
+          "beta": 3.0,
+          "sample_updates": 4
+        },
         "top_drivers": {
           "positive": [
             {
@@ -982,7 +1043,7 @@
             },
             {
               "feature": "sentiment_score",
-              "value": -0.0,
+              "value": 0.22,
               "impact": "+22.1%"
             },
             {
@@ -999,7 +1060,7 @@
             },
             {
               "feature": "volatility",
-              "value": 26.3,
+              "value": 26.25,
               "impact": "-24.5%"
             },
             {
@@ -1015,17 +1076,63 @@
           "UP": 0.12
         },
         "conformal_prediction_set": [
-          "SHORT"
+          "SHORT",
+          "FLAT"
         ],
         "confidence_breakdown": {
           "raw_model_confidence": 88,
+          "bayesian_expected_accuracy_pct": 78.4,
+          "credible_interval_90": [
+            58.7,
+            93.3
+          ],
+          "bayesian_allocation_multiplier": 1.0,
           "rolling_accuracy_multiplier": 1.0,
           "rolling_hit_rate_pct": 65.0,
-          "agreement_penalty": 0.0,
+          "agreement_penalty": 4.0,
           "anomaly_penalty": 3.5,
           "regime_penalty": 5.0,
-          "calibrated_confidence": 88
-        }
+          "calibrated_confidence": 67
+        },
+        "hmm_regime": {
+          "active_state": 0,
+          "regime_name": "LOW_VOL_TRENDING",
+          "probabilities": {
+            "P_Trending": 0.836,
+            "P_Panic": 0.025,
+            "P_Choppy": 0.139
+          },
+          "regime_vol_annual_pct": 19.6,
+          "volatility_multiplier": 0.9,
+          "kelly_scale_factor": 1.15,
+          "stop_loss_multiplier": 1.0,
+          "state_parameters": {
+            "trending_annual_vol": 17.65,
+            "panic_annual_vol": 54.25,
+            "choppy_annual_vol": 24.96
+          }
+        },
+        "temporal_anomaly": {
+          "is_temporal_anomaly": true,
+          "temporal_anomaly_score": 0.845,
+          "reconstruction_error": 1.7901,
+          "threshold": 1.4121,
+          "feature_breakdown": {
+            "return_1d": 0.0024,
+            "volume_zscore": 0.096,
+            "parkinson_spread": 1.8495,
+            "rsi_deviation": 0.5323,
+            "macd_ratio": 0.6424
+          },
+          "recent_10d_temporal_count": 8
+        },
+        "aspect_sentiment": {
+          "risk_solvency": 0.0,
+          "liquidity_cashflow": 0.0,
+          "margin_health": 0.0
+        },
+        "tone_shift_index": 0.13,
+        "tone_shift_regime": "STABLE"
       }
     }
   ],
@@ -15014,24 +15121,75 @@
       "node": "quant",
       "data": {
         "ticker": "MSFT",
-        "current_price": 524.5,
-        "annualized_volatility": 33.99,
-        "daily_VaR_95_pct": -2.85,
-        "suggested_stop_loss_atr_pct": 6.68,
+        "current_price": 524.33,
+        "annualized_volatility": 31.43,
+        "daily_VaR_95_pct": -3.08,
+        "suggested_stop_loss_atr_pct": 6.69,
         "half_kelly_allocation_pct": 4.5,
         "half_kelly_cap_pct": 4.5,
         "recent_10d_anomalies": 1,
-        "rsi_14": 47.13,
-        "recent_5d_return_pct": -1.15,
+        "rsi_14": 47.07,
+        "recent_5d_return_pct": -1.18,
         "sma20_trend": "BEARISH",
         "close_gt_sma20": false,
-        "sma20_val": 529.42,
+        "sma20_val": 529.41,
         "sma50_val": 519.01,
-        "sma20_z_score": -0.49,
+        "sma20_z_score": -0.51,
         "bb_upper": 549.45,
-        "bb_middle": 529.42,
-        "bb_lower": 509.38,
+        "bb_middle": 529.41,
+        "bb_lower": 509.36,
         "bb_width_pct": 7.57,
+        "garch_vol_forecast_pct": 32.13,
+        "volatility_shock_ratio": 1.14,
+        "anomaly_telemetry": {
+          "is_confirmed_anomaly": false,
+          "consensus_votes": 0,
+          "confidence_score": 0.0,
+          "timeframe_breakdown": {
+            "15d_micro": false,
+            "45d_micro": false,
+            "120d_micro": false
+          },
+          "scaled_feature_magnitudes": {
+            "return_1d": 0.08,
+            "return_5d": -0.15,
+            "volume_zscore": -0.52,
+            "parkinson_spread": 0.13,
+            "rsi_deviation": -0.08
+          }
+        },
+        "hmm_regime": {
+          "active_state": 0,
+          "regime_name": "LOW_VOL_TRENDING",
+          "probabilities": {
+            "P_Trending": 0.542,
+            "P_Panic": 0.092,
+            "P_Choppy": 0.366
+          },
+          "regime_vol_annual_pct": 27.54,
+          "volatility_multiplier": 0.9,
+          "kelly_scale_factor": 1.15,
+          "stop_loss_multiplier": 1.0,
+          "state_parameters": {
+            "trending_annual_vol": 21.78,
+            "panic_annual_vol": 64.93,
+            "choppy_annual_vol": 26.72
+          }
+        },
+        "temporal_anomaly": {
+          "is_temporal_anomaly": false,
+          "temporal_anomaly_score": 0.365,
+          "reconstruction_error": 0.8716,
+          "threshold": 1.5938,
+          "feature_breakdown": {
+            "return_1d": 0.0,
+            "volume_zscore": 2.5919,
+            "parkinson_spread": 0.1431,
+            "rsi_deviation": 0.0486,
+            "macd_ratio": 0.1473
+          },
+          "recent_10d_temporal_count": 0
+        },
         "chart_data": [
           {
             "date": "2026-08-21",
@@ -15287,7 +15445,7 @@
             "low": 491.1,
             "close": 493.78,
             "volume": 39622300,
-            "is_anomaly": true,
+            "is_anomaly": false,
             "bb_upper": 512.96,
             "bb_middle": 497.51,
             "bb_lower": 482.06,
@@ -15352,7 +15510,7 @@
             "low": 497.25,
             "close": 516.17,
             "volume": 38193100,
-            "is_anomaly": true,
+            "is_anomaly": false,
             "bb_upper": 514.41,
             "bb_middle": 500.04,
             "bb_lower": 485.67,
@@ -15690,7 +15848,7 @@
             "low": 504.96,
             "close": 507.12,
             "volume": 34743300,
-            "is_anomaly": false,
+            "is_anomaly": true,
             "bb_upper": 546.12,
             "bb_middle": 530.08,
             "bb_lower": 514.04,
@@ -15716,7 +15874,7 @@
             "low": 542.3,
             "close": 555.8,
             "volume": 50807800,
-            "is_anomaly": true,
+            "is_anomaly": false,
             "bb_upper": 551.23,
             "bb_middle": 530.96,
             "bb_lower": 510.7,
@@ -15805,12 +15963,12 @@
             "open": 519.91,
             "high": 526.07,
             "low": 513.82,
-            "close": 524.5,
-            "volume": 13274585,
+            "close": 524.33,
+            "volume": 13425554,
             "is_anomaly": false,
             "bb_upper": 549.45,
-            "bb_middle": 529.42,
-            "bb_lower": 509.38,
+            "bb_middle": 529.41,
+            "bb_lower": 509.36,
             "sma_50": 519.01
           }
         ],
@@ -15819,9 +15977,11 @@
         "regime": {
           "state": 1,
           "label": "HIGH_VOLATILITY",
-          "prob_high_vol": 0.85
+          "prob_high_vol": 0.786,
+          "state_probabilities": {},
+          "kelly_scale_factor": 1.15
         },
-        "garch_volatility_forecast_pct": 34.67
+        "garch_volatility_forecast_pct": 32.13
       }
     },
     {
@@ -15834,64 +15994,125 @@
             "title": "Microsoft Corporation (MSFT) stock price, news, quote and history - Yahoo Finance UK",
             "label": "neutral",
             "score": 0.947,
-            "published_at": "Thu, 12 Nov 2026 14:54:06 GMT"
+            "published_at": "Thu, 12 Nov 2026 14:54:06 GMT",
+            "net_polarity": -0.012,
+            "heuristic_routing": "FINBERT_DIRECT",
+            "lm_matches": {
+              "pos": [],
+              "neg": []
+            }
           },
           {
             "title": "Microsoft jumps 8% as it boosts capital spending plans, citing demand - CNBC",
             "label": "positive",
             "score": 0.911,
-            "published_at": "Wed, 29 Jul 2026 07:00:00 GMT"
+            "published_at": "Wed, 29 Jul 2026 07:00:00 GMT",
+            "net_polarity": 0.886,
+            "heuristic_routing": "FINBERT_DIRECT",
+            "lm_matches": {
+              "pos": [],
+              "neg": []
+            }
           },
           {
             "title": "Microsoft's stock rockets more than 15% for largest single-day jump in history - Yahoo Finance",
             "label": "positive",
             "score": 0.897,
-            "published_at": "Thu, 30 Jul 2026 07:00:00 GMT"
+            "published_at": "Thu, 30 Jul 2026 07:00:00 GMT",
+            "net_polarity": 0.852,
+            "heuristic_routing": "FINBERT_DIRECT",
+            "lm_matches": {
+              "pos": [],
+              "neg": []
+            }
           },
           {
             "title": "MSFT Stock Soars After Results: CFO Dismisses AI Overcapacity Narrative, Says Can Rein In Spending If Demand Changes - Yahoo Finance",
-            "label": "negative",
-            "score": 0.51,
-            "published_at": "Wed, 29 Jul 2026 07:00:00 GMT"
+            "label": "neutral",
+            "score": 0.459,
+            "published_at": "Wed, 29 Jul 2026 07:00:00 GMT",
+            "net_polarity": -0.087,
+            "heuristic_routing": "DAMPENED_AMBIGUOUS",
+            "lm_matches": {
+              "pos": [],
+              "neg": []
+            }
           },
           {
             "title": "MSFT Stock Posts Best Quarter Since 1998 As Azure Growth Revives AI Optimism - Yahoo Finance",
             "label": "positive",
             "score": 0.918,
-            "published_at": "Fri, 02 Oct 2026 07:00:00 GMT"
+            "published_at": "Fri, 02 Oct 2026 07:00:00 GMT",
+            "net_polarity": 0.87,
+            "heuristic_routing": "FINBERT_DIRECT",
+            "lm_matches": {
+              "pos": [],
+              "neg": []
+            }
           },
           {
             "title": "Claude Was Right About Microsoft (MSFT): Can The Stock Keep Rising? - Yahoo Finance",
             "label": "neutral",
             "score": 0.781,
-            "published_at": "Tue, 13 Oct 2026 07:00:00 GMT"
+            "published_at": "Tue, 13 Oct 2026 07:00:00 GMT",
+            "net_polarity": 0.177,
+            "heuristic_routing": "FINBERT_DIRECT",
+            "lm_matches": {
+              "pos": [],
+              "neg": []
+            }
           },
           {
             "title": "Microsoft (MSFT) Stock Sees Modest Fair Value Lift As AI Debate Drives Price Target Split - Yahoo Finance",
             "label": "positive",
             "score": 0.898,
-            "published_at": "Wed, 17 Jun 2026 07:00:00 GMT"
+            "published_at": "Wed, 17 Jun 2026 07:00:00 GMT",
+            "net_polarity": 0.844,
+            "heuristic_routing": "FINBERT_DIRECT",
+            "lm_matches": {
+              "pos": [],
+              "neg": []
+            }
           },
           {
             "title": "Wells Fargo Raises PT on Microsoft (MSFT) Stock - Yahoo Finance",
             "label": "neutral",
             "score": 0.845,
-            "published_at": "Sat, 06 Jun 2026 07:00:00 GMT"
+            "published_at": "Sat, 06 Jun 2026 07:00:00 GMT",
+            "net_polarity": 0.079,
+            "heuristic_routing": "FINBERT_DIRECT",
+            "lm_matches": {
+              "pos": [],
+              "neg": []
+            }
           }
         ],
-        "news_available": true
+        "news_available": true,
+        "aspect_sentiment": {
+          "risk_solvency": 0.0,
+          "liquidity_cashflow": 0.0,
+          "margin_health": 0.0
+        },
+        "composite_aspect_score": 0.0,
+        "tone_shift_index": 0.44,
+        "tone_shift_regime": "STABLE",
+        "aspect_relevance": {
+          "risk_solvency": 0,
+          "liquidity_cashflow": 0,
+          "margin_health": 0
+        }
       }
     },
     {
       "node": "bull",
       "data": {
-        "bull_thesis": "\u2022 Trend regime is BEARISH with 5-day momentum at -1.15%, supporting an active Half-Kelly capacity allocation of 4.5%.\n\u2022 RSI-14 sits at 47.13 with contained 95% daily VaR of -2.85%, providing an asymmetrical entry window against 33.99% annualized vol.\n\u2022 Aggregate news sentiment reads 0.45 with 1 price/volume anomalies reflecting institutional accumulation."
+        "bull_thesis": "\u2022 Trend regime is BEARISH with 5-day momentum at -1.18%, supporting an active Half-Kelly capacity allocation of 4.5%.\n\u2022 RSI-14 sits at 47.07 with contained 95% daily VaR of -3.08%, providing an asymmetrical entry window against 31.43% annualized vol.\n\u2022 Aggregate news sentiment reads 0.45 with 1 price/volume anomalies reflecting institutional accumulation."
       }
     },
     {
       "node": "bear",
       "data": {
-        "bear_thesis": "\u2022 Tail risk is severe: 95% daily VaR of -2.85% with 33.99% annualized vol exposes any 4.5% allocation to fat-tail liquidation.\n\u2022 14-day RSI sits at 47.13; any momentum stalling will trigger abrupt mean-reversion and trap retail longs chasing 524.5.\n\u2022 1 price/volume anomalies in 10 sessions combined with headline sentiment (0.45) flag institutional distribution risk."
+        "bear_thesis": "\u2022 Tail risk is severe: 95% daily VaR of -3.08% with 31.43% annualized vol exposes any 4.5% allocation to fat-tail liquidation.\n\u2022 14-day RSI sits at 47.07; any momentum stalling will trigger abrupt mean-reversion and trap retail longs chasing 524.33.\n\u2022 1 price/volume anomalies in 10 sessions combined with headline sentiment (0.45) flag institutional distribution risk."
       }
     },
     {
@@ -15899,11 +16120,33 @@
       "data": {
         "action": "LONG",
         "verdict": "LONG",
-        "confidence": 84,
-        "recommended_allocation_pct": 4.5,
-        "stop_loss_pct": 6.68,
-        "kill_switch_reason": "Breakdown below 20-day SMA or ATR trailing stop (6.68%).",
-        "verdict_summary": "Institutional LONG execution approved: Trend structure is constructive (SMA20: BEARISH, Close: 524.5, RSI: 47.13) with positive news sentiment (0.45). Half-Kelly capacity allocated at 4.5% with stop loss at 6.68%.",
+        "raw_confidence": 84,
+        "confidence": 66,
+        "recommended_allocation_pct": 5.17,
+        "stop_loss_pct": 6.69,
+        "kill_switch_reason": "Breakdown below 20-day SMA or ATR trailing stop (6.69%).",
+        "verdict_summary": "Institutional LONG execution approved: Trend structure is constructive (SMA20: BEARISH, Close: 524.33, RSI: 47.07) with positive news sentiment (0.45). Half-Kelly capacity allocated at 5.17% with stop loss at 6.69%.",
+        "rolling_accuracy_telemetry": {
+          "rolling_hit_rate_pct": 65.0,
+          "resolved_count": 0,
+          "confidence_multiplier": 1.0,
+          "allocation_multiplier": 1.0,
+          "status": "CALIBRATION_NEUTRAL (Insufficient sample)",
+          "recent_history": [],
+          "raw_confidence": 84,
+          "calibrated_confidence": 84
+        },
+        "bayesian_calibration": {
+          "raw_ai_confidence": 84,
+          "calibrated_confidence": 66,
+          "posterior_mean_accuracy_pct": 78.4,
+          "credible_lower_bound_pct": 58.7,
+          "credible_upper_bound_pct": 93.3,
+          "bayesian_allocation_multiplier": 1.0,
+          "alpha": 10.88,
+          "beta": 3.0,
+          "sample_updates": 4
+        },
         "top_drivers": {
           "positive": [
             {
@@ -15918,19 +16161,19 @@
             },
             {
               "feature": "momentum_5d",
-              "value": -1.15,
+              "value": -1.18,
               "impact": "+14.2%"
             }
           ],
           "negative": [
             {
               "feature": "daily_VaR_95",
-              "value": -2.85,
+              "value": -3.08,
               "impact": "-31.2%"
             },
             {
               "feature": "volatility",
-              "value": 33.99,
+              "value": 31.43,
               "impact": "-24.5%"
             },
             {
@@ -15946,15 +16189,1198 @@
           "UP": 0.66
         },
         "conformal_prediction_set": [
-          "LONG"
+          "LONG",
+          "FLAT"
         ],
         "confidence_breakdown": {
           "raw_model_confidence": 84,
-          "agreement_penalty": 0.0,
+          "bayesian_expected_accuracy_pct": 78.4,
+          "credible_interval_90": [
+            58.7,
+            93.3
+          ],
+          "bayesian_allocation_multiplier": 1.0,
+          "rolling_accuracy_multiplier": 1.0,
+          "rolling_hit_rate_pct": 65.0,
+          "agreement_penalty": 4.0,
           "anomaly_penalty": 3.5,
           "regime_penalty": 5.0,
-          "calibrated_confidence": 84
+          "calibrated_confidence": 66
+        },
+        "hmm_regime": {
+          "active_state": 0,
+          "regime_name": "LOW_VOL_TRENDING",
+          "probabilities": {
+            "P_Trending": 0.542,
+            "P_Panic": 0.092,
+            "P_Choppy": 0.366
+          },
+          "regime_vol_annual_pct": 27.54,
+          "volatility_multiplier": 0.9,
+          "kelly_scale_factor": 1.15,
+          "stop_loss_multiplier": 1.0,
+          "state_parameters": {
+            "trending_annual_vol": 21.78,
+            "panic_annual_vol": 64.93,
+            "choppy_annual_vol": 26.72
+          }
+        },
+        "temporal_anomaly": {
+          "is_temporal_anomaly": false,
+          "temporal_anomaly_score": 0.365,
+          "reconstruction_error": 0.8716,
+          "threshold": 1.5938,
+          "feature_breakdown": {
+            "return_1d": 0.0,
+            "volume_zscore": 2.5919,
+            "parkinson_spread": 0.1431,
+            "rsi_deviation": 0.0486,
+            "macd_ratio": 0.1473
+          },
+          "recent_10d_temporal_count": 0
+        },
+        "aspect_sentiment": {
+          "risk_solvency": 0.0,
+          "liquidity_cashflow": 0.0,
+          "margin_health": 0.0
+        },
+        "tone_shift_index": 0.44,
+        "tone_shift_regime": "STABLE"
+      }
+    }
+  ],
+  "AAPL_": [
+    {
+      "node": "quant",
+      "data": {
+        "ticker": "AAPL",
+        "current_price": 357.58,
+        "annualized_volatility": 28.29,
+        "daily_VaR_95_pct": -2.76,
+        "suggested_stop_loss_atr_pct": 5.29,
+        "half_kelly_allocation_pct": 4.98,
+        "half_kelly_cap_pct": 4.98,
+        "recent_10d_anomalies": 2,
+        "rsi_14": 59.19,
+        "recent_5d_return_pct": 4.44,
+        "sma20_trend": "BULLISH",
+        "close_gt_sma20": true,
+        "sma20_val": 346.22,
+        "sma50_val": 339.06,
+        "sma20_z_score": 1.87,
+        "bb_upper": 358.39,
+        "bb_middle": 346.22,
+        "bb_lower": 334.04,
+        "bb_width_pct": 7.03,
+        "garch_vol_forecast_pct": 28.3,
+        "volatility_shock_ratio": 1.27,
+        "anomaly_telemetry": {
+          "is_confirmed_anomaly": false,
+          "consensus_votes": 0,
+          "confidence_score": 0.0,
+          "timeframe_breakdown": {
+            "15d_micro": false,
+            "45d_micro": false,
+            "120d_micro": false
+          },
+          "scaled_feature_magnitudes": {
+            "return_1d": 0.25,
+            "return_5d": 0.57,
+            "volume_zscore": -0.78,
+            "parkinson_spread": -0.6,
+            "rsi_deviation": 0.11
+          }
+        },
+        "hmm_regime": {
+          "active_state": 0,
+          "regime_name": "LOW_VOL_TRENDING",
+          "probabilities": {
+            "P_Trending": 0.465,
+            "P_Panic": 0.193,
+            "P_Choppy": 0.343
+          },
+          "regime_vol_annual_pct": 22.98,
+          "volatility_multiplier": 0.9,
+          "kelly_scale_factor": 1.15,
+          "stop_loss_multiplier": 1.0,
+          "state_parameters": {
+            "trending_annual_vol": 15.34,
+            "panic_annual_vol": 37.98,
+            "choppy_annual_vol": 24.9
+          }
+        },
+        "temporal_anomaly": {
+          "is_temporal_anomaly": false,
+          "temporal_anomaly_score": 0.397,
+          "reconstruction_error": 1.152,
+          "threshold": 1.9323,
+          "feature_breakdown": {
+            "return_1d": 0.1424,
+            "volume_zscore": 2.8561,
+            "parkinson_spread": 1.1356,
+            "rsi_deviation": 0.0012,
+            "macd_ratio": 0.1051
+          },
+          "recent_10d_temporal_count": 0
+        },
+        "chart_data": [
+          {
+            "date": "2026-08-21",
+            "open": 312.05,
+            "high": 312.38,
+            "low": 307.01,
+            "close": 309.35,
+            "volume": 46876800,
+            "is_anomaly": false,
+            "bb_upper": 338.86,
+            "bb_middle": 314.34,
+            "bb_lower": 289.82,
+            "sma_50": 310.21
+          },
+          {
+            "date": "2026-08-24",
+            "open": 311.47,
+            "high": 313.36,
+            "low": 309.97,
+            "close": 310.34,
+            "volume": 34673600,
+            "is_anomaly": false,
+            "bb_upper": 335.14,
+            "bb_middle": 313.01,
+            "bb_lower": 290.88,
+            "sma_50": 310.5
+          },
+          {
+            "date": "2026-08-25",
+            "open": 310.79,
+            "high": 313.59,
+            "low": 308.21,
+            "close": 309.9,
+            "volume": 25869800,
+            "is_anomaly": false,
+            "bb_upper": 329.61,
+            "bb_middle": 311.5,
+            "bb_lower": 293.39,
+            "sma_50": 310.88
+          },
+          {
+            "date": "2026-08-26",
+            "open": 310.3,
+            "high": 315.43,
+            "low": 308.8,
+            "close": 313.45,
+            "volume": 34024500,
+            "is_anomaly": false,
+            "bb_upper": 323.39,
+            "bb_middle": 310.26,
+            "bb_lower": 297.14,
+            "sma_50": 311.22
+          },
+          {
+            "date": "2026-08-27",
+            "open": 310.55,
+            "high": 315.4,
+            "low": 309.4,
+            "close": 314.58,
+            "volume": 32419200,
+            "is_anomaly": false,
+            "bb_upper": 317.04,
+            "bb_middle": 309.32,
+            "bb_lower": 301.61,
+            "sma_50": 311.52
+          },
+          {
+            "date": "2026-08-28",
+            "open": 316.85,
+            "high": 322.37,
+            "low": 315.45,
+            "close": 319.7,
+            "volume": 38649400,
+            "is_anomaly": false,
+            "bb_upper": 318.86,
+            "bb_middle": 309.86,
+            "bb_lower": 300.86,
+            "sma_50": 312.0
+          },
+          {
+            "date": "2026-08-31",
+            "open": 319.6,
+            "high": 321.24,
+            "low": 312.8,
+            "close": 316.85,
+            "volume": 41242700,
+            "is_anomaly": false,
+            "bb_upper": 319.51,
+            "bb_middle": 310.53,
+            "bb_lower": 301.55,
+            "sma_50": 312.38
+          },
+          {
+            "date": "2026-09-01",
+            "open": 316.98,
+            "high": 327.3,
+            "low": 314.73,
+            "close": 325.13,
+            "volume": 53167400,
+            "is_anomaly": true,
+            "bb_upper": 322.39,
+            "bb_middle": 311.32,
+            "bb_lower": 300.25,
+            "sma_50": 312.94
+          },
+          {
+            "date": "2026-09-02",
+            "open": 326.87,
+            "high": 328.4,
+            "low": 323.53,
+            "close": 324.96,
+            "volume": 33776400,
+            "is_anomaly": false,
+            "bb_upper": 324.65,
+            "bb_middle": 312.02,
+            "bb_lower": 299.38,
+            "sma_50": 313.55
+          },
+          {
+            "date": "2026-09-03",
+            "open": 324.87,
+            "high": 330.81,
+            "low": 324.11,
+            "close": 328.21,
+            "volume": 37225800,
+            "is_anomaly": false,
+            "bb_upper": 327.38,
+            "bb_middle": 312.81,
+            "bb_lower": 298.24,
+            "sma_50": 314.25
+          },
+          {
+            "date": "2026-09-04",
+            "open": 328.31,
+            "high": 328.93,
+            "low": 317.86,
+            "close": 319.97,
+            "volume": 39606900,
+            "is_anomaly": false,
+            "bb_upper": 328.06,
+            "bb_middle": 313.14,
+            "bb_lower": 298.22,
+            "sma_50": 315.15
+          },
+          {
+            "date": "2026-09-08",
+            "open": 317.1,
+            "high": 320.7,
+            "low": 314.9,
+            "close": 316.22,
+            "volume": 35477100,
+            "is_anomaly": false,
+            "bb_upper": 328.33,
+            "bb_middle": 313.54,
+            "bb_lower": 298.75,
+            "sma_50": 315.8
+          },
+          {
+            "date": "2026-09-09",
+            "open": 315.49,
+            "high": 319.15,
+            "low": 309.9,
+            "close": 315.34,
+            "volume": 65640000,
+            "is_anomaly": false,
+            "bb_upper": 328.3,
+            "bb_middle": 314.06,
+            "bb_lower": 299.82,
+            "sma_50": 316.47
+          },
+          {
+            "date": "2026-09-10",
+            "open": 316.67,
+            "high": 326.74,
+            "low": 316.51,
+            "close": 326.57,
+            "volume": 70011900,
+            "is_anomaly": false,
+            "bb_upper": 329.42,
+            "bb_middle": 315.28,
+            "bb_lower": 301.13,
+            "sma_50": 317.22
+          },
+          {
+            "date": "2026-09-11",
+            "open": 327.45,
+            "high": 336.22,
+            "low": 326.3,
+            "close": 332.27,
+            "volume": 50716900,
+            "is_anomaly": false,
+            "bb_upper": 331.86,
+            "bb_middle": 316.63,
+            "bb_lower": 301.39,
+            "sma_50": 317.97
+          },
+          {
+            "date": "2026-09-14",
+            "open": 334.79,
+            "high": 335.5,
+            "low": 331.34,
+            "close": 333.08,
+            "volume": 39269100,
+            "is_anomaly": false,
+            "bb_upper": 334.02,
+            "bb_middle": 317.98,
+            "bb_lower": 301.95,
+            "sma_50": 318.46
+          },
+          {
+            "date": "2026-09-15",
+            "open": 330.14,
+            "high": 331.78,
+            "low": 328.35,
+            "close": 331.34,
+            "volume": 31748200,
+            "is_anomaly": false,
+            "bb_upper": 335.25,
+            "bb_middle": 319.27,
+            "bb_lower": 303.29,
+            "sma_50": 318.84
+          },
+          {
+            "date": "2026-09-16",
+            "open": 332.53,
+            "high": 335.48,
+            "low": 330.7,
+            "close": 332.41,
+            "volume": 35981000,
+            "is_anomaly": false,
+            "bb_upper": 336.78,
+            "bb_middle": 320.39,
+            "bb_lower": 304.0,
+            "sma_50": 319.27
+          },
+          {
+            "date": "2026-09-17",
+            "open": 334.77,
+            "high": 338.34,
+            "low": 330.18,
+            "close": 337.0,
+            "volume": 36700200,
+            "is_anomaly": false,
+            "bb_upper": 339.28,
+            "bb_middle": 321.4,
+            "bb_lower": 303.52,
+            "sma_50": 319.74
+          },
+          {
+            "date": "2026-09-18",
+            "open": 337.91,
+            "high": 338.49,
+            "low": 332.53,
+            "close": 336.13,
+            "volume": 86588200,
+            "is_anomaly": false,
+            "bb_upper": 341.01,
+            "bb_middle": 322.64,
+            "bb_lower": 304.27,
+            "sma_50": 320.14
+          },
+          {
+            "date": "2026-09-21",
+            "open": 335.28,
+            "high": 339.64,
+            "low": 333.05,
+            "close": 338.98,
+            "volume": 34999200,
+            "is_anomaly": false,
+            "bb_upper": 342.75,
+            "bb_middle": 324.12,
+            "bb_lower": 305.49,
+            "sma_50": 320.62
+          },
+          {
+            "date": "2026-09-22",
+            "open": 340.14,
+            "high": 345.34,
+            "low": 338.75,
+            "close": 339.75,
+            "volume": 40711800,
+            "is_anomaly": false,
+            "bb_upper": 344.29,
+            "bb_middle": 325.59,
+            "bb_lower": 306.9,
+            "sma_50": 321.06
+          },
+          {
+            "date": "2026-09-23",
+            "open": 341.08,
+            "high": 341.8,
+            "low": 335.5,
+            "close": 337.02,
+            "volume": 31658800,
+            "is_anomaly": false,
+            "bb_upper": 344.76,
+            "bb_middle": 326.95,
+            "bb_lower": 309.13,
+            "sma_50": 321.51
+          },
+          {
+            "date": "2026-09-24",
+            "open": 336.72,
+            "high": 338.91,
+            "low": 334.3,
+            "close": 335.92,
+            "volume": 24733100,
+            "is_anomaly": false,
+            "bb_upper": 345.12,
+            "bb_middle": 328.07,
+            "bb_lower": 311.02,
+            "sma_50": 321.68
+          },
+          {
+            "date": "2026-09-25",
+            "open": 336.04,
+            "high": 341.67,
+            "low": 334.53,
+            "close": 341.07,
+            "volume": 30002500,
+            "is_anomaly": false,
+            "bb_upper": 346.15,
+            "bb_middle": 329.4,
+            "bb_lower": 312.65,
+            "sma_50": 321.83
+          },
+          {
+            "date": "2026-09-28",
+            "open": 340.37,
+            "high": 342.99,
+            "low": 338.04,
+            "close": 338.4,
+            "volume": 32820800,
+            "is_anomaly": false,
+            "bb_upper": 346.89,
+            "bb_middle": 330.33,
+            "bb_lower": 313.77,
+            "sma_50": 321.93
+          },
+          {
+            "date": "2026-09-29",
+            "open": 336.97,
+            "high": 337.09,
+            "low": 328.7,
+            "close": 329.4,
+            "volume": 38478000,
+            "is_anomaly": false,
+            "bb_upper": 346.27,
+            "bb_middle": 330.96,
+            "bb_lower": 315.65,
+            "sma_50": 321.98
+          },
+          {
+            "date": "2026-09-30",
+            "open": 330.8,
+            "high": 339.5,
+            "low": 330.14,
+            "close": 333.02,
+            "volume": 49988600,
+            "is_anomaly": false,
+            "bb_upper": 346.44,
+            "bb_middle": 331.35,
+            "bb_lower": 316.27,
+            "sma_50": 322.09
+          },
+          {
+            "date": "2026-10-01",
+            "open": 330.0,
+            "high": 332.48,
+            "low": 325.81,
+            "close": 330.32,
+            "volume": 36306300,
+            "is_anomaly": false,
+            "bb_upper": 346.41,
+            "bb_middle": 331.62,
+            "bb_lower": 316.83,
+            "sma_50": 322.18
+          },
+          {
+            "date": "2026-10-02",
+            "open": 333.26,
+            "high": 334.54,
+            "low": 330.61,
+            "close": 333.69,
+            "volume": 33278600,
+            "is_anomaly": false,
+            "bb_upper": 346.62,
+            "bb_middle": 331.89,
+            "bb_lower": 317.17,
+            "sma_50": 322.42
+          },
+          {
+            "date": "2026-10-05",
+            "open": 332.82,
+            "high": 336.21,
+            "low": 331.65,
+            "close": 332.89,
+            "volume": 34400900,
+            "is_anomaly": false,
+            "bb_upper": 346.16,
+            "bb_middle": 332.54,
+            "bb_lower": 318.92,
+            "sma_50": 322.41
+          },
+          {
+            "date": "2026-10-06",
+            "open": 332.28,
+            "high": 334.38,
+            "low": 330.62,
+            "close": 333.63,
+            "volume": 30449000,
+            "is_anomaly": false,
+            "bb_upper": 344.66,
+            "bb_middle": 333.41,
+            "bb_lower": 322.17,
+            "sma_50": 322.35
+          },
+          {
+            "date": "2026-10-07",
+            "open": 336.96,
+            "high": 338.67,
+            "low": 332.78,
+            "close": 336.67,
+            "volume": 34147900,
+            "is_anomaly": false,
+            "bb_upper": 341.9,
+            "bb_middle": 334.48,
+            "bb_lower": 327.05,
+            "sma_50": 322.28
+          },
+          {
+            "date": "2026-10-08",
+            "open": 336.82,
+            "high": 341.57,
+            "low": 335.9,
+            "close": 340.42,
+            "volume": 35332400,
+            "is_anomaly": false,
+            "bb_upper": 342.05,
+            "bb_middle": 335.17,
+            "bb_lower": 328.29,
+            "sma_50": 322.32
+          },
+          {
+            "date": "2026-10-09",
+            "open": 331.7,
+            "high": 338.61,
+            "low": 330.7,
+            "close": 336.64,
+            "volume": 37881200,
+            "is_anomaly": false,
+            "bb_upper": 342.16,
+            "bb_middle": 335.39,
+            "bb_lower": 328.62,
+            "sma_50": 322.39
+          },
+          {
+            "date": "2026-10-12",
+            "open": 338.22,
+            "high": 342.63,
+            "low": 337.6,
+            "close": 340.97,
+            "volume": 25900600,
+            "is_anomaly": false,
+            "bb_upper": 342.9,
+            "bb_middle": 335.78,
+            "bb_lower": 328.67,
+            "sma_50": 323.03
+          },
+          {
+            "date": "2026-10-13",
+            "open": 344.67,
+            "high": 348.15,
+            "low": 340.74,
+            "close": 341.27,
+            "volume": 38983800,
+            "is_anomaly": false,
+            "bb_upper": 343.48,
+            "bb_middle": 336.28,
+            "bb_lower": 329.08,
+            "sma_50": 323.79
+          },
+          {
+            "date": "2026-10-14",
+            "open": 344.61,
+            "high": 347.09,
+            "low": 341.72,
+            "close": 342.96,
+            "volume": 50061100,
+            "is_anomaly": false,
+            "bb_upper": 344.35,
+            "bb_middle": 336.81,
+            "bb_lower": 329.27,
+            "sma_50": 324.46
+          },
+          {
+            "date": "2026-10-15",
+            "open": 346.95,
+            "high": 347.85,
+            "low": 341.6,
+            "close": 342.0,
+            "volume": 39767300,
+            "is_anomaly": false,
+            "bb_upper": 344.95,
+            "bb_middle": 337.06,
+            "bb_lower": 329.17,
+            "sma_50": 325.08
+          },
+          {
+            "date": "2026-10-16",
+            "open": 346.09,
+            "high": 347.82,
+            "low": 340.46,
+            "close": 343.46,
+            "volume": 59946400,
+            "is_anomaly": false,
+            "bb_upper": 345.8,
+            "bb_middle": 337.42,
+            "bb_lower": 329.05,
+            "sma_50": 325.7
+          },
+          {
+            "date": "2026-10-19",
+            "open": 340.78,
+            "high": 346.0,
+            "low": 340.12,
+            "close": 342.94,
+            "volume": 34573200,
+            "is_anomaly": false,
+            "bb_upper": 346.33,
+            "bb_middle": 337.62,
+            "bb_lower": 328.91,
+            "sma_50": 326.29
+          },
+          {
+            "date": "2026-10-20",
+            "open": 339.86,
+            "high": 343.06,
+            "low": 338.7,
+            "close": 339.5,
+            "volume": 35851400,
+            "is_anomaly": false,
+            "bb_upper": 346.31,
+            "bb_middle": 337.61,
+            "bb_lower": 328.91,
+            "sma_50": 326.92
+          },
+          {
+            "date": "2026-10-21",
+            "open": 339.36,
+            "high": 345.25,
+            "low": 338.83,
+            "close": 343.99,
+            "volume": 35614100,
+            "is_anomaly": false,
+            "bb_upper": 347.1,
+            "bb_middle": 337.96,
+            "bb_lower": 328.81,
+            "sma_50": 327.7
+          },
+          {
+            "date": "2026-10-22",
+            "open": 344.94,
+            "high": 348.36,
+            "low": 342.28,
+            "close": 348.22,
+            "volume": 46898900,
+            "is_anomaly": false,
+            "bb_upper": 348.74,
+            "bb_middle": 338.57,
+            "bb_lower": 328.41,
+            "sma_50": 328.62
+          },
+          {
+            "date": "2026-10-23",
+            "open": 349.12,
+            "high": 351.73,
+            "low": 345.75,
+            "close": 347.73,
+            "volume": 39539700,
+            "is_anomaly": false,
+            "bb_upper": 349.83,
+            "bb_middle": 338.91,
+            "bb_lower": 327.99,
+            "sma_50": 329.47
+          },
+          {
+            "date": "2026-10-26",
+            "open": 343.92,
+            "high": 347.09,
+            "low": 341.03,
+            "close": 343.91,
+            "volume": 42743600,
+            "is_anomaly": false,
+            "bb_upper": 350.32,
+            "bb_middle": 339.18,
+            "bb_lower": 328.04,
+            "sma_50": 330.23
+          },
+          {
+            "date": "2026-10-27",
+            "open": 343.17,
+            "high": 347.78,
+            "low": 342.39,
+            "close": 347.1,
+            "volume": 39984400,
+            "is_anomaly": false,
+            "bb_upper": 350.74,
+            "bb_middle": 340.07,
+            "bb_lower": 329.39,
+            "sma_50": 331.06
+          },
+          {
+            "date": "2026-10-28",
+            "open": 346.92,
+            "high": 347.18,
+            "low": 343.52,
+            "close": 343.83,
+            "volume": 35714300,
+            "is_anomaly": false,
+            "bb_upper": 350.86,
+            "bb_middle": 340.61,
+            "bb_lower": 330.35,
+            "sma_50": 331.73
+          },
+          {
+            "date": "2026-10-29",
+            "open": 348.0,
+            "high": 351.43,
+            "low": 347.3,
+            "close": 348.91,
+            "volume": 42582100,
+            "is_anomaly": false,
+            "bb_upper": 351.22,
+            "bb_middle": 341.54,
+            "bb_lower": 331.85,
+            "sma_50": 332.37
+          },
+          {
+            "date": "2026-10-30",
+            "open": 346.72,
+            "high": 349.19,
+            "low": 334.35,
+            "close": 344.63,
+            "volume": 67841600,
+            "is_anomaly": false,
+            "bb_upper": 351.12,
+            "bb_middle": 342.08,
+            "bb_lower": 333.05,
+            "sma_50": 333.04
+          },
+          {
+            "date": "2026-11-02",
+            "open": 342.67,
+            "high": 343.8,
+            "low": 335.82,
+            "close": 338.32,
+            "volume": 64757700,
+            "is_anomaly": false,
+            "bb_upper": 350.51,
+            "bb_middle": 342.36,
+            "bb_lower": 334.2,
+            "sma_50": 333.62
+          },
+          {
+            "date": "2026-11-03",
+            "open": 325.58,
+            "high": 334.5,
+            "low": 325.33,
+            "close": 331.9,
+            "volume": 63160000,
+            "is_anomaly": true,
+            "bb_upper": 350.84,
+            "bb_middle": 342.27,
+            "bb_lower": 333.7,
+            "sma_50": 334.05
+          },
+          {
+            "date": "2026-11-04",
+            "open": 341.57,
+            "high": 354.5,
+            "low": 340.99,
+            "close": 349.51,
+            "volume": 89637700,
+            "is_anomaly": true,
+            "bb_upper": 351.63,
+            "bb_middle": 342.91,
+            "bb_lower": 334.19,
+            "sma_50": 334.84
+          },
+          {
+            "date": "2026-11-05",
+            "open": 353.89,
+            "high": 355.38,
+            "low": 342.06,
+            "close": 344.17,
+            "volume": 75678900,
+            "is_anomaly": false,
+            "bb_upper": 351.76,
+            "bb_middle": 343.1,
+            "bb_lower": 334.44,
+            "sma_50": 335.46
+          },
+          {
+            "date": "2026-11-06",
+            "open": 338.73,
+            "high": 345.79,
+            "low": 338.3,
+            "close": 342.37,
+            "volume": 44703800,
+            "is_anomaly": false,
+            "bb_upper": 351.51,
+            "bb_middle": 343.38,
+            "bb_lower": 335.26,
+            "sma_50": 336.01
+          },
+          {
+            "date": "2026-11-09",
+            "open": 345.0,
+            "high": 352.33,
+            "low": 344.78,
+            "close": 350.69,
+            "volume": 48753100,
+            "is_anomaly": false,
+            "bb_upper": 352.53,
+            "bb_middle": 343.87,
+            "bb_lower": 335.21,
+            "sma_50": 336.63
+          },
+          {
+            "date": "2026-11-10",
+            "open": 351.35,
+            "high": 353.87,
+            "low": 346.46,
+            "close": 348.51,
+            "volume": 29756100,
+            "is_anomaly": false,
+            "bb_upper": 353.04,
+            "bb_middle": 344.23,
+            "bb_lower": 335.43,
+            "sma_50": 337.27
+          },
+          {
+            "date": "2026-11-11",
+            "open": 349.55,
+            "high": 355.91,
+            "low": 349.33,
+            "close": 355.63,
+            "volume": 34453500,
+            "is_anomaly": false,
+            "bb_upper": 355.01,
+            "bb_middle": 344.87,
+            "bb_lower": 334.72,
+            "sma_50": 337.88
+          },
+          {
+            "date": "2026-11-12",
+            "open": 357.81,
+            "high": 359.37,
+            "low": 354.41,
+            "close": 354.88,
+            "volume": 31875000,
+            "is_anomaly": false,
+            "bb_upper": 356.49,
+            "bb_middle": 345.51,
+            "bb_lower": 334.53,
+            "sma_50": 338.48
+          },
+          {
+            "date": "2026-11-13",
+            "open": 357.96,
+            "high": 360.83,
+            "low": 357.3,
+            "close": 357.58,
+            "volume": 20740224,
+            "is_anomaly": false,
+            "bb_upper": 358.39,
+            "bb_middle": 346.22,
+            "bb_lower": 334.04,
+            "sma_50": 339.06
+          }
+        ],
+        "time_machine_actual_return_pct": null,
+        "max_drawdown_5d_pct": null,
+        "regime": {
+          "state": 1,
+          "label": "HIGH_VOLATILITY",
+          "prob_high_vol": 0.707,
+          "state_probabilities": {},
+          "kelly_scale_factor": 1.15
+        },
+        "garch_volatility_forecast_pct": 28.3
+      }
+    },
+    {
+      "node": "news",
+      "data": {
+        "ticker": "AAPL",
+        "aggregate_sentiment_score": 0.17,
+        "headlines": [
+          {
+            "title": "Apple Inc. (AAPL) stock price, news, quote and history - Yahoo Finance Singapore",
+            "label": "neutral",
+            "score": 0.948,
+            "published_at": "Wed, 11 Nov 2026 14:18:58 GMT",
+            "net_polarity": -0.011,
+            "heuristic_routing": "FINBERT_DIRECT",
+            "lm_matches": {
+              "pos": [],
+              "neg": []
+            }
+          },
+          {
+            "title": "Apple Is the World\u2019s Largest Company, and Nvidia Is Second. Here\u2019s What $10,000 Invested in Each Today Could Be Worth by the End of Next Year. - The Motley Fool",
+            "label": "neutral",
+            "score": 0.936,
+            "published_at": "Fri, 13 Nov 2026 15:22:00 GMT",
+            "net_polarity": 0.014,
+            "heuristic_routing": "FINBERT_DIRECT",
+            "lm_matches": {
+              "pos": [],
+              "neg": []
+            }
+          },
+          {
+            "title": "Where Will Apple Stock Be in 5 Years? - Yahoo Finance",
+            "label": "neutral",
+            "score": 0.943,
+            "published_at": "Mon, 09 Nov 2026 17:10:00 GMT",
+            "net_polarity": 0.006,
+            "heuristic_routing": "FINBERT_DIRECT",
+            "lm_matches": {
+              "pos": [],
+              "neg": []
+            }
+          },
+          {
+            "title": "Where Will Apple Stock Be in 5 Years? - The Motley Fool",
+            "label": "neutral",
+            "score": 0.922,
+            "published_at": "Mon, 09 Nov 2026 16:50:00 GMT",
+            "net_polarity": -0.012,
+            "heuristic_routing": "FINBERT_DIRECT",
+            "lm_matches": {
+              "pos": [],
+              "neg": []
+            }
+          },
+          {
+            "title": "Apple Inc. $AAPL Stock: Atala Financial Inc Raises Position - MarketBeat",
+            "label": "positive",
+            "score": 0.585,
+            "published_at": "Fri, 13 Nov 2026 08:26:49 GMT",
+            "net_polarity": 0.398,
+            "heuristic_routing": "DAMPENED_AMBIGUOUS",
+            "lm_matches": {
+              "pos": [],
+              "neg": []
+            }
+          },
+          {
+            "title": "Apple Inc. (AAPL) Rallied 15% as Investors Reassessed Its Growth: What\u2019s Next for the Stock? - Yahoo Finance",
+            "label": "positive",
+            "score": 0.898,
+            "published_at": "Tue, 10 Nov 2026 15:56:10 GMT",
+            "net_polarity": 0.873,
+            "heuristic_routing": "FINBERT_DIRECT",
+            "lm_matches": {
+              "pos": [
+                "rallied"
+              ],
+              "neg": []
+            }
+          },
+          {
+            "title": "Why Did AAPL, XERS, ZETA Stocks Jump To 52-Week Highs Today? - Yahoo Finance",
+            "label": "neutral",
+            "score": 0.865,
+            "published_at": "Thu, 12 Nov 2026 03:49:00 GMT",
+            "net_polarity": 0.09,
+            "heuristic_routing": "FINBERT_DIRECT",
+            "lm_matches": {
+              "pos": [],
+              "neg": []
+            }
+          },
+          {
+            "title": "AAPL Stock Heads For Another Green Month As John Ternus Takes The Reins From Tim Cook: What Could Change? - Yahoo Finance",
+            "label": "neutral",
+            "score": 0.924,
+            "published_at": "Sun, 30 Aug 2026 07:00:00 GMT",
+            "net_polarity": 0.011,
+            "heuristic_routing": "FINBERT_DIRECT",
+            "lm_matches": {
+              "pos": [],
+              "neg": []
+            }
+          }
+        ],
+        "news_available": true,
+        "aspect_sentiment": {
+          "risk_solvency": 0.0,
+          "liquidity_cashflow": 0.0,
+          "margin_health": 0.0
+        },
+        "composite_aspect_score": 0.0,
+        "tone_shift_index": -0.7,
+        "tone_shift_regime": "STABLE",
+        "aspect_relevance": {
+          "risk_solvency": 0,
+          "liquidity_cashflow": 0,
+          "margin_health": 0
         }
+      }
+    },
+    {
+      "node": "bull",
+      "data": {
+        "bull_thesis": "\u2022 Trend regime is BULLISH with 5-day momentum at 4.44%, supporting an active Half-Kelly capacity allocation of 4.98%.\n\u2022 RSI-14 sits at 59.19 with contained 95% daily VaR of -2.76%, providing an asymmetrical entry window against 28.29% annualized vol.\n\u2022 Aggregate news sentiment reads 0.17 with 2 price/volume anomalies reflecting institutional accumulation."
+      }
+    },
+    {
+      "node": "bear",
+      "data": {
+        "bear_thesis": "\u2022 Tail risk is severe: 95% daily VaR of -2.76% with 28.29% annualized vol exposes any 4.98% allocation to fat-tail liquidation.\n\u2022 14-day RSI sits at 59.19; any momentum stalling will trigger abrupt mean-reversion and trap retail longs chasing 357.58.\n\u2022 2 price/volume anomalies in 10 sessions combined with headline sentiment (0.17) flag institutional distribution risk."
+      }
+    },
+    {
+      "node": "cro",
+      "data": {
+        "action": "LONG",
+        "verdict": "LONG",
+        "raw_confidence": 84,
+        "confidence": 66,
+        "recommended_allocation_pct": 5.73,
+        "stop_loss_pct": 5.29,
+        "kill_switch_reason": "Breakdown below 20-day SMA or ATR trailing stop (5.29%).",
+        "verdict_summary": "Institutional LONG execution approved: Trend structure is constructive (SMA20: BULLISH, Close: 357.58, RSI: 59.19) with positive news sentiment (0.17). Half-Kelly capacity allocated at 5.73% with stop loss at 5.29%.",
+        "rolling_accuracy_telemetry": {
+          "rolling_hit_rate_pct": 65.0,
+          "resolved_count": 0,
+          "confidence_multiplier": 1.0,
+          "allocation_multiplier": 1.0,
+          "status": "CALIBRATION_NEUTRAL (Insufficient sample)",
+          "recent_history": [],
+          "raw_confidence": 84,
+          "calibrated_confidence": 84
+        },
+        "bayesian_calibration": {
+          "raw_ai_confidence": 84,
+          "calibrated_confidence": 66,
+          "posterior_mean_accuracy_pct": 78.4,
+          "credible_lower_bound_pct": 58.7,
+          "credible_upper_bound_pct": 93.3,
+          "bayesian_allocation_multiplier": 1.0,
+          "alpha": 10.88,
+          "beta": 3.0,
+          "sample_updates": 4
+        },
+        "top_drivers": {
+          "positive": [
+            {
+              "feature": "close_gt_sma20",
+              "value": true,
+              "impact": "+28.4%"
+            },
+            {
+              "feature": "sentiment_score",
+              "value": 0.17,
+              "impact": "+22.1%"
+            },
+            {
+              "feature": "momentum_5d",
+              "value": 4.44,
+              "impact": "+14.2%"
+            }
+          ],
+          "negative": [
+            {
+              "feature": "daily_VaR_95",
+              "value": -2.76,
+              "impact": "-31.2%"
+            },
+            {
+              "feature": "volatility",
+              "value": 28.29,
+              "impact": "-24.5%"
+            },
+            {
+              "feature": "isolation_forest_anomalies",
+              "value": 2,
+              "impact": "-20.8%"
+            }
+          ]
+        },
+        "calibrated_probabilities": {
+          "DOWN": 0.12,
+          "FLAT": 0.22,
+          "UP": 0.66
+        },
+        "conformal_prediction_set": [
+          "LONG",
+          "FLAT"
+        ],
+        "confidence_breakdown": {
+          "raw_model_confidence": 84,
+          "bayesian_expected_accuracy_pct": 78.4,
+          "credible_interval_90": [
+            58.7,
+            93.3
+          ],
+          "bayesian_allocation_multiplier": 1.0,
+          "rolling_accuracy_multiplier": 1.0,
+          "rolling_hit_rate_pct": 65.0,
+          "agreement_penalty": 4.0,
+          "anomaly_penalty": 7.0,
+          "regime_penalty": 5.0,
+          "calibrated_confidence": 66
+        },
+        "hmm_regime": {
+          "active_state": 0,
+          "regime_name": "LOW_VOL_TRENDING",
+          "probabilities": {
+            "P_Trending": 0.465,
+            "P_Panic": 0.193,
+            "P_Choppy": 0.343
+          },
+          "regime_vol_annual_pct": 22.98,
+          "volatility_multiplier": 0.9,
+          "kelly_scale_factor": 1.15,
+          "stop_loss_multiplier": 1.0,
+          "state_parameters": {
+            "trending_annual_vol": 15.34,
+            "panic_annual_vol": 37.98,
+            "choppy_annual_vol": 24.9
+          }
+        },
+        "temporal_anomaly": {
+          "is_temporal_anomaly": false,
+          "temporal_anomaly_score": 0.397,
+          "reconstruction_error": 1.152,
+          "threshold": 1.9323,
+          "feature_breakdown": {
+            "return_1d": 0.1424,
+            "volume_zscore": 2.8561,
+            "parkinson_spread": 1.1356,
+            "rsi_deviation": 0.0012,
+            "macd_ratio": 0.1051
+          },
+          "recent_10d_temporal_count": 0
+        },
+        "aspect_sentiment": {
+          "risk_solvency": 0.0,
+          "liquidity_cashflow": 0.0,
+          "margin_health": 0.0
+        },
+        "tone_shift_index": -0.7,
+        "tone_shift_regime": "STABLE"
       }
     }
   ]
