@@ -34,21 +34,34 @@ def analyze_ticker_quant(ticker: str, cutoff_date: Optional[str] = None) -> Dict
         except Exception:
             cutoff_dt = None
 
-    # Fetch data: if cutoff_date is set, fetch 400 days prior and 30 days after
+    # Fetch data: if cutoff_date is set, fetch 400 days prior and 30 days after.
+    # auto_adjust=False keeps the actual requested ticker's unadjusted daily Close
+    # (yfinance defaults to auto-adjusted prices, which are not the traded close).
     if cutoff_dt:
         start_str = (cutoff_dt - pd.Timedelta(days=400)).strftime("%Y-%m-%d")
         end_str = (cutoff_dt + pd.Timedelta(days=35)).strftime("%Y-%m-%d")
-        raw_df = yf.download(clean_ticker_sym, start=start_str, end=end_str, progress=False)
+        raw_df = yf.download(
+            clean_ticker_sym,
+            start=start_str,
+            end=end_str,
+            progress=False,
+            auto_adjust=False,
+        )
     else:
-        raw_df = yf.download(clean_ticker_sym, period="1y", progress=False)
+        raw_df = yf.download(
+            clean_ticker_sym,
+            period="1y",
+            progress=False,
+            auto_adjust=False,
+        )
 
-    # Fallback to Ticker.history if download returned empty
+    # Fallback to Ticker.history (same ticker only) if download returned empty
     if raw_df is None or raw_df.empty:
         t_obj = yf.Ticker(clean_ticker_sym)
         if cutoff_dt:
-            raw_df = t_obj.history(start=start_str, end=end_str)
+            raw_df = t_obj.history(start=start_str, end=end_str, auto_adjust=False)
         else:
-            raw_df = t_obj.history(period="1y")
+            raw_df = t_obj.history(period="1y", auto_adjust=False)
 
     if raw_df is None or raw_df.empty:
         raise ValueError(f"No price data found for ticker: {ticker}")

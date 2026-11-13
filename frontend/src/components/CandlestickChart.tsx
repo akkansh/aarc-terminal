@@ -11,8 +11,12 @@ import {
   CrosshairMode,
   createSeriesMarkers,
   IChartApi,
+  ISeriesApi,
+  ISeriesMarkersPluginApi,
+  Time,
 } from 'lightweight-charts';
-import { AlertTriangle, Eye, EyeOff } from 'lucide-react';
+import { AlertTriangle } from 'lucide-react';
+import { isIndexTicker, latestChartPoint, sortUniqueChartData } from '@/lib/marketDisplay';
 
 export interface ChartDataPoint {
   date: string;
@@ -34,6 +38,10 @@ interface CandlestickChartProps {
   ticker?: string;
 }
 
+type CandleSeriesApi = ISeriesApi<'Candlestick'>;
+type HistogramSeriesApi = ISeriesApi<'Histogram'>;
+type LineSeriesApi = ISeriesApi<'Line'>;
+
 export default function CandlestickChart({
   data,
   currencySymbol = '₹',
@@ -41,6 +49,15 @@ export default function CandlestickChart({
 }: CandlestickChartProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<IChartApi | null>(null);
+  const candleSeriesRef = useRef<CandleSeriesApi | null>(null);
+  const volumeSeriesRef = useRef<HistogramSeriesApi | null>(null);
+  const bbUpperSeriesRef = useRef<LineSeriesApi | null>(null);
+  const bbMiddleSeriesRef = useRef<LineSeriesApi | null>(null);
+  const bbLowerSeriesRef = useRef<LineSeriesApi | null>(null);
+  const sma50SeriesRef = useRef<LineSeriesApi | null>(null);
+  const markersRef = useRef<ISeriesMarkersPluginApi<Time> | null>(null);
+  const sortedDataRef = useRef<ChartDataPoint[]>([]);
+  const lastTickerRef = useRef<string | null>(null);
 
   // Indicator Visibility Toggles
   const [showBollinger, setShowBollinger] = useState(true);
@@ -50,25 +67,18 @@ export default function CandlestickChart({
   // Hovered item for terminal telemetry
   const [hoveredPoint, setHoveredPoint] = useState<ChartDataPoint | null>(null);
 
-  // Latest point as default
-  const latestPoint = data && data.length > 0 ? data[data.length - 1] : null;
+  // Latest point as default (by date, not array order)
+  const latestPoint = latestChartPoint(data);
   const activePoint = hoveredPoint || latestPoint;
+  const priceUnit = isIndexTicker(ticker) ? ' pts' : '';
 
+  const formatPrice = (value: number) =>
+    `${currencySymbol}${value.toFixed(2)}${priceUnit}`;
+
+  // Create the chart and all series once. Indicator toggles only change series
+  // visibility, so the viewport (pan/zoom) survives every toggle.
   useEffect(() => {
-    if (!containerRef.current || !data || data.length === 0) return;
-
-    // Filter and sort data by date ascending, ensure uniqueness
-    const sortedData = [...data]
-      .sort((a, b) => a.date.localeCompare(b.date))
-      .filter((item, index, self) => index === self.findIndex((t) => t.date === item.date));
-
-    if (sortedData.length === 0) return;
-
-    // Clean existing chart if present
-    if (chartRef.current) {
-      chartRef.current.remove();
-      chartRef.current = null;
-    }
+    if (!containerRef.current) return;
 
     const container = containerRef.current;
     const width = container.clientWidth || 600;
@@ -134,115 +144,65 @@ export default function CandlestickChart({
         minMove: 0.05,
       },
     });
+    candleSeriesRef.current = candleSeries;
 
-    const candleData = sortedData.map((d) => ({
-      time: d.date,
-      open: typeof d.open === 'number' ? d.open : d.close,
-      high: typeof d.high === 'number' ? d.high : d.close,
-      low: typeof d.low === 'number' ? d.low : d.close,
-      close: d.close,
-    }));
+    // 2. Volume Histogram at bottom
+    const volumeSeries = chart.addSeries(HistogramSeries, {
+      priceFormat: { type: 'volume' },
+      priceScaleId: 'volume',
+      visible: showVolume,
+    });
+    volumeSeriesRef.current = volumeSeries;
 
-    candleSeries.setData(candleData);
+    chart.priceScale('volume').applyOptions({
+      scaleMargins: {
+        top: 0.8,
+        bottom: 0,
+      },
+    });
 
-    // 2. Anomaly markers on top of candles
-    const anomalyMarkers = sortedData
-      .filter((d) => d.is_anomaly)
-      .map((d) => ({
-        time: d.date,
-        position: 'aboveBar' as const,
-        color: '#F43F5E',
-        shape: 'circle' as const,
-        text: 'ANOMALY',
-        size: 1.2,
-      }));
+    // 3. Bollinger Bands (Upper, Middle/SMA20, Lower)
+    const bbUpperSeries = chart.addSeries(LineSeries, {
+      color: '#818CF8',
+      lineWidth: 1,
+      lineStyle: LineStyle.Dashed,
+      title: 'BB Upper',
+      priceLineVisible: false,
+      visible: showBollinger,
+    });
+    const bbMiddleSeries = chart.addSeries(LineSeries, {
+      color: '#F59E0B',
+      lineWidth: 1,
+      lineStyle: LineStyle.Dotted,
+      title: 'SMA 20',
+      priceLineVisible: false,
+      visible: showBollinger,
+    });
+    const bbLowerSeries = chart.addSeries(LineSeries, {
+      color: '#818CF8',
+      lineWidth: 1,
+      lineStyle: LineStyle.Dashed,
+      title: 'BB Lower',
+      priceLineVisible: false,
+      visible: showBollinger,
+    });
+    bbUpperSeriesRef.current = bbUpperSeries;
+    bbMiddleSeriesRef.current = bbMiddleSeries;
+    bbLowerSeriesRef.current = bbLowerSeries;
 
-    if (anomalyMarkers.length > 0) {
-      createSeriesMarkers(candleSeries, anomalyMarkers);
-    }
+    // 4. 50-day Moving Average (SMA50)
+    const sma50Series = chart.addSeries(LineSeries, {
+      color: '#06B6D4',
+      lineWidth: 2,
+      lineStyle: LineStyle.Solid,
+      title: 'SMA 50',
+      priceLineVisible: false,
+      visible: showSma50,
+    });
+    sma50SeriesRef.current = sma50Series;
 
-    // 3. Volume Histogram at bottom
-    if (showVolume) {
-      const volumeSeries = chart.addSeries(HistogramSeries, {
-        priceFormat: { type: 'volume' },
-        priceScaleId: 'volume',
-      });
-
-      chart.priceScale('volume').applyOptions({
-        scaleMargins: {
-          top: 0.8,
-          bottom: 0,
-        },
-      });
-
-      const volumeData = sortedData.map((d) => {
-        const o = typeof d.open === 'number' ? d.open : d.close;
-        const isUp = d.close >= o;
-        return {
-          time: d.date,
-          value: d.volume,
-          color: isUp ? 'rgba(16, 185, 129, 0.35)' : 'rgba(244, 63, 94, 0.35)',
-        };
-      });
-
-      volumeSeries.setData(volumeData);
-    }
-
-    // 4. Bollinger Bands (Upper, Middle/SMA20, Lower)
-    if (showBollinger) {
-      const bbUpperSeries = chart.addSeries(LineSeries, {
-        color: '#818CF8',
-        lineWidth: 1,
-        lineStyle: LineStyle.Dashed,
-        title: 'BB Upper',
-        priceLineVisible: false,
-      });
-      const bbMiddleSeries = chart.addSeries(LineSeries, {
-        color: '#F59E0B',
-        lineWidth: 1,
-        lineStyle: LineStyle.Dotted,
-        title: 'SMA 20',
-        priceLineVisible: false,
-      });
-      const bbLowerSeries = chart.addSeries(LineSeries, {
-        color: '#818CF8',
-        lineWidth: 1,
-        lineStyle: LineStyle.Dashed,
-        title: 'BB Lower',
-        priceLineVisible: false,
-      });
-
-      const upperData = sortedData
-        .filter((d) => typeof d.bb_upper === 'number' && d.bb_upper > 0)
-        .map((d) => ({ time: d.date, value: d.bb_upper! }));
-      const middleData = sortedData
-        .filter((d) => typeof d.bb_middle === 'number' && d.bb_middle > 0)
-        .map((d) => ({ time: d.date, value: d.bb_middle! }));
-      const lowerData = sortedData
-        .filter((d) => typeof d.bb_lower === 'number' && d.bb_lower > 0)
-        .map((d) => ({ time: d.date, value: d.bb_lower! }));
-
-      bbUpperSeries.setData(upperData);
-      bbMiddleSeries.setData(middleData);
-      bbLowerSeries.setData(lowerData);
-    }
-
-    // 5. 50-day Moving Average (SMA50)
-    if (showSma50) {
-      const sma50Series = chart.addSeries(LineSeries, {
-        color: '#06B6D4',
-        lineWidth: 2,
-        lineStyle: LineStyle.Solid,
-        title: 'SMA 50',
-        priceLineVisible: false,
-      });
-
-      const sma50Data = sortedData
-        .filter((d) => typeof d.sma_50 === 'number' && d.sma_50 > 0)
-        .map((d) => ({ time: d.date, value: d.sma_50! }));
-
-      sma50Series.setData(sma50Data);
-    }
+    // Anomaly markers live on the candle series and are refreshed with the data.
+    markersRef.current = createSeriesMarkers(candleSeries, []);
 
     // Crosshair move handler
     chart.subscribeCrosshairMove((param) => {
@@ -251,15 +211,9 @@ export default function CandlestickChart({
         return;
       }
       const timeStr = String(param.time);
-      const match = sortedData.find((d) => d.date === timeStr);
-      if (match) {
-        setHoveredPoint(match);
-      } else {
-        setHoveredPoint(null);
-      }
+      const match = sortedDataRef.current.find((d) => d.date === timeStr);
+      setHoveredPoint(match || null);
     });
-
-    chart.timeScale().fitContent();
 
     // Resize handling
     const resizeObserver = new ResizeObserver((entries) => {
@@ -274,12 +228,116 @@ export default function CandlestickChart({
 
     return () => {
       resizeObserver.disconnect();
+      if (markersRef.current) {
+        markersRef.current.detach();
+        markersRef.current = null;
+      }
       if (chartRef.current) {
         chartRef.current.remove();
         chartRef.current = null;
       }
+      candleSeriesRef.current = null;
+      volumeSeriesRef.current = null;
+      bbUpperSeriesRef.current = null;
+      bbMiddleSeriesRef.current = null;
+      bbLowerSeriesRef.current = null;
+      sma50SeriesRef.current = null;
+      sortedDataRef.current = [];
+      lastTickerRef.current = null;
     };
-  }, [data, showBollinger, showSma50, showVolume]);
+    // Chart is created once; indicator visibility is applied by the effect below.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Refresh series data without recreating the chart. Preserve the visible range
+  // unless the user has selected a different ticker.
+  useEffect(() => {
+    const candleSeries = candleSeriesRef.current;
+    if (!candleSeries) return;
+
+    const sortedData = sortUniqueChartData(data || []);
+    sortedDataRef.current = sortedData;
+
+    candleSeries.setData(
+      sortedData.map((d) => ({
+        time: d.date,
+        open: typeof d.open === 'number' ? d.open : d.close,
+        high: typeof d.high === 'number' ? d.high : d.close,
+        low: typeof d.low === 'number' ? d.low : d.close,
+        close: d.close,
+      })),
+    );
+
+    volumeSeriesRef.current?.setData(
+      sortedData.map((d) => {
+        const open = typeof d.open === 'number' ? d.open : d.close;
+        const isUp = d.close >= open;
+        return {
+          time: d.date,
+          value: d.volume,
+          color: isUp ? 'rgba(16, 185, 129, 0.35)' : 'rgba(244, 63, 94, 0.35)',
+        };
+      }),
+    );
+
+    bbUpperSeriesRef.current?.setData(
+      sortedData
+        .filter((d) => typeof d.bb_upper === 'number' && d.bb_upper > 0)
+        .map((d) => ({ time: d.date, value: d.bb_upper! })),
+    );
+    bbMiddleSeriesRef.current?.setData(
+      sortedData
+        .filter((d) => typeof d.bb_middle === 'number' && d.bb_middle > 0)
+        .map((d) => ({ time: d.date, value: d.bb_middle! })),
+    );
+    bbLowerSeriesRef.current?.setData(
+      sortedData
+        .filter((d) => typeof d.bb_lower === 'number' && d.bb_lower > 0)
+        .map((d) => ({ time: d.date, value: d.bb_lower! })),
+    );
+    sma50SeriesRef.current?.setData(
+      sortedData
+        .filter((d) => typeof d.sma_50 === 'number' && d.sma_50 > 0)
+        .map((d) => ({ time: d.date, value: d.sma_50! })),
+    );
+
+    markersRef.current?.setMarkers(
+      sortedData
+        .filter((d) => d.is_anomaly)
+        .map((d) => ({
+          time: d.date,
+          position: 'aboveBar' as const,
+          color: '#F43F5E',
+          shape: 'circle' as const,
+          text: 'ANOMALY',
+          size: 1.2,
+        })),
+    );
+
+    setHoveredPoint(null);
+
+    if (lastTickerRef.current !== ticker) {
+      lastTickerRef.current = ticker;
+      chartRef.current?.timeScale().fitContent();
+    }
+  }, [data, ticker]);
+
+  // Indicator toggles only apply visibility; the chart and viewport stay intact.
+  useEffect(() => {
+    bbUpperSeriesRef.current?.applyOptions({ visible: showBollinger });
+    bbMiddleSeriesRef.current?.applyOptions({ visible: showBollinger });
+    bbLowerSeriesRef.current?.applyOptions({ visible: showBollinger });
+    sma50SeriesRef.current?.applyOptions({ visible: showSma50 });
+    volumeSeriesRef.current?.applyOptions({ visible: showVolume });
+    chartRef.current?.applyOptions({
+      rightPriceScale: {
+        scaleMargins: {
+          top: 0.08,
+          bottom: showVolume ? 0.22 : 0.08,
+        },
+      },
+    });
+  }, [showBollinger, showSma50, showVolume]);
 
   return (
     <div className="space-y-2.5">
@@ -349,22 +407,19 @@ export default function CandlestickChart({
             <span className="text-[#64748B]">
               O:{' '}
               <span className="text-white">
-                {currencySymbol}
-                {(activePoint.open ?? activePoint.close).toFixed(2)}
+                {formatPrice(activePoint.open ?? activePoint.close)}
               </span>
             </span>
             <span className="text-[#64748B]">
               H:{' '}
               <span className="text-white">
-                {currencySymbol}
-                {(activePoint.high ?? activePoint.close).toFixed(2)}
+                {formatPrice(activePoint.high ?? activePoint.close)}
               </span>
             </span>
             <span className="text-[#64748B]">
               L:{' '}
               <span className="text-white">
-                {currencySymbol}
-                {(activePoint.low ?? activePoint.close).toFixed(2)}
+                {formatPrice(activePoint.low ?? activePoint.close)}
               </span>
             </span>
             <span className="text-[#64748B]">
@@ -376,8 +431,7 @@ export default function CandlestickChart({
                     : 'text-[#F43F5E]'
                 }`}
               >
-                {currencySymbol}
-                {activePoint.close.toFixed(2)}
+                {formatPrice(activePoint.close)}
               </span>
             </span>
             <span className="text-[#64748B]">
@@ -392,11 +446,13 @@ export default function CandlestickChart({
             {showBollinger && typeof activePoint.bb_upper === 'number' && (
               <span className="text-[#818CF8] text-[10px]">
                 BB: [{activePoint.bb_lower?.toFixed(1)} - {activePoint.bb_upper?.toFixed(1)}]
+                {priceUnit}
               </span>
             )}
             {showSma50 && typeof activePoint.sma_50 === 'number' && (
               <span className="text-[#06B6D4] text-[10px]">
                 SMA50: {activePoint.sma_50?.toFixed(1)}
+                {priceUnit}
               </span>
             )}
             {activePoint.is_anomaly && (

@@ -95,6 +95,14 @@ def _call_gemini(client, prompt: str, schema=None):
     return None
 
 
+def _sentiment_inputs(news_data: Dict[str, Any]) -> tuple:
+    """Return (numeric sentiment for rules, display label for generated text)."""
+    value = news_data.get("aggregate_sentiment_score")
+    if isinstance(value, (int, float)) and not isinstance(value, bool):
+        return float(value), f"{value}"
+    return 0.0, "UNAVAILABLE"
+
+
 def run_bull_node(quant_data: Dict[str, Any], news_data: Dict[str, Any]) -> str:
     """
     Bull node: Uses Gemini to write 3 sharp, quantitative bullet points
@@ -110,7 +118,7 @@ def run_bull_node(quant_data: Dict[str, Any], news_data: Dict[str, Any]) -> str:
     rsi = quant_data.get("rsi_14", 50.0)
     ret_5d = quant_data.get("recent_5d_return_pct", 0.0)
     sma_trend = quant_data.get("sma20_trend", "BULLISH")
-    sentiment = news_data.get("aggregate_sentiment_score", 0.0)
+    sentiment, sentiment_label = _sentiment_inputs(news_data)
     headlines = [h.get("title", "") for h in news_data.get("headlines", [])[:3]]
 
     prompt = f"""You are the Lead Quantitative Bull Analyst at an elite multi-strategy hedge fund.
@@ -124,12 +132,12 @@ Exact Quantitative Metrics:
 - 95% Daily VaR: {var}%
 - Half-Kelly Capacity Floor: {kelly}%
 - Recent 10-day Anomalies: {anomalies}
-- News Sentiment Score: {sentiment} (-1.0 to +1.0)
+- News Sentiment Score: {sentiment_label} (-1.0 to +1.0)
 - Recent Headlines: {headlines}
 
 Rules:
 1. Exactly 3 bullet points, each starting with '• '.
-2. Cite the specific numbers (price, Kelly fraction {kelly}%, RSI {rsi}, SMA trend, or sentiment {sentiment}) to justify upside.
+2. Cite the specific numbers (price, Kelly fraction {kelly}%, RSI {rsi}, SMA trend, or sentiment {sentiment_label}) to justify upside.
 3. Keep each bullet point under 35 words. Be ultra-concise and professional.
 """
     if client:
@@ -141,7 +149,7 @@ Rules:
     return (
         f"• Trend regime is {sma_trend} with 5-day momentum at {ret_5d}%, supporting an active Half-Kelly capacity allocation of {kelly}%.\n"
         f"• RSI-14 sits at {rsi} with contained 95% daily VaR of {var}%, providing an asymmetrical entry window against {vol}% annualized vol.\n"
-        f"• Aggregate news sentiment reads {sentiment} with {anomalies} price/volume anomalies reflecting institutional accumulation."
+        f"• Aggregate news sentiment reads {sentiment_label} with {anomalies} price/volume anomalies reflecting institutional accumulation."
     )
 
 
@@ -159,7 +167,7 @@ def run_bear_node(quant_data: Dict[str, Any], news_data: Dict[str, Any], bull_th
     anomalies = quant_data.get("recent_10d_anomalies", 0)
     rsi = quant_data.get("rsi_14", 50.0)
     ret_5d = quant_data.get("recent_5d_return_pct", 0.0)
-    sentiment = news_data.get("aggregate_sentiment_score", 0.0)
+    sentiment, sentiment_label = _sentiment_inputs(news_data)
     headlines = [h.get("title", "") for h in news_data.get("headlines", [])]
 
     prompt = f"""You are a ruthless short-seller and Head of Adversarial Stress Testing at a Tier-1 macro fund.
@@ -171,7 +179,7 @@ Quantitative Metrics:
 - Annualized Volatility: {vol}%
 - 95% Daily VaR: {var}%
 - Recent 10-day Anomalies: {anomalies}
-- News Sentiment Score: {sentiment}
+- News Sentiment Score: {sentiment_label}
 - Key Headlines: {headlines}
 
 Bull Case:
@@ -191,7 +199,7 @@ Rules:
     return (
         f"• Tail risk is severe: 95% daily VaR of {var}% with {vol}% annualized vol exposes any {kelly}% allocation to fat-tail liquidation.\n"
         f"• 14-day RSI sits at {rsi}; any momentum stalling will trigger abrupt mean-reversion and trap retail longs chasing {price}.\n"
-        f"• {anomalies} price/volume anomalies in 10 sessions combined with headline sentiment ({sentiment}) flag institutional distribution risk."
+        f"• {anomalies} price/volume anomalies in 10 sessions combined with headline sentiment ({sentiment_label}) flag institutional distribution risk."
     )
 
 
@@ -219,7 +227,7 @@ def run_cro_node(
     ret_5d = quant_data.get("recent_5d_return_pct", 0.0)
     close_gt_sma20 = quant_data.get("close_gt_sma20", True)
     sma_trend = quant_data.get("sma20_trend", "BULLISH")
-    sentiment = news_data.get("aggregate_sentiment_score", 0.0)
+    sentiment, sentiment_label = _sentiment_inputs(news_data)
 
     # Dynamic conditioning from HMM Regime & LSTM Temporal Anomaly
     hmm_data = quant_data.get("hmm_regime", {})
@@ -250,7 +258,7 @@ Annualized Volatility: {vol}%
 Suggested Stop Loss (2x ATR %): {suggested_stop}%
 Half-Kelly Allocation Cap: {kelly}%
 Recent 10d Anomalies: {anomalies}
-News Sentiment Score: {sentiment}
+News Sentiment Score: {sentiment_label}
 
 Bull Argument:
 {bull_thesis}
@@ -340,13 +348,18 @@ Instructions:
         conf = 80
         alloc = min(kelly, 10.0)
         kill = f"Breakout back above 20-day SMA or ATR stop ({suggested_stop}%)."
-        summary = f"Bearish trend breakdown confirmed: Spot price trading below 20-day SMA with adverse headline sentiment ({sentiment}). SHORT position sizing approved at {alloc}% with stop at {suggested_stop}%."
+        summary = f"Bearish trend breakdown confirmed: Spot price trading below 20-day SMA with adverse headline sentiment ({sentiment_label}). SHORT position sizing approved at {alloc}% with stop at {suggested_stop}%."
     elif is_long_regime or close_gt_sma20 or sentiment > 0.0:
         action = "LONG"
         conf = 84
         alloc = min(kelly, 15.0)
         kill = f"Breakdown below 20-day SMA or ATR trailing stop ({suggested_stop}%)."
-        summary = f"Institutional LONG execution approved: Trend structure is constructive (SMA20: {sma_trend}, Close: {price}, RSI: {rsi}) with positive news sentiment ({sentiment}). Half-Kelly capacity allocated at {alloc}% with stop loss at {suggested_stop}%."
+        sentiment_summary = (
+            f"positive news sentiment ({sentiment_label})"
+            if sentiment > 0.0
+            else f"news sentiment {sentiment_label}"
+        )
+        summary = f"Institutional LONG execution approved: Trend structure is constructive (SMA20: {sma_trend}, Close: {price}, RSI: {rsi}) with {sentiment_summary}. Half-Kelly capacity allocated at {alloc}% with stop loss at {suggested_stop}%."
     else:
         action = "LONG"
         conf = 72
@@ -428,7 +441,9 @@ async def stream_committee(ticker: str, cutoff_date: Optional[str] = None):
 
     # 2. News Node
     try:
-        news_data = await asyncio.to_thread(analyze_ticker_sentiment, clean_ticker)
+        news_data = await asyncio.to_thread(
+            analyze_ticker_sentiment, clean_ticker, cutoff_date
+        )
         yield {
             "node": "news",
             "data": news_data
@@ -436,15 +451,24 @@ async def stream_committee(ticker: str, cutoff_date: Optional[str] = None):
     except Exception as e:
         print(f"[STREAM NEWS ERROR]: {e}")
         traceback.print_exc()
+        # Report sentiment as unavailable; never substitute a fake neutral score.
         news_data = {
             "ticker": clean_ticker,
-            "aggregate_sentiment_score": 0.0,
-            "headlines": []
+            "aggregate_sentiment_score": None,
+            "headlines": [],
+            "news_available": False,
+            "news_error": str(e),
         }
         yield {
             "node": "news",
             "data": news_data
         }
+
+    # Indices are benchmarks, not directly tradable instruments. Keep their
+    # market analysis, but never generate trade theses or allocation advice.
+    if clean_ticker.startswith("^"):
+        yield {"node": "index_complete", "data": {"ticker": clean_ticker}}
+        return
 
     # 3. Bull Node
     try:
