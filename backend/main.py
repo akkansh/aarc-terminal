@@ -8,11 +8,15 @@ from dotenv import load_dotenv
 # Ensure .env is loaded before anything else
 ROOT_ENV_PATH = Path(__file__).resolve().parent.parent / ".env"
 load_dotenv(dotenv_path=ROOT_ENV_PATH, override=True)
-from fastapi import FastAPI, Query, HTTPException
+from fastapi import FastAPI, Query, HTTPException, Body
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel, Field
 from sse_starlette.sse import EventSourceResponse
 
-from backend.graph import stream_committee
+from backend.graph import stream_committee, run_cro_node, run_bull_node, run_bear_node
+from backend.tools.quant_math import analyze_ticker_quant
+from backend.tools.sentiment_nlp import analyze_ticker_sentiment
+from backend.calibration.bayesian_calibrator import BetaBinomialConfidenceCalibrator
 import yfinance as yf
 
 app = FastAPI(
@@ -162,6 +166,223 @@ async def stream_committee_endpoint(
             }
 
     return EventSourceResponse(event_generator())
+
+
+class ConfidenceUpdateRequest(BaseModel):
+    is_hit: bool = Field(description="Whether the previous risk or direction prediction was accurate")
+    ticker: Optional[str] = Field(default=None, description="Optional asset ticker symbol")
+
+
+@app.get("/api/regime/status")
+async def get_regime_status(
+    ticker: str = Query(default="RELIANCE.NS", description="Asset ticker symbol"),
+    cutoff_date: Optional[str] = Query(default=None, description="Optional historical cutoff date (YYYY-MM-DD)"),
+):
+    """
+    Exposes Gaussian HMM 3-state market regime classification and GARCH(1,1) volatility dynamics.
+    Outputs active state probabilities, conditional volatility, and regime risk boundaries.
+    """
+    clean_t = ticker.strip().upper()
+    try:
+        quant_data = await asyncio.to_thread(analyze_ticker_quant, clean_t, cutoff_date)
+        regime = quant_data.get("hmm_regime", {})
+        return {
+            "ticker": clean_t,
+            "active_state": regime.get("active_state", 0),
+            "regime_name": regime.get("regime_name", "LOW_VOL_TRENDING"),
+            "probabilities": regime.get("probabilities", {"P_Trending": 0.65, "P_Panic": 0.10, "P_Choppy": 0.25}),
+            "garch_vol_forecast_annual_pct": quant_data.get("garch_vol_forecast_pct"),
+            "volatility_shock_ratio": quant_data.get("volatility_shock_ratio"),
+            "regime_vol_annual_pct": regime.get("regime_vol_annual_pct"),
+            "kelly_scale_factor": regime.get("kelly_scale_factor", 1.0),
+            "stop_loss_multiplier": regime.get("stop_loss_multiplier", 1.0),
+            "state_parameters": regime.get("state_parameters", {}),
+            "current_price": quant_data.get("current_price"),
+            "annualized_volatility": quant_data.get("annualized_volatility"),
+            "daily_VaR_95_pct": quant_data.get("daily_VaR_95_pct"),
+        }
+    except Exception as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+
+
+@app.get("/api/anomaly/status")
+async def get_anomaly_status(
+    ticker: str = Query(default="RELIANCE.NS", description="Asset ticker symbol"),
+    cutoff_date: Optional[str] = Query(default=None, description="Optional historical cutoff date (YYYY-MM-DD)"),
+):
+    """
+    Exposes PyTorch LSTM Autoencoder sequence reconstruction anomaly detection
+    alongside multi-timeframe ensemble Isolation Forest anomaly votes.
+    """
+    clean_t = ticker.strip().upper()
+    try:
+        quant_data = await asyncio.to_thread(analyze_ticker_quant, clean_t, cutoff_date)
+        temporal = quant_data.get("temporal_anomaly", {})
+        return {
+            "ticker": clean_t,
+            "is_temporal_anomaly": temporal.get("is_temporal_anomaly", False),
+            "temporal_anomaly_score": temporal.get("temporal_anomaly_score", 0.0),
+            "reconstruction_error": temporal.get("reconstruction_error", 0.0),
+            "reconstruction_threshold": temporal.get("threshold", 0.0),
+            "feature_breakdown": temporal.get("feature_breakdown", {}),
+            "recent_10d_temporal_count": temporal.get("recent_10d_temporal_count", 0),
+            "ensemble_isolation_forest": quant_data.get("anomaly_telemetry", {}),
+            "point_in_time_anomalies_10d": quant_data.get("recent_10d_anomalies", 0),
+        }
+    except Exception as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+
+
+@app.get("/api/anomaly/stream")
+async def stream_anomaly_status(
+    ticker: str = Query(default="RELIANCE.NS", description="Asset ticker symbol"),
+    cutoff_date: Optional[str] = Query(default=None, description="Optional historical cutoff date (YYYY-MM-DD)"),
+):
+    """
+    Real-time SSE telemetry stream for temporal anomaly monitoring.
+    """
+    clean_t = ticker.strip().upper()
+
+    async def anomaly_generator():
+        try:
+            quant_data = await asyncio.to_thread(analyze_ticker_quant, clean_t, cutoff_date)
+            temporal = quant_data.get("temporal_anomaly", {})
+            yield {
+                "data": json.dumps({
+                    "event": "anomaly_telemetry",
+                    "ticker": clean_t,
+                    "is_temporal_anomaly": temporal.get("is_temporal_anomaly", False),
+                    "reconstruction_error": temporal.get("reconstruction_error", 0.0),
+                    "threshold": temporal.get("threshold", 0.0),
+                    "feature_breakdown": temporal.get("feature_breakdown", {}),
+                    "recent_10d_temporal_count": temporal.get("recent_10d_temporal_count", 0),
+                    "ensemble_isolation_forest": quant_data.get("anomaly_telemetry", {}),
+                })
+            }
+        except Exception as exc:
+            yield {
+                "data": json.dumps({"event": "error", "error": str(exc)})
+            }
+
+    return EventSourceResponse(anomaly_generator())
+
+
+@app.get("/api/sentiment/aspects")
+async def get_sentiment_aspects(
+    ticker: str = Query(default="RELIANCE.NS", description="Asset ticker symbol"),
+    cutoff_date: Optional[str] = Query(default=None, description="Optional historical cutoff date (YYYY-MM-DD)"),
+):
+    """
+    Exposes FinBERT sentiment analysis with Loughran-McDonald confidence thresholding,
+    Aspect-Based Sentiment Analysis (Risk/Solvency, Liquidity/Cash Flow, Margin Health),
+    and Tone Shift Index (TSI) narrative momentum.
+    """
+    clean_t = ticker.strip().upper()
+    try:
+        news_data = await asyncio.to_thread(analyze_ticker_sentiment, clean_t, cutoff_date)
+        return {
+            "ticker": clean_t,
+            "aggregate_sentiment_score": news_data.get("aggregate_sentiment_score"),
+            "aspect_scores": news_data.get("aspect_sentiment", {}),
+            "composite_aspect_score": news_data.get("composite_aspect_score", 0.0),
+            "tone_shift_index": news_data.get("tone_shift_index", 0.0),
+            "tone_shift_regime": news_data.get("tone_shift_regime", "NEUTRAL"),
+            "aspect_relevance": news_data.get("aspect_relevance", {}),
+            "news_available": news_data.get("news_available", True),
+            "headlines": news_data.get("headlines", []),
+        }
+    except Exception as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+
+
+@app.get("/api/risk/evaluate")
+async def evaluate_risk_consolidated(
+    ticker: str = Query(default="RELIANCE.NS", description="Asset ticker symbol"),
+    cutoff_date: Optional[str] = Query(default=None, description="Optional historical cutoff date (YYYY-MM-DD)"),
+):
+    """
+    Consolidated institutional risk arbitration endpoint:
+    Synthesizes HMM dynamic regimes, GARCH(1,1) volatility forecasts, LSTM Autoencoder sequential anomalies,
+    Aspect-Based Sentiment Analysis (ABSA), Tone Shift Index (TSI), and Chief Risk Officer (CRO) arbitration
+    calibrated with Bayesian Beta-Binomial conjugate updating.
+    """
+    clean_t = ticker.strip().upper()
+    try:
+        quant_data = await asyncio.to_thread(analyze_ticker_quant, clean_t, cutoff_date)
+        news_data = await asyncio.to_thread(analyze_ticker_sentiment, clean_t, cutoff_date)
+        bull_thesis = await asyncio.to_thread(run_bull_node, quant_data, news_data)
+        bear_thesis = await asyncio.to_thread(run_bear_node, quant_data, news_data, bull_thesis)
+        cro_verdict = await asyncio.to_thread(run_cro_node, quant_data, news_data, bull_thesis, bear_thesis)
+
+        return {
+            "ticker": clean_t,
+            "current_price": quant_data.get("current_price"),
+            "action": cro_verdict.get("action"),
+            "verdict": cro_verdict.get("verdict"),
+            "calibrated_confidence": cro_verdict.get("confidence"),
+            "raw_confidence": cro_verdict.get("raw_confidence"),
+            "bayesian_calibration": cro_verdict.get("bayesian_calibration"),
+            "confidence_breakdown": cro_verdict.get("confidence_breakdown"),
+            "regime": quant_data.get("hmm_regime"),
+            "garch_volatility": {
+                "5d_forecast_annual_pct": quant_data.get("garch_vol_forecast_pct"),
+                "historical_annual_vol_pct": quant_data.get("annualized_volatility"),
+                "volatility_shock_ratio": quant_data.get("volatility_shock_ratio"),
+                "daily_VaR_95_pct": quant_data.get("daily_VaR_95_pct"),
+            },
+            "sequential_anomaly": quant_data.get("temporal_anomaly"),
+            "ensemble_isolation_forest": quant_data.get("anomaly_telemetry"),
+            "sentiment_and_tone_shift": {
+                "aggregate_sentiment": news_data.get("aggregate_sentiment_score"),
+                "aspects": news_data.get("aspect_sentiment"),
+                "tone_shift_index": news_data.get("tone_shift_index"),
+                "tone_shift_regime": news_data.get("tone_shift_regime"),
+            },
+            "risk_boundaries": {
+                "recommended_allocation_pct": cro_verdict.get("recommended_allocation_pct"),
+                "half_kelly_cap_pct": quant_data.get("half_kelly_allocation_pct"),
+                "suggested_stop_loss_pct": cro_verdict.get("stop_loss_pct"),
+                "kill_switch_reason": cro_verdict.get("kill_switch_reason"),
+            },
+            "theses": {
+                "bull_thesis": bull_thesis,
+                "bear_thesis": bear_thesis,
+            },
+            "verdict_summary": cro_verdict.get("verdict_summary"),
+            "top_explainability_drivers": cro_verdict.get("top_drivers"),
+        }
+    except Exception as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+
+
+@app.post("/api/confidence/update")
+async def update_bayesian_confidence(body: ConfidenceUpdateRequest = Body(...)):
+    """
+    Bayesian confidence updating endpoint:
+    Increments alpha on successful risk/anomaly prediction and beta on false positives.
+    Updates the Beta-Binomial conjugate posterior moments and 90% credible intervals.
+    """
+    calibrator = BetaBinomialConfidenceCalibrator()
+    summary = calibrator.update_evidence(is_hit=body.is_hit, ticker=body.ticker)
+    return {
+        "status": "success",
+        "ticker": body.ticker,
+        "is_hit": body.is_hit,
+        "posterior_summary": summary,
+    }
+
+
+@app.get("/api/confidence/status")
+async def get_confidence_status(ticker: Optional[str] = Query(default=None)):
+    """
+    Returns current Bayesian Beta-Binomial posterior accuracy, variance, and 90% credible intervals.
+    """
+    calibrator = BetaBinomialConfidenceCalibrator()
+    summary = calibrator.get_posterior_summary(ticker=ticker)
+    return {
+        "ticker": ticker or "GLOBAL",
+        "posterior_summary": summary,
+    }
 
 
 if __name__ == "__main__":
