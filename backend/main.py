@@ -67,10 +67,21 @@ async def health_check():
     }
 
 
+TICKER_ALIASES = {
+    "ZOMATO": "ETERNAL.NS",
+    "ZOMATO.NS": "ETERNAL.NS",
+    "ZOMATO.BO": "ETERNAL.BO",
+}
+
+
 @app.get("/api/instrument")
 async def instrument_name(ticker: str = Query(min_length=1, max_length=32)):
     """Resolve only an exact symbol match; never assign a different company's name."""
     symbol = ticker.strip().upper()
+    if symbol in ("ZOMATO", "ZOMATO.NS"):
+        return {"ticker": "ETERNAL.NS", "name": "Eternal Limited (formerly Zomato)"}
+    elif symbol == "ETERNAL.NS":
+        return {"ticker": "ETERNAL.NS", "name": "Eternal Limited (formerly Zomato)"}
     try:
         search = await asyncio.to_thread(yf.Search, symbol, max_results=10, news_count=0)
         for quote in search.quotes:
@@ -93,6 +104,14 @@ async def search_instruments(q: str = Query(min_length=1, max_length=80)):
         search = await asyncio.to_thread(yf.Search, query, max_results=20, news_count=0)
         results = []
         seen = set()
+
+        if "zomato" in query.lower() or "eternal" in query.lower():
+            results.append({
+                "ticker": "ETERNAL.NS",
+                "name": "Eternal Limited (formerly Zomato)",
+                "exchange": "NSE"
+            })
+            seen.add("ETERNAL.NS")
         for quote in search.quotes:
             if quote.get("quoteType", "").upper() != "EQUITY":
                 continue
@@ -126,6 +145,7 @@ async def stream_committee_endpoint(
     intentionally disabled so a request for one ticker can never be served another.
     """
     clean_t = ticker.strip().upper()
+    clean_t = TICKER_ALIASES.get(clean_t, clean_t)
     cleaned_cutoff = cutoff_date.strip() if cutoff_date and cutoff_date.strip() else None
     cache_key = f"{clean_t}_{cleaned_cutoff or ''}"
 
@@ -183,6 +203,7 @@ async def get_regime_status(
     Outputs active state probabilities, conditional volatility, and regime risk boundaries.
     """
     clean_t = ticker.strip().upper()
+    clean_t = TICKER_ALIASES.get(clean_t, clean_t)
     try:
         quant_data = await asyncio.to_thread(analyze_ticker_quant, clean_t, cutoff_date)
         regime = quant_data.get("hmm_regime", {})
@@ -215,6 +236,7 @@ async def get_anomaly_status(
     alongside multi-timeframe ensemble Isolation Forest anomaly votes.
     """
     clean_t = ticker.strip().upper()
+    clean_t = TICKER_ALIASES.get(clean_t, clean_t)
     try:
         quant_data = await asyncio.to_thread(analyze_ticker_quant, clean_t, cutoff_date)
         temporal = quant_data.get("temporal_anomaly", {})
@@ -242,6 +264,7 @@ async def stream_anomaly_status(
     Real-time SSE telemetry stream for temporal anomaly monitoring.
     """
     clean_t = ticker.strip().upper()
+    clean_t = TICKER_ALIASES.get(clean_t, clean_t)
 
     async def anomaly_generator():
         try:
@@ -278,6 +301,7 @@ async def get_sentiment_aspects(
     and Tone Shift Index (TSI) narrative momentum.
     """
     clean_t = ticker.strip().upper()
+    clean_t = TICKER_ALIASES.get(clean_t, clean_t)
     try:
         news_data = await asyncio.to_thread(analyze_ticker_sentiment, clean_t, cutoff_date)
         return {
@@ -308,6 +332,7 @@ async def evaluate_risk_consolidated(
     calibrated with Bayesian Beta-Binomial conjugate updating.
     """
     clean_t = ticker.strip().upper()
+    clean_t = TICKER_ALIASES.get(clean_t, clean_t)
     try:
         quant_data = await asyncio.to_thread(analyze_ticker_quant, clean_t, cutoff_date)
         news_data = await asyncio.to_thread(analyze_ticker_sentiment, clean_t, cutoff_date)

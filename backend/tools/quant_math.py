@@ -20,12 +20,20 @@ def _clean_number(val: Any) -> float:
         return 0.0
 
 
+TICKER_ALIASES: Dict[str, str] = {
+    "ZOMATO": "ETERNAL.NS",
+    "ZOMATO.NS": "ETERNAL.NS",
+    "ZOMATO.BO": "ETERNAL.BO",
+}
+
+
 def analyze_ticker_quant(ticker: str, cutoff_date: Optional[str] = None) -> Dict[str, Any]:
     """
     Downloads historical OHLCV data for ticker, flags price/volume anomalies via IsolationForest,
     and computes institutional risk and allocation metrics.
     """
     clean_ticker_sym = ticker.strip().upper()
+    clean_ticker_sym = TICKER_ALIASES.get(clean_ticker_sym, clean_ticker_sym)
 
     cutoff_dt = None
     if cutoff_date:

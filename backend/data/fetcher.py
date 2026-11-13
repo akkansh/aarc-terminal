@@ -23,6 +23,13 @@ def _clean_series(s: pd.Series) -> pd.Series:
     return s.replace([np.inf, -np.inf], np.nan).ffill().bfill().fillna(0.0)
 
 
+TICKER_ALIASES = {
+    "ZOMATO": "ETERNAL.NS",
+    "ZOMATO.NS": "ETERNAL.NS",
+    "ZOMATO.BO": "ETERNAL.BO",
+}
+
+
 class MarketDataFetcher:
     """Unified data fetcher for equities, market benchmarks, VIX, and news RSS."""
 
@@ -55,6 +62,7 @@ class MarketDataFetcher:
         standardizes column names, and removes timezone offsets.
         """
         clean_ticker = ticker.strip().upper()
+        clean_ticker = TICKER_ALIASES.get(clean_ticker, clean_ticker)
         cache_key = (
             f"ohlcv:{OHLCV_CACHE_VERSION}:{clean_ticker}:"
             f"{start_date}:{end_date}:{period}"
@@ -288,6 +296,7 @@ class MarketDataFetcher:
     def fetch_fundamentals(self, ticker: str) -> Dict[str, Any]:
         """Fetch fundamental valuation ratios and earnings dates if available."""
         clean_ticker = ticker.strip().upper()
+        clean_ticker = TICKER_ALIASES.get(clean_ticker, clean_ticker)
         cache_key = f"fundamentals:{clean_ticker}"
 
         cached = self.cache.get(cache_key)

@@ -142,6 +142,8 @@ def _is_indian_ticker(ticker: str) -> bool:
 def _news_search_term(ticker: str) -> str:
     """Build a search term for an arbitrary ticker (strips exchange suffix/caret)."""
     clean = ticker.strip().upper()
+    if clean in ("ETERNAL.NS", "ETERNAL.BO", "ETERNAL", "ZOMATO.NS", "ZOMATO.BO", "ZOMATO"):
+        return "Eternal Zomato"
     if "." in clean:
         clean = clean.split(".")[0]
     return clean.lstrip("^")

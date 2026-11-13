@@ -15,7 +15,7 @@ universe:
     - "RELIANCE.NS"
     - "TCS.NS"
     - "HDFCBANK.NS"
-    - "ZOMATO.NS"
+    - "ETERNAL.NS"
     - "NVDA"
   default_ticker: "RELIANCE.NS"
 

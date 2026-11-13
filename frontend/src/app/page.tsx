@@ -127,7 +127,7 @@ const PRESET_TICKERS = [
   'HDFCBANK.NS',
   'INFY.NS',
   'ICICIBANK.NS',
-  'ZOMATO.NS',
+  'ETERNAL.NS',
   // Popular US large caps
   'NVDA',
   'AVGO',
@@ -142,10 +142,16 @@ const PRESET_TICKERS = [
   '^BSESN',
 ];
 
+const TICKER_ALIASES: Record<string, string> = {
+  ZOMATO: 'ETERNAL.NS',
+  'ZOMATO.NS': 'ETERNAL.NS',
+  'ZOMATO.BO': 'ETERNAL.BO',
+};
+
 const TICKER_NAMES: Record<string, string> = {
   'RELIANCE.NS': 'Reliance Industries Limited', 'TCS.NS': 'Tata Consultancy Services Limited',
   'HDFCBANK.NS': 'HDFC Bank Limited', 'INFY.NS': 'Infosys Limited',
-  'ICICIBANK.NS': 'ICICI Bank Limited', 'ZOMATO.NS': 'Zomato Limited',
+  'ICICIBANK.NS': 'ICICI Bank Limited', 'ETERNAL.NS': 'Eternal Limited (formerly Zomato)', 'ZOMATO.NS': 'Eternal Limited (formerly Zomato)',
   NVDA: 'NVIDIA Corporation', AVGO: 'Broadcom Inc.', AAPL: 'Apple Inc.',
   MSFT: 'Microsoft Corporation', GOOGL: 'Alphabet Inc.', AMZN: 'Amazon.com, Inc.',
   TSLA: 'Tesla, Inc.', '^NSEI': 'NIFTY 50', '^NSEBANK': 'NIFTY Bank',
@@ -238,7 +244,10 @@ export default function TerminalPage() {
   }, [customTicker, searchOpen]);
 
   const runCommittee = (targetTicker: string, targetCutoff: string) => {
-    const cleanT = targetTicker.trim().toUpperCase();
+    let cleanT = targetTicker.trim().toUpperCase();
+    if (TICKER_ALIASES[cleanT]) {
+      cleanT = TICKER_ALIASES[cleanT];
+    }
     setTicker(cleanT);
     try { localStorage.setItem(STORAGE_KEY, cleanT); } catch { /* storage is optional */ }
     if (eventSourceRef.current) {
