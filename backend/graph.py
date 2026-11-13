@@ -13,6 +13,7 @@ load_dotenv(dotenv_path=ROOT_ENV_PATH, override=True)
 
 from backend.tools.quant_math import analyze_ticker_quant
 from backend.tools.sentiment_nlp import analyze_ticker_sentiment
+from backend.calibration.rolling_tracker import RollingAccuracyTracker
 
 MODEL_CANDIDATES = ["gemini-3.8-flash", "gemini-2.5-flash"]
 
@@ -283,7 +284,18 @@ Instructions:
                     verdict.recommended_allocation_pct = 0.0
 
                 verdict.verdict = verdict.action
-                return verdict.model_dump()
+                result = verdict.model_dump()
+                
+                # Apply Rolling Accuracy Confidence Calibration Loop
+                import datetime
+                tracker = RollingAccuracyTracker()
+                cal_conf, tracker_telemetry = tracker.calibrate_confidence(result["confidence"], ticker)
+                result["raw_confidence"] = result["confidence"]
+                result["confidence"] = cal_conf
+                result["rolling_accuracy_telemetry"] = tracker_telemetry
+                tracker.log_prediction(ticker, result["action"], result["raw_confidence"], price, datetime.date.today().isoformat(), var)
+
+                return result
             except Exception as e:
                 print(f"[CRO JSON PARSE ERROR]: {e}")
                 traceback.print_exc()
@@ -320,14 +332,29 @@ Instructions:
         kill = f"Breach of 2x ATR trailing stop ({suggested_stop}%)."
         summary = f"Controlled LONG positioning permitted at {alloc}%. Volatility ({vol}%) warrants trailing stop at {suggested_stop}%."
 
+    # Rolling Accuracy Calibration Loop
+    import datetime
+    tracker = RollingAccuracyTracker()
+    calibrated_conf, tracker_telemetry = tracker.calibrate_confidence(conf, ticker)
+    if action in ("LONG", "SHORT"):
+        alloc = round(alloc * tracker_telemetry.get("allocation_multiplier", 1.0), 2)
+        alloc = max(4.5, min(kelly, alloc))
+    else:
+        alloc = 0.0
+
+    today_str = datetime.date.today().isoformat()
+    tracker.log_prediction(ticker, action, conf, price, today_str, var)
+
     return {
         "action": action,
         "verdict": action,
-        "confidence": conf,
+        "raw_confidence": conf,
+        "confidence": calibrated_conf,
         "recommended_allocation_pct": alloc,
         "stop_loss_pct": suggested_stop,
         "kill_switch_reason": kill,
         "verdict_summary": summary,
+        "rolling_accuracy_telemetry": tracker_telemetry,
     }
 
 
@@ -452,8 +479,11 @@ async def stream_committee(ticker: str, cutoff_date: Optional[str] = None):
 
         cro_verdict["calibrated_probabilities"] = cal_probs
         cro_verdict["conformal_prediction_set"] = conformal_set
+        tracker_meta = cro_verdict.get("rolling_accuracy_telemetry", {})
         cro_verdict["confidence_breakdown"] = {
-            "raw_model_confidence": conf,
+            "raw_model_confidence": cro_verdict.get("raw_confidence", conf),
+            "rolling_accuracy_multiplier": tracker_meta.get("confidence_multiplier", 1.0),
+            "rolling_hit_rate_pct": tracker_meta.get("rolling_hit_rate_pct", 65.0),
             "agreement_penalty": 0.0 if conf >= 80 else 4.0,
             "anomaly_penalty": min(16.0, quant_data.get("recent_10d_anomalies", 0) * 3.5),
             "regime_penalty": 5.0 if quant_data.get("annualized_volatility", 0.0) > 25.0 else 0.0,

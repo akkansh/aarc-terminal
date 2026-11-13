@@ -3,6 +3,8 @@ import numpy as np
 import yfinance as yf
 from sklearn.ensemble import IsolationForest
 from typing import Optional, Dict, Any, List
+from backend.models.garch_engine import GARCHVolatilityEngine
+from backend.features.ensemble_anomaly import MultiTimeframeEnsembleIsolationForest
 
 
 def _clean_number(val: Any) -> float:
@@ -84,10 +86,12 @@ def analyze_ticker_quant(ticker: str, cutoff_date: Optional[str] = None) -> Dict
     history_df["Returns"] = history_df["Close"].pct_change().replace([np.inf, -np.inf], np.nan).fillna(0.0)
     history_df["Volume_Change"] = history_df["Volume"].pct_change().replace([np.inf, -np.inf], np.nan).fillna(0.0)
 
-    # Isolation Forest to flag price/volume anomalies (-1 = anomaly, 1 = normal)
-    iso = IsolationForest(contamination=0.08, random_state=42)
-    features = history_df[["Returns", "Volume_Change"]].values
-    history_df["anomaly"] = iso.fit_predict(features)
+    # 1. Robust Scaled Multi-Timeframe Ensemble Isolation Forest (Micro 15d, Tactical 45d, Structural 120d)
+    ensemble_anomaly_detector = MultiTimeframeEnsembleIsolationForest(contamination=0.05, random_state=42)
+    anomaly_res = ensemble_anomaly_detector.fit_predict_multitimeframe(history_df)
+    history_df["anomaly"] = anomaly_res["anomaly_flags"]
+    recent_10d_anomalies = anomaly_res["recent_10d_anomalies_count"]
+    anomaly_telemetry = anomaly_res["latest_bar_status"]
 
     # Metrics
     current_price = _clean_number(round(float(history_df["Close"].iloc[-1]), 2))
@@ -97,11 +101,15 @@ def analyze_ticker_quant(ticker: str, cutoff_date: Optional[str] = None) -> Dict
     if len(valid_returns) == 0:
         valid_returns = history_df["Returns"]
 
-    # Annualized volatility: std * sqrt(252) * 100
-    ann_vol = _clean_number(round(float(valid_returns.std() * np.sqrt(252) * 100), 2))
+    # 2. Dynamic GARCH(1,1) Conditional Volatility & Value-at-Risk (VaR 95%)
+    garch_engine = GARCHVolatilityEngine(p=1, q=1, dist="StudentsT")
+    garch_metrics = garch_engine.compute_dynamic_volatility_and_var(valid_returns, confidence_level=0.95, horizon_days=5)
 
-    # Daily VaR 95% (5th percentile return in percent)
-    var_95 = _clean_number(round(float(np.percentile(valid_returns, 5) * 100), 2))
+    # Dynamic GARCH-derived parameters
+    ann_vol = _clean_number(garch_metrics["conditional_vol_annual_pct"])
+    var_95 = _clean_number(garch_metrics["dynamic_garch_var_95_pct"])
+    garch_5d_forecast = _clean_number(garch_metrics["garch_vol_forecast_annual_pct"])
+    vol_shock_ratio = _clean_number(garch_metrics["volatility_shock_ratio"])
 
     # Suggested stop loss: 2x 14-day ATR %
     high = history_df["High"]
@@ -283,6 +291,9 @@ def analyze_ticker_quant(ticker: str, cutoff_date: Optional[str] = None) -> Dict
         "bb_middle": sma20_val,
         "bb_lower": _clean_number(round(current_lower_bb, 2)),
         "bb_width_pct": bb_width_pct,
+        "garch_vol_forecast_pct": garch_5d_forecast,
+        "volatility_shock_ratio": vol_shock_ratio,
+        "anomaly_telemetry": anomaly_telemetry,
         "chart_data": chart_data,
         "time_machine_actual_return_pct": time_machine_actual_return_pct,
         "max_drawdown_5d_pct": max_drawdown_5d_pct,

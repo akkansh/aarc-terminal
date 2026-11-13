@@ -4,6 +4,7 @@ import torch
 import numpy as np
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 from typing import Dict, Any, List, Optional, Union
+from backend.features.financial_lexicon import LoughranMcDonaldVerifier
 
 _GLOBAL_FINBERT_INSTANCE = None
 
@@ -67,6 +68,7 @@ class FinBertSentimentAnalyzer:
 
         results: List[Dict[str, Any]] = []
         net_scores: List[float] = []
+        verifier = LoughranMcDonaldVerifier(confidence_threshold=0.75)
 
         for i, meta in enumerate(metadata_list):
             title = meta.get("title", "")
@@ -81,12 +83,26 @@ class FinBertSentimentAnalyzer:
             else:
                 net_score = top_score if top_label == "positive" else (-top_score if top_label == "negative" else 0.0)
 
-            net_scores.append(net_score)
+            # FinBERT Confidence Thresholding & Heuristic Cross-Verification Gate (< 0.75)
+            calibrated = verifier.verify_and_calibrate(
+                headline=title,
+                finbert_label=top_label,
+                finbert_confidence=top_score,
+                finbert_net_score=net_score,
+            )
+            final_net = calibrated["final_score"]
+            final_label = calibrated["final_label"]
+            cal_conf = calibrated["calibrated_confidence"]
+
+            net_scores.append(final_net)
             results.append({
                 "title": title,
-                "label": top_label,
-                "score": round(top_score, 3),
-                "published_at": str(published_at).strip() if published_at else ""
+                "label": final_label,
+                "score": round(cal_conf, 3),
+                "published_at": str(published_at).strip() if published_at else "",
+                "net_polarity": round(final_net, 3),
+                "heuristic_routing": calibrated["routing"],
+                "lm_matches": calibrated["lm_matches"],
             })
 
         aggregate_score = float(np.mean(net_scores)) if net_scores else 0.0
