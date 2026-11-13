@@ -1,0 +1,76 @@
+# Autonomous Adversarial Risk Committee (AARC)
+# Quantitative Decision-Support System Configuration
+
+project:
+  name: "aarc-quant-terminal"
+  version: "2.0.0"
+  random_seed: 42
+
+horizon:
+  trading_days: 5
+  volatility_threshold_factor: 0.5  # Label threshold = factor * rolling_std_5d
+
+universe:
+  presets:
+    - "RELIANCE.NS"
+    - "TCS.NS"
+    - "HDFCBANK.NS"
+    - "ZOMATO.NS"
+    - "NVDA"
+  default_ticker: "RELIANCE.NS"
+
+market_context:
+  india:
+    benchmark: "^NSEI"      # Nifty 50
+    volatility_index: "^INDIAVIX"
+  us:
+    benchmark: "^GSPC"      # S&P 500
+    volatility_index: "^VIX"
+
+features:
+  rolling_windows:
+    short: 5
+    medium: 20
+    long: 50
+  rsi_period: 14
+  atr_period: 14
+  bollinger_window: 20
+  bollinger_std: 2.0
+  volume_zscore_window: 20
+  sentiment_windows: [3, 7, 14]
+  isolation_forest:
+    contamination: 0.05
+    rolling_window: 60
+    random_state: 42
+
+models:
+  baseline:
+    c_penalty: 1.0
+    solver: "lbfgs"
+    max_iter: 1000
+  lightgbm:
+    n_estimators: 150
+    learning_rate: 0.05
+    num_leaves: 31
+    class_weight: "balanced"
+    random_state: 42
+  optuna:
+    n_trials: 25
+    timeout_sec: 60
+  regime:
+    n_states: 2
+    random_state: 42
+  garch:
+    p: 1
+    q: 1
+  sequence_model:
+    enabled: false
+    seq_length: 10
+  conformal:
+    significance_level: 0.10  # 90% coverage
+    min_prob_threshold: 0.40  # Below this -> HOLD/NO CLEAR SIGNAL
+
+cache:
+  enabled: true
+  dir: ".cache"
+  ttl_seconds: 3600

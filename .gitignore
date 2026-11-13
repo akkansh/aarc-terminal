@@ -3,6 +3,11 @@ node_modules/
 dist/
 build/
 __pycache__/
+*.pyc
 .env
 venv/
+backend/.venv/
+.cache/
+backend/data_cache/
+.pytest_cache/
 .DS_Store

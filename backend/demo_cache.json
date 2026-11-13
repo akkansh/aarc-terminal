@@ -4,64 +4,25 @@
       "node": "quant",
       "data": {
         "ticker": "RELIANCE.NS",
-        "current_price": 1312.3,
-        "annualized_volatility": 24.3,
+        "current_price": 1339.7,
+        "annualized_volatility": 24.28,
         "daily_VaR_95_pct": -2.23,
-        "suggested_stop_loss_atr_pct": 5.37,
-        "half_kelly_allocation_pct": 10.29,
-        "half_kelly_cap_pct": 10.29,
+        "suggested_stop_loss_atr_pct": 4.94,
+        "half_kelly_allocation_pct": 10.3,
+        "half_kelly_cap_pct": 10.3,
         "recent_10d_anomalies": 1,
-        "rsi_14": 70.63,
-        "recent_5d_return_pct": 0.95,
+        "rsi_14": 80.89,
+        "recent_5d_return_pct": 2.0,
         "sma20_trend": "BULLISH",
         "close_gt_sma20": true,
-        "sma20_val": 1223.24,
-        "sma50_val": 1235.88,
-        "sma20_z_score": 1.45,
-        "bb_upper": 1345.78,
-        "bb_middle": 1223.24,
-        "bb_lower": 1100.7,
-        "bb_width_pct": 20.04,
+        "sma20_val": 1249.58,
+        "sma50_val": 1239.49,
+        "sma20_z_score": 1.31,
+        "bb_upper": 1387.04,
+        "bb_middle": 1249.58,
+        "bb_lower": 1112.11,
+        "bb_width_pct": 22.0,
         "chart_data": [
-          {
-            "date": "2026-08-13",
-            "open": 1327.8,
-            "high": 1327.8,
-            "low": 1307.2,
-            "close": 1317.0,
-            "volume": 9397301,
-            "is_anomaly": false,
-            "bb_upper": 1348.46,
-            "bb_middle": 1303.2,
-            "bb_lower": 1257.94,
-            "sma_50": 1301.19
-          },
-          {
-            "date": "2026-08-14",
-            "open": 1317.0,
-            "high": 1317.5,
-            "low": 1301.5,
-            "close": 1310.0,
-            "volume": 10497358,
-            "is_anomaly": false,
-            "bb_upper": 1346.32,
-            "bb_middle": 1302.34,
-            "bb_lower": 1258.36,
-            "sma_50": 1301.43
-          },
-          {
-            "date": "2026-08-17",
-            "open": 1314.0,
-            "high": 1320.8,
-            "low": 1298.1,
-            "close": 1316.0,
-            "volume": 13383867,
-            "is_anomaly": false,
-            "bb_upper": 1345.37,
-            "bb_middle": 1301.99,
-            "bb_lower": 1258.6,
-            "sma_50": 1301.93
-          },
           {
             "date": "2026-08-18",
             "open": 1314.0,
@@ -793,32 +754,77 @@
           {
             "date": "2026-11-09",
             "open": 1317.0,
-            "high": 1324.8,
+            "high": 1330.2,
             "low": 1305.5,
-            "close": 1312.3,
-            "volume": 7656504,
+            "close": 1324.4,
+            "volume": 19734153,
             "is_anomaly": false,
-            "bb_upper": 1345.78,
-            "bb_middle": 1223.24,
-            "bb_lower": 1100.7,
-            "sma_50": 1235.88
+            "bb_upper": 1348.34,
+            "bb_middle": 1223.85,
+            "bb_lower": 1099.35,
+            "sma_50": 1236.12
+          },
+          {
+            "date": "2026-11-11",
+            "open": 1333.5,
+            "high": 1349.4,
+            "low": 1327.0,
+            "close": 1335.4,
+            "volume": 17554310,
+            "is_anomaly": false,
+            "bb_upper": 1362.68,
+            "bb_middle": 1232.67,
+            "bb_lower": 1102.66,
+            "sma_50": 1237.18
+          },
+          {
+            "date": "2026-11-12",
+            "open": 1335.4,
+            "high": 1342.5,
+            "low": 1330.9,
+            "close": 1339.7,
+            "volume": 13807921,
+            "is_anomaly": false,
+            "bb_upper": 1375.8,
+            "bb_middle": 1241.32,
+            "bb_lower": 1106.84,
+            "sma_50": 1238.24
+          },
+          {
+            "date": "2026-11-13",
+            "open": 1336.6,
+            "high": 1350.7,
+            "low": 1324.0,
+            "close": 1339.7,
+            "volume": 13751275,
+            "is_anomaly": false,
+            "bb_upper": 1387.04,
+            "bb_middle": 1249.58,
+            "bb_lower": 1112.11,
+            "sma_50": 1239.49
           }
         ],
         "time_machine_actual_return_pct": null,
-        "max_drawdown_5d_pct": null
+        "max_drawdown_5d_pct": null,
+        "regime": {
+          "state": 1,
+          "label": "HIGH_VOLATILITY",
+          "prob_high_vol": 0.607
+        },
+        "garch_volatility_forecast_pct": 24.77
       }
     },
     {
       "node": "news",
       "data": {
         "ticker": "RELIANCE.NS",
-        "aggregate_sentiment_score": 0.26,
+        "aggregate_sentiment_score": 0.22,
         "headlines": [
           {
-            "title": "Jio Financial Services share price decoded: Reliance stock performance amid Jio Platforms IPO buzz; target, outlook - Livemint",
-            "label": "positive",
-            "score": 0.823,
-            "published_at": "Tue, 27 Oct 2026 07:00:00 GMT"
+            "title": "Reliance Industries Limited (RELIANCE.NS) stock price, news, quote and history - Yahoo Finance Australia",
+            "label": "neutral",
+            "score": 0.951,
+            "published_at": "Thu, 12 Nov 2026 18:57:34 GMT"
           },
           {
             "title": "What\u2019s left of Jio Financial when you strip away Reliance? - The Ken",
@@ -833,34 +839,34 @@
             "published_at": "Wed, 17 Jun 2026 07:00:00 GMT"
           },
           {
-            "title": "Reliance Industries, ITC among 10 stocks that saw highest buying by LIC in Q1. See full list - The Economic Times",
-            "label": "neutral",
-            "score": 0.895,
-            "published_at": "Sat, 08 Aug 2026 07:00:00 GMT"
-          },
-          {
             "title": "Jio Financial Share Price: Jio Platforms Link, Q2, Key Levels - Univest",
             "label": "neutral",
             "score": 0.928,
             "published_at": "Tue, 27 Oct 2026 07:00:00 GMT"
           },
           {
-            "title": "Reliance (RS) Stock Looks Fully Priced Despite Its 196% Five Year Run - Yahoo Finance",
-            "label": "positive",
-            "score": 0.864,
-            "published_at": "Thu, 08 Oct 2026 07:00:00 GMT"
+            "title": "Earnings Outlook Might Change The Case For Investing In Reliance Stock (RS) - Yahoo Finance",
+            "label": "neutral",
+            "score": 0.862,
+            "published_at": "Sat, 17 Oct 2026 07:00:00 GMT"
           },
           {
-            "title": "Reliance Share Price Holds Firm Despite Q1 Profit Fall as Jio Growth and IPO Plans Drive Optimism - India Infoline",
-            "label": "negative",
-            "score": 0.726,
-            "published_at": "Mon, 20 Jul 2026 07:00:00 GMT"
+            "title": "Reliance Industries Shares Hit 52-Week High as JPMorgan Turns Bullish on 2026 Outlook - NiftyTrader",
+            "label": "positive",
+            "score": 0.86,
+            "published_at": "Mon, 22 Jun 2026 07:00:00 GMT"
           },
           {
             "title": "Reliance spin-off Jio Financial valued at $20 billion, above estimates - Reuters",
             "label": "neutral",
             "score": 0.866,
             "published_at": "Wed, 19 Jul 2023 07:00:00 GMT"
+          },
+          {
+            "title": "Reliance Home Finance Ltd. Share Price Today | Reliance Home Fin Live NSE/BSE - Value Research",
+            "label": "neutral",
+            "score": 0.938,
+            "published_at": "Fri, 25 Mar 2022 10:34:03 GMT"
           }
         ]
       }
@@ -868,25 +874,76 @@
     {
       "node": "bull",
       "data": {
-        "bull_thesis": "\u2022 Trend regime is BULLISH with 5-day momentum at 0.95%, supporting an active Half-Kelly capacity allocation of 10.29%.\n\u2022 RSI-14 sits at 70.63 with contained 95% daily VaR of -2.23%, providing an asymmetrical entry window against 24.3% annualized vol.\n\u2022 Aggregate news sentiment reads 0.26 with 1 price/volume anomalies reflecting institutional accumulation."
+        "bull_thesis": "\u2022 Trend regime is BULLISH with 5-day momentum at 2.0%, supporting an active Half-Kelly capacity allocation of 10.3%.\n\u2022 RSI-14 sits at 80.89 with contained 95% daily VaR of -2.23%, providing an asymmetrical entry window against 24.28% annualized vol.\n\u2022 Aggregate news sentiment reads 0.22 with 1 price/volume anomalies reflecting institutional accumulation."
       }
     },
     {
       "node": "bear",
       "data": {
-        "bear_thesis": "\u2022 Tail risk is severe: 95% daily VaR of -2.23% with 24.3% annualized vol exposes any 10.29% allocation to fat-tail liquidation.\n\u2022 14-day RSI sits at 70.63; any momentum stalling will trigger abrupt mean-reversion and trap retail longs chasing 1312.3.\n\u2022 1 price/volume anomalies in 10 sessions combined with headline sentiment (0.26) flag institutional distribution risk."
+        "bear_thesis": "\u2022 Tail risk is severe: 95% daily VaR of -2.23% with 24.28% annualized vol exposes any 10.3% allocation to fat-tail liquidation.\n\u2022 14-day RSI sits at 80.89; any momentum stalling will trigger abrupt mean-reversion and trap retail longs chasing 1339.7.\n\u2022 1 price/volume anomalies in 10 sessions combined with headline sentiment (0.22) flag institutional distribution risk."
       }
     },
     {
       "node": "cro",
       "data": {
-        "action": "LONG",
-        "verdict": "LONG",
-        "confidence": 84,
-        "recommended_allocation_pct": 10.29,
-        "stop_loss_pct": 5.37,
-        "kill_switch_reason": "Breakdown below 20-day SMA or ATR trailing stop (5.37%).",
-        "verdict_summary": "Institutional LONG execution approved: Trend structure is constructive (SMA20: BULLISH, Close: 1312.3, RSI: 70.63) with positive news sentiment (0.26). Half-Kelly capacity allocated at 10.29% with stop loss at 5.37%."
+        "action": "SHORT",
+        "verdict": "SHORT",
+        "confidence": 88,
+        "recommended_allocation_pct": 10.3,
+        "stop_loss_pct": 4.94,
+        "kill_switch_reason": "Continuation of parabolic squeeze above 2x ATR trailing stop (4.94%).",
+        "verdict_summary": "Parabolic overbought exhaustion detected (14-day RSI: 80.89 >= 75, 5-day Return: 2.0%). Mean reversion to historical trend lines expected; tactical SHORT sizing approved at 10.3% with ATR stop at 4.94%.",
+        "top_drivers": {
+          "positive": [
+            {
+              "feature": "close_gt_sma20",
+              "value": true,
+              "impact": "+28.4%"
+            },
+            {
+              "feature": "sentiment_score",
+              "value": 0.22,
+              "impact": "+22.1%"
+            },
+            {
+              "feature": "momentum_5d",
+              "value": 2.0,
+              "impact": "+14.2%"
+            }
+          ],
+          "negative": [
+            {
+              "feature": "daily_VaR_95",
+              "value": -2.23,
+              "impact": "-31.2%"
+            },
+            {
+              "feature": "volatility",
+              "value": 24.28,
+              "impact": "-24.5%"
+            },
+            {
+              "feature": "isolation_forest_anomalies",
+              "value": 1,
+              "impact": "-20.8%"
+            }
+          ]
+        },
+        "calibrated_probabilities": {
+          "DOWN": 0.64,
+          "FLAT": 0.24,
+          "UP": 0.12
+        },
+        "conformal_prediction_set": [
+          "SHORT"
+        ],
+        "confidence_breakdown": {
+          "raw_model_confidence": 88,
+          "agreement_penalty": 0.0,
+          "anomaly_penalty": 3.5,
+          "regime_penalty": 0.0,
+          "calibrated_confidence": 88
+        }
       }
     }
   ],
@@ -3911,7 +3968,7 @@
             "open": 1448.88,
             "high": 1469.28,
             "low": 1448.88,
-            "close": 1461.95,
+            "close": 1461.94,
             "volume": 9138330,
             "is_anomaly": false,
             "bb_upper": 1487.79,
@@ -4091,7 +4148,7 @@
           {
             "date": "2024-05-03",
             "open": 1453.47,
-            "high": 1457.38,
+            "high": 1457.37,
             "low": 1399.28,
             "close": 1416.91,
             "volume": 17226958,
@@ -4363,20 +4420,26 @@
           }
         ],
         "time_machine_actual_return_pct": -2.58,
-        "max_drawdown_5d_pct": 7.49
+        "max_drawdown_5d_pct": 7.49,
+        "regime": {
+          "state": 0,
+          "label": "LOW_VOLATILITY",
+          "prob_high_vol": 0.484
+        },
+        "garch_volatility_forecast_pct": 19.77
       }
     },
     {
       "node": "news",
       "data": {
         "ticker": "RELIANCE.NS",
-        "aggregate_sentiment_score": 0.26,
+        "aggregate_sentiment_score": 0.22,
         "headlines": [
           {
-            "title": "Jio Financial Services share price decoded: Reliance stock performance amid Jio Platforms IPO buzz; target, outlook - Livemint",
-            "label": "positive",
-            "score": 0.823,
-            "published_at": "Tue, 27 Oct 2026 07:00:00 GMT"
+            "title": "Reliance Industries Limited (RELIANCE.NS) stock price, news, quote and history - Yahoo Finance Australia",
+            "label": "neutral",
+            "score": 0.951,
+            "published_at": "Thu, 12 Nov 2026 18:57:34 GMT"
           },
           {
             "title": "What\u2019s left of Jio Financial when you strip away Reliance? - The Ken",
@@ -4391,34 +4454,34 @@
             "published_at": "Wed, 17 Jun 2026 07:00:00 GMT"
           },
           {
-            "title": "Reliance Industries, ITC among 10 stocks that saw highest buying by LIC in Q1. See full list - The Economic Times",
-            "label": "neutral",
-            "score": 0.895,
-            "published_at": "Sat, 08 Aug 2026 07:00:00 GMT"
-          },
-          {
             "title": "Jio Financial Share Price: Jio Platforms Link, Q2, Key Levels - Univest",
             "label": "neutral",
             "score": 0.928,
             "published_at": "Tue, 27 Oct 2026 07:00:00 GMT"
           },
           {
-            "title": "Reliance (RS) Stock Looks Fully Priced Despite Its 196% Five Year Run - Yahoo Finance",
-            "label": "positive",
-            "score": 0.864,
-            "published_at": "Thu, 08 Oct 2026 07:00:00 GMT"
+            "title": "Earnings Outlook Might Change The Case For Investing In Reliance Stock (RS) - Yahoo Finance",
+            "label": "neutral",
+            "score": 0.862,
+            "published_at": "Sat, 17 Oct 2026 07:00:00 GMT"
           },
           {
-            "title": "Reliance Share Price Holds Firm Despite Q1 Profit Fall as Jio Growth and IPO Plans Drive Optimism - India Infoline",
-            "label": "negative",
-            "score": 0.726,
-            "published_at": "Mon, 20 Jul 2026 07:00:00 GMT"
+            "title": "Reliance Industries Shares Hit 52-Week High as JPMorgan Turns Bullish on 2026 Outlook - NiftyTrader",
+            "label": "positive",
+            "score": 0.86,
+            "published_at": "Mon, 22 Jun 2026 07:00:00 GMT"
           },
           {
             "title": "Reliance spin-off Jio Financial valued at $20 billion, above estimates - Reuters",
             "label": "neutral",
             "score": 0.866,
             "published_at": "Wed, 19 Jul 2023 07:00:00 GMT"
+          },
+          {
+            "title": "Reliance Home Finance Ltd. Share Price Today | Reliance Home Fin Live NSE/BSE - Value Research",
+            "label": "neutral",
+            "score": 0.938,
+            "published_at": "Fri, 25 Mar 2022 10:34:03 GMT"
           }
         ]
       }
@@ -4426,13 +4489,13 @@
     {
       "node": "bull",
       "data": {
-        "bull_thesis": "\u2022 Trend regime is BULLISH with 5-day momentum at 3.01%, supporting an active Half-Kelly capacity allocation of 6.62%.\n\u2022 RSI-14 sits at 76.2 with contained 95% daily VaR of -1.53%, providing an asymmetrical entry window against 19.38% annualized vol.\n\u2022 Aggregate news sentiment reads 0.26 with 2 price/volume anomalies reflecting institutional accumulation."
+        "bull_thesis": "\u2022 Trend regime is BULLISH with 5-day momentum at 3.01%, supporting an active Half-Kelly capacity allocation of 6.62%.\n\u2022 RSI-14 sits at 76.2 with contained 95% daily VaR of -1.53%, providing an asymmetrical entry window against 19.38% annualized vol.\n\u2022 Aggregate news sentiment reads 0.22 with 2 price/volume anomalies reflecting institutional accumulation."
       }
     },
     {
       "node": "bear",
       "data": {
-        "bear_thesis": "\u2022 Tail risk is severe: 95% daily VaR of -1.53% with 19.38% annualized vol exposes any 6.62% allocation to fat-tail liquidation.\n\u2022 14-day RSI sits at 76.2; any momentum stalling will trigger abrupt mean-reversion and trap retail longs chasing 1492.33.\n\u2022 2 price/volume anomalies in 10 sessions combined with headline sentiment (0.26) flag institutional distribution risk."
+        "bear_thesis": "\u2022 Tail risk is severe: 95% daily VaR of -1.53% with 19.38% annualized vol exposes any 6.62% allocation to fat-tail liquidation.\n\u2022 14-day RSI sits at 76.2; any momentum stalling will trigger abrupt mean-reversion and trap retail longs chasing 1492.33.\n\u2022 2 price/volume anomalies in 10 sessions combined with headline sentiment (0.22) flag institutional distribution risk."
       }
     },
     {
@@ -4444,7 +4507,58 @@
         "recommended_allocation_pct": 6.62,
         "stop_loss_pct": 3.68,
         "kill_switch_reason": "Continuation of parabolic squeeze above 2x ATR trailing stop (3.68%).",
-        "verdict_summary": "Parabolic overbought exhaustion detected (14-day RSI: 76.2 >= 75, 5-day Return: 3.01%). Mean reversion to historical trend lines expected; tactical SHORT sizing approved at 6.62% with ATR stop at 3.68%."
+        "verdict_summary": "Parabolic overbought exhaustion detected (14-day RSI: 76.2 >= 75, 5-day Return: 3.01%). Mean reversion to historical trend lines expected; tactical SHORT sizing approved at 6.62% with ATR stop at 3.68%.",
+        "top_drivers": {
+          "positive": [
+            {
+              "feature": "close_gt_sma20",
+              "value": true,
+              "impact": "+28.4%"
+            },
+            {
+              "feature": "sentiment_score",
+              "value": 0.22,
+              "impact": "+22.1%"
+            },
+            {
+              "feature": "momentum_5d",
+              "value": 3.01,
+              "impact": "+14.2%"
+            }
+          ],
+          "negative": [
+            {
+              "feature": "daily_VaR_95",
+              "value": -1.53,
+              "impact": "-31.2%"
+            },
+            {
+              "feature": "volatility",
+              "value": 19.38,
+              "impact": "-24.5%"
+            },
+            {
+              "feature": "isolation_forest_anomalies",
+              "value": 2,
+              "impact": "-20.8%"
+            }
+          ]
+        },
+        "calibrated_probabilities": {
+          "DOWN": 0.64,
+          "FLAT": 0.24,
+          "UP": 0.12
+        },
+        "conformal_prediction_set": [
+          "SHORT"
+        ],
+        "confidence_breakdown": {
+          "raw_model_confidence": 88,
+          "agreement_penalty": 0.0,
+          "anomaly_penalty": 7.0,
+          "regime_penalty": 0.0,
+          "calibrated_confidence": 88
+        }
       }
     }
   ],
@@ -7126,90 +7240,25 @@
       "node": "quant",
       "data": {
         "ticker": "NVDA",
-        "current_price": 186.64,
-        "annualized_volatility": 38.43,
-        "daily_VaR_95_pct": -3.99,
-        "suggested_stop_loss_atr_pct": 8.59,
-        "half_kelly_allocation_pct": 4.5,
-        "half_kelly_cap_pct": 4.5,
-        "recent_10d_anomalies": 2,
-        "rsi_14": 29.63,
-        "recent_5d_return_pct": -8.8,
+        "current_price": 160.07,
+        "annualized_volatility": 38.79,
+        "daily_VaR_95_pct": -4.19,
+        "suggested_stop_loss_atr_pct": 13.6,
+        "half_kelly_allocation_pct": 6.44,
+        "half_kelly_cap_pct": 6.44,
+        "recent_10d_anomalies": 5,
+        "rsi_14": 18.52,
+        "recent_5d_return_pct": -14.24,
         "sma20_trend": "BEARISH",
         "close_gt_sma20": false,
-        "sma20_val": 211.55,
-        "sma50_val": 219.77,
-        "sma20_z_score": -2.09,
-        "bb_upper": 235.36,
-        "bb_middle": 211.55,
-        "bb_lower": 187.73,
-        "bb_width_pct": 22.51,
+        "sma20_val": 198.55,
+        "sma50_val": 214.58,
+        "sma20_z_score": -1.91,
+        "bb_upper": 238.84,
+        "bb_middle": 198.55,
+        "bb_lower": 158.26,
+        "bb_width_pct": 40.59,
         "chart_data": [
-          {
-            "date": "2026-08-14",
-            "open": 226.52,
-            "high": 227.24,
-            "low": 224.25,
-            "close": 224.91,
-            "volume": 75680900,
-            "is_anomaly": false,
-            "bb_upper": 232.03,
-            "bb_middle": 210.16,
-            "bb_lower": 188.29,
-            "sma_50": 206.29
-          },
-          {
-            "date": "2026-08-17",
-            "open": 225.73,
-            "high": 227.67,
-            "low": 224.61,
-            "close": 224.76,
-            "volume": 93678700,
-            "is_anomaly": false,
-            "bb_upper": 233.77,
-            "bb_middle": 211.25,
-            "bb_lower": 188.72,
-            "sma_50": 206.42
-          },
-          {
-            "date": "2026-08-18",
-            "open": 220.2,
-            "high": 221.39,
-            "low": 218.45,
-            "close": 219.49,
-            "volume": 103128200,
-            "is_anomaly": false,
-            "bb_upper": 234.59,
-            "bb_middle": 211.87,
-            "bb_lower": 189.14,
-            "sma_50": 206.71
-          },
-          {
-            "date": "2026-08-19",
-            "open": 221.42,
-            "high": 222.62,
-            "low": 216.52,
-            "close": 217.32,
-            "volume": 96797300,
-            "is_anomaly": false,
-            "bb_upper": 235.0,
-            "bb_middle": 212.14,
-            "bb_lower": 189.29,
-            "sma_50": 206.89
-          },
-          {
-            "date": "2026-08-20",
-            "open": 218.12,
-            "high": 219.61,
-            "low": 215.42,
-            "close": 216.61,
-            "volume": 92457000,
-            "is_anomaly": false,
-            "bb_upper": 235.42,
-            "bb_middle": 212.55,
-            "bb_lower": 189.67,
-            "sma_50": 207.06
-          },
           {
             "date": "2026-08-21",
             "open": 218.18,
@@ -7918,71 +7967,142 @@
             "high": 194.9,
             "low": 185.22,
             "close": 186.64,
-            "volume": 179722400,
+            "volume": 180212300,
             "is_anomaly": false,
             "bb_upper": 235.36,
             "bb_middle": 211.55,
             "bb_lower": 187.73,
             "sma_50": 219.77
+          },
+          {
+            "date": "2026-11-09",
+            "open": 173.07,
+            "high": 179.92,
+            "low": 170.24,
+            "close": 178.67,
+            "volume": 462719300,
+            "is_anomaly": true,
+            "bb_upper": 236.09,
+            "bb_middle": 209.16,
+            "bb_lower": 182.24,
+            "sma_50": 219.0
+          },
+          {
+            "date": "2026-11-10",
+            "open": 173.97,
+            "high": 174.69,
+            "low": 165.89,
+            "close": 168.89,
+            "volume": 429273200,
+            "is_anomaly": true,
+            "bb_upper": 237.0,
+            "bb_middle": 206.18,
+            "bb_lower": 175.36,
+            "sma_50": 217.97
+          },
+          {
+            "date": "2026-11-11",
+            "open": 172.8,
+            "high": 177.54,
+            "low": 170.77,
+            "close": 173.73,
+            "volume": 339214800,
+            "is_anomaly": false,
+            "bb_upper": 236.97,
+            "bb_middle": 203.8,
+            "bb_lower": 170.64,
+            "sma_50": 217.1
+          },
+          {
+            "date": "2026-11-12",
+            "open": 151.01,
+            "high": 167.14,
+            "low": 148.8,
+            "close": 166.19,
+            "volume": 742789000,
+            "is_anomaly": true,
+            "bb_upper": 237.75,
+            "bb_middle": 201.25,
+            "bb_lower": 164.75,
+            "sma_50": 215.94
+          },
+          {
+            "date": "2026-11-13",
+            "open": 169.89,
+            "high": 170.0,
+            "low": 160.02,
+            "close": 160.07,
+            "volume": 128330303,
+            "is_anomaly": true,
+            "bb_upper": 238.84,
+            "bb_middle": 198.55,
+            "bb_lower": 158.26,
+            "sma_50": 214.58
           }
         ],
         "time_machine_actual_return_pct": null,
-        "max_drawdown_5d_pct": null
+        "max_drawdown_5d_pct": null,
+        "regime": {
+          "state": 1,
+          "label": "HIGH_VOLATILITY",
+          "prob_high_vol": 0.97
+        },
+        "garch_volatility_forecast_pct": 39.57
       }
     },
     {
       "node": "news",
       "data": {
         "ticker": "NVDA",
-        "aggregate_sentiment_score": 0.17,
+        "aggregate_sentiment_score": -0.24,
         "headlines": [
           {
-            "title": "NVIDIA Corporation (NVDA.TO) Stock Price, News, Quote & History - Yahoo! Finance Canada",
+            "title": "NVIDIA Corporation (NVDA) stock price, news, quote and history - Yahoo Finance UK",
             "label": "neutral",
-            "score": 0.947,
-            "published_at": "Mon, 09 Nov 2026 03:17:43 GMT"
+            "score": 0.949,
+            "published_at": "Thu, 12 Nov 2026 21:58:49 GMT"
           },
           {
-            "title": "Nvidia Stock (NVDA) Rises 2.8% as Chip Stocks Rebound (Nov 6) - Gotrade",
-            "label": "positive",
-            "score": 0.933,
-            "published_at": "Mon, 09 Nov 2026 03:00:00 GMT"
-          },
-          {
-            "title": "Why Nvidia Stock Looks Like a Bargain Right Now - Yahoo Finance",
+            "title": "Nvidia Shareholders Won\u2019t Miss Jensen Huang for Long - WSJ",
             "label": "neutral",
-            "score": 0.92,
-            "published_at": "Sun, 08 Nov 2026 17:10:00 GMT"
+            "score": 0.882,
+            "published_at": "Thu, 12 Nov 2026 17:43:00 GMT"
           },
           {
-            "title": "Why Nvidia at 13 Times Expected Earnings Still Isn\u2019t Cheap - Yahoo Finance",
+            "title": "What to Watch in Nvidia Earnings: Leadership, Data Center Concerns Take Center Stage - Morningstar",
             "label": "neutral",
-            "score": 0.883,
-            "published_at": "Sun, 08 Nov 2026 16:08:00 GMT"
+            "score": 0.912,
+            "published_at": "Thu, 12 Nov 2026 15:23:30 GMT"
           },
           {
-            "title": "NVIDIA Corporation (NVDA) stock price, news, quote and history - Yahoo Finance Singapore",
+            "title": "Nvidia stock slips as investors digest CEO exit, broader chip sector falls - Yahoo Finance",
+            "label": "negative",
+            "score": 0.949,
+            "published_at": "Fri, 13 Nov 2026 14:48:18 GMT"
+          },
+          {
+            "title": "Analysis: Nvidia\u2019s leadership crisis tests the chipmaker\u2019s role as the \u2018central bank of AI\u2019 - CNBC",
             "label": "neutral",
-            "score": 0.948,
-            "published_at": "Sat, 07 Nov 2026 03:32:31 GMT"
+            "score": 0.516,
+            "published_at": "Wed, 11 Nov 2026 18:09:50 GMT"
           },
           {
-            "title": "NVIDIA Corporation (NVDA) Stock Price, News, Quote & History - Yahoo! Finance Canada",
+            "title": "Nvidia stock closes down over 4% after CEO Jensen Huang announces resignation - CNBC",
+            "label": "negative",
+            "score": 0.96,
+            "published_at": "Thu, 12 Nov 2026 09:02:10 GMT"
+          },
+          {
+            "title": "Here are 5 new share price forecasts for Nvidia after the Huang scandal - Yahoo Finance UK",
             "label": "neutral",
-            "score": 0.947,
-            "published_at": "Sat, 07 Nov 2026 04:33:48 GMT"
+            "score": 0.911,
+            "published_at": "Fri, 13 Nov 2026 13:38:00 GMT"
           },
           {
-            "title": "AMD, AVGO, INTC, MU: Chip Stocks Inch Higher As Investors Look Past Midterms-Led Selloff, Nvidia Controversy - Yahoo Finance",
-            "label": "positive",
-            "score": 0.888,
-            "published_at": "Mon, 09 Nov 2026 03:34:00 GMT"
-          },
-          {
-            "title": "AI stocks like Nvidia, Micron, and Sandisk have been blown up, but keep this in mind - Yahoo Finance",
+            "title": "Michael Burry Sees A \u2018Mechanical Bid\u2019 Under NVDA Stock \u2013 Even As He Questions Nvidia\u2019s Succession Plan And Asia Sales - Yahoo Finance",
             "label": "neutral",
-            "score": 0.591,
-            "published_at": "Sun, 08 Nov 2026 11:00:00 GMT"
+            "score": 0.573,
+            "published_at": "Fri, 13 Nov 2026 04:22:18 GMT"
           }
         ]
       }
@@ -7990,25 +8110,77 @@
     {
       "node": "bull",
       "data": {
-        "bull_thesis": "\u2022 Trend regime is BEARISH with 5-day momentum at -8.8%, supporting an active Half-Kelly capacity allocation of 4.5%.\n\u2022 RSI-14 sits at 29.63 with contained 95% daily VaR of -3.99%, providing an asymmetrical entry window against 38.43% annualized vol.\n\u2022 Aggregate news sentiment reads 0.17 with 2 price/volume anomalies reflecting institutional accumulation."
+        "bull_thesis": "\u2022 Trend regime is BEARISH with 5-day momentum at -14.24%, supporting an active Half-Kelly capacity allocation of 6.44%.\n\u2022 RSI-14 sits at 18.52 with contained 95% daily VaR of -4.19%, providing an asymmetrical entry window against 38.79% annualized vol.\n\u2022 Aggregate news sentiment reads -0.24 with 5 price/volume anomalies reflecting institutional accumulation."
       }
     },
     {
       "node": "bear",
       "data": {
-        "bear_thesis": "\u2022 Tail risk is severe: 95% daily VaR of -3.99% with 38.43% annualized vol exposes any 4.5% allocation to fat-tail liquidation.\n\u2022 14-day RSI sits at 29.63; any momentum stalling will trigger abrupt mean-reversion and trap retail longs chasing 186.64.\n\u2022 2 price/volume anomalies in 10 sessions combined with headline sentiment (0.17) flag institutional distribution risk."
+        "bear_thesis": "\u2022 Tail risk is severe: 95% daily VaR of -4.19% with 38.79% annualized vol exposes any 6.44% allocation to fat-tail liquidation.\n\u2022 14-day RSI sits at 18.52; any momentum stalling will trigger abrupt mean-reversion and trap retail longs chasing 160.07.\n\u2022 5 price/volume anomalies in 10 sessions combined with headline sentiment (-0.24) flag institutional distribution risk."
       }
     },
     {
       "node": "cro",
       "data": {
-        "action": "LONG",
-        "verdict": "LONG",
-        "confidence": 84,
-        "recommended_allocation_pct": 4.5,
-        "stop_loss_pct": 8.59,
-        "kill_switch_reason": "Breakdown below 20-day SMA or ATR trailing stop (8.59%).",
-        "verdict_summary": "Institutional LONG execution approved: Trend structure is constructive (SMA20: BEARISH, Close: 186.64, RSI: 29.63) with positive news sentiment (0.17). Half-Kelly capacity allocated at 4.5% with stop loss at 8.59%."
+        "action": "REJECT_TRADE",
+        "verdict": "REJECT_TRADE",
+        "confidence": 92,
+        "recommended_allocation_pct": 0.0,
+        "stop_loss_pct": 13.6,
+        "kill_switch_reason": "Isolation Forest flagged critical anomaly clustering (5 anomalies >= 3) and severe tail loss (VaR -4.19% < -3.0%).",
+        "verdict_summary": "Trade rejected: Extreme microstructural anomaly clustering (5 anomalies) combined with severe tail loss risk (Daily VaR: -4.19%). Capital preservation mandate triggered.",
+        "top_drivers": {
+          "positive": [
+            {
+              "feature": "close_gt_sma20",
+              "value": false,
+              "impact": "+28.4%"
+            },
+            {
+              "feature": "sentiment_score",
+              "value": -0.24,
+              "impact": "+22.1%"
+            },
+            {
+              "feature": "momentum_5d",
+              "value": -14.24,
+              "impact": "+14.2%"
+            }
+          ],
+          "negative": [
+            {
+              "feature": "daily_VaR_95",
+              "value": -4.19,
+              "impact": "-31.2%"
+            },
+            {
+              "feature": "volatility",
+              "value": 38.79,
+              "impact": "-24.5%"
+            },
+            {
+              "feature": "isolation_forest_anomalies",
+              "value": 5,
+              "impact": "-20.8%"
+            }
+          ]
+        },
+        "calibrated_probabilities": {
+          "DOWN": 0.48,
+          "FLAT": 0.38,
+          "UP": 0.14
+        },
+        "conformal_prediction_set": [
+          "REJECT_TRADE",
+          "DOWN"
+        ],
+        "confidence_breakdown": {
+          "raw_model_confidence": 92,
+          "agreement_penalty": 0.0,
+          "anomaly_penalty": 16.0,
+          "regime_penalty": 5.0,
+          "calibrated_confidence": 92
+        }
       }
     }
   ],
@@ -8900,6 +9072,954 @@
         "stop_loss_pct": 7.93,
         "kill_switch_reason": "Breakout back above 20-day SMA or ATR stop (7.93%).",
         "verdict_summary": "Bearish trend breakdown confirmed: Spot price trading below 20-day SMA with adverse headline sentiment (-0.24). SHORT position sizing approved at 4.5% with stop at 7.93%."
+      }
+    }
+  ],
+  "HDFCBANK.NS_": [
+    {
+      "node": "quant",
+      "data": {
+        "ticker": "HDFCBANK.NS",
+        "current_price": 804.0,
+        "annualized_volatility": 23.32,
+        "daily_VaR_95_pct": -2.25,
+        "suggested_stop_loss_atr_pct": 4.43,
+        "half_kelly_allocation_pct": 10.72,
+        "half_kelly_cap_pct": 10.72,
+        "recent_10d_anomalies": 2,
+        "rsi_14": 85.41,
+        "recent_5d_return_pct": 5.79,
+        "sma20_trend": "BULLISH",
+        "close_gt_sma20": true,
+        "sma20_val": 731.13,
+        "sma50_val": 720.77,
+        "sma20_z_score": 1.56,
+        "bb_upper": 824.42,
+        "bb_middle": 731.13,
+        "bb_lower": 637.84,
+        "bb_width_pct": 25.52,
+        "chart_data": [
+          {
+            "date": "2026-08-18",
+            "open": 726.3,
+            "high": 729.0,
+            "low": 723.0,
+            "close": 723.0,
+            "volume": 17916507,
+            "is_anomaly": false,
+            "bb_upper": 757.98,
+            "bb_middle": 737.84,
+            "bb_lower": 717.69,
+            "sma_50": 768.99
+          },
+          {
+            "date": "2026-08-19",
+            "open": 724.0,
+            "high": 725.4,
+            "low": 715.1,
+            "close": 720.0,
+            "volume": 21342651,
+            "is_anomaly": false,
+            "bb_upper": 756.48,
+            "bb_middle": 736.18,
+            "bb_lower": 715.88,
+            "sma_50": 768.86
+          },
+          {
+            "date": "2026-08-20",
+            "open": 725.5,
+            "high": 728.3,
+            "low": 724.3,
+            "close": 725.05,
+            "volume": 17603805,
+            "is_anomaly": false,
+            "bb_upper": 755.24,
+            "bb_middle": 735.07,
+            "bb_lower": 714.9,
+            "sma_50": 768.67
+          },
+          {
+            "date": "2026-08-21",
+            "open": 728.3,
+            "high": 732.8,
+            "low": 726.6,
+            "close": 726.95,
+            "volume": 26029811,
+            "is_anomaly": false,
+            "bb_upper": 754.42,
+            "bb_middle": 734.28,
+            "bb_lower": 714.14,
+            "sma_50": 768.56
+          },
+          {
+            "date": "2026-08-24",
+            "open": 732.5,
+            "high": 734.4,
+            "low": 724.1,
+            "close": 729.0,
+            "volume": 11408345,
+            "is_anomaly": false,
+            "bb_upper": 753.86,
+            "bb_middle": 733.75,
+            "bb_lower": 713.64,
+            "sma_50": 767.94
+          },
+          {
+            "date": "2026-08-25",
+            "open": 726.6,
+            "high": 728.7,
+            "low": 722.0,
+            "close": 727.5,
+            "volume": 17511874,
+            "is_anomaly": false,
+            "bb_upper": 753.64,
+            "bb_middle": 733.36,
+            "bb_lower": 713.07,
+            "sma_50": 767.19
+          },
+          {
+            "date": "2026-08-26",
+            "open": 728.0,
+            "high": 731.0,
+            "low": 724.15,
+            "close": 727.2,
+            "volume": 21156463,
+            "is_anomaly": false,
+            "bb_upper": 751.5,
+            "bb_middle": 732.31,
+            "bb_lower": 713.11,
+            "sma_50": 766.29
+          },
+          {
+            "date": "2026-08-27",
+            "open": 728.15,
+            "high": 728.15,
+            "low": 710.0,
+            "close": 711.0,
+            "volume": 46515020,
+            "is_anomaly": true,
+            "bb_upper": 748.76,
+            "bb_middle": 730.16,
+            "bb_lower": 711.56,
+            "sma_50": 765.03
+          },
+          {
+            "date": "2026-08-28",
+            "open": 710.85,
+            "high": 720.3,
+            "low": 707.0,
+            "close": 720.3,
+            "volume": 16494301,
+            "is_anomaly": false,
+            "bb_upper": 745.8,
+            "bb_middle": 728.76,
+            "bb_lower": 711.73,
+            "sma_50": 763.72
+          },
+          {
+            "date": "2026-08-31",
+            "open": 723.05,
+            "high": 739.75,
+            "low": 704.15,
+            "close": 709.0,
+            "volume": 78157067,
+            "is_anomaly": true,
+            "bb_upper": 741.68,
+            "bb_middle": 726.56,
+            "bb_lower": 711.45,
+            "sma_50": 762.3
+          },
+          {
+            "date": "2026-09-01",
+            "open": 705.05,
+            "high": 715.45,
+            "low": 698.5,
+            "close": 711.9,
+            "volume": 44417092,
+            "is_anomaly": false,
+            "bb_upper": 739.69,
+            "bb_middle": 725.06,
+            "bb_lower": 710.43,
+            "sma_50": 760.81
+          },
+          {
+            "date": "2026-09-02",
+            "open": 702.3,
+            "high": 705.65,
+            "low": 700.0,
+            "close": 700.8,
+            "volume": 36950338,
+            "is_anomaly": false,
+            "bb_upper": 740.81,
+            "bb_middle": 723.35,
+            "bb_lower": 705.89,
+            "sma_50": 759.33
+          },
+          {
+            "date": "2026-09-03",
+            "open": 705.0,
+            "high": 712.6,
+            "low": 705.0,
+            "close": 706.65,
+            "volume": 27770641,
+            "is_anomaly": false,
+            "bb_upper": 740.14,
+            "bb_middle": 721.97,
+            "bb_lower": 703.8,
+            "sma_50": 757.6
+          },
+          {
+            "date": "2026-09-04",
+            "open": 708.35,
+            "high": 716.5,
+            "low": 708.35,
+            "close": 712.1,
+            "volume": 14488024,
+            "is_anomaly": false,
+            "bb_upper": 739.18,
+            "bb_middle": 721.02,
+            "bb_lower": 702.87,
+            "sma_50": 755.92
+          },
+          {
+            "date": "2026-09-07",
+            "open": 712.1,
+            "high": 713.0,
+            "low": 707.05,
+            "close": 710.5,
+            "volume": 12180390,
+            "is_anomaly": false,
+            "bb_upper": 738.1,
+            "bb_middle": 720.0,
+            "bb_lower": 701.9,
+            "sma_50": 754.15
+          },
+          {
+            "date": "2026-09-08",
+            "open": 707.1,
+            "high": 708.9,
+            "low": 703.0,
+            "close": 703.0,
+            "volume": 19883515,
+            "is_anomaly": false,
+            "bb_upper": 737.78,
+            "bb_middle": 718.7,
+            "bb_lower": 699.61,
+            "sma_50": 752.25
+          },
+          {
+            "date": "2026-09-09",
+            "open": 698.0,
+            "high": 700.0,
+            "low": 687.1,
+            "close": 687.1,
+            "volume": 39173990,
+            "is_anomaly": false,
+            "bb_upper": 739.7,
+            "bb_middle": 716.6,
+            "bb_lower": 693.5,
+            "sma_50": 750.07
+          },
+          {
+            "date": "2026-09-10",
+            "open": 687.1,
+            "high": 694.5,
+            "low": 686.2,
+            "close": 693.8,
+            "volume": 27108053,
+            "is_anomaly": false,
+            "bb_upper": 739.9,
+            "bb_middle": 715.04,
+            "bb_lower": 690.18,
+            "sma_50": 748.03
+          },
+          {
+            "date": "2026-09-11",
+            "open": 683.9,
+            "high": 709.0,
+            "low": 681.9,
+            "close": 708.25,
+            "volume": 31411934,
+            "is_anomaly": false,
+            "bb_upper": 738.48,
+            "bb_middle": 714.1,
+            "bb_lower": 689.73,
+            "sma_50": 746.17
+          },
+          {
+            "date": "2026-09-15",
+            "open": 722.4,
+            "high": 730.75,
+            "low": 715.05,
+            "close": 716.55,
+            "volume": 50387632,
+            "is_anomaly": false,
+            "bb_upper": 736.87,
+            "bb_middle": 713.48,
+            "bb_lower": 690.1,
+            "sma_50": 743.9
+          },
+          {
+            "date": "2026-09-16",
+            "open": 714.9,
+            "high": 725.4,
+            "low": 710.85,
+            "close": 721.5,
+            "volume": 27476943,
+            "is_anomaly": false,
+            "bb_upper": 736.67,
+            "bb_middle": 713.41,
+            "bb_lower": 690.14,
+            "sma_50": 741.75
+          },
+          {
+            "date": "2026-09-17",
+            "open": 717.5,
+            "high": 719.4,
+            "low": 713.0,
+            "close": 713.0,
+            "volume": 21543303,
+            "is_anomaly": false,
+            "bb_upper": 736.11,
+            "bb_middle": 713.06,
+            "bb_lower": 690.0,
+            "sma_50": 739.8
+          },
+          {
+            "date": "2026-09-18",
+            "open": 715.25,
+            "high": 733.8,
+            "low": 715.25,
+            "close": 731.0,
+            "volume": 39400710,
+            "is_anomaly": true,
+            "bb_upper": 737.2,
+            "bb_middle": 713.35,
+            "bb_lower": 689.51,
+            "sma_50": 738.07
+          },
+          {
+            "date": "2026-09-21",
+            "open": 731.0,
+            "high": 742.65,
+            "low": 729.05,
+            "close": 739.5,
+            "volume": 35482683,
+            "is_anomaly": false,
+            "bb_upper": 739.91,
+            "bb_middle": 713.98,
+            "bb_lower": 688.06,
+            "sma_50": 736.36
+          },
+          {
+            "date": "2026-09-22",
+            "open": 738.85,
+            "high": 749.3,
+            "low": 738.6,
+            "close": 738.6,
+            "volume": 35483669,
+            "is_anomaly": false,
+            "bb_upper": 741.87,
+            "bb_middle": 714.46,
+            "bb_lower": 687.05,
+            "sma_50": 734.78
+          },
+          {
+            "date": "2026-09-23",
+            "open": 735.65,
+            "high": 742.8,
+            "low": 734.0,
+            "close": 737.25,
+            "volume": 23197231,
+            "is_anomaly": false,
+            "bb_upper": 743.65,
+            "bb_middle": 714.95,
+            "bb_lower": 686.25,
+            "sma_50": 733.33
+          },
+          {
+            "date": "2026-09-24",
+            "open": 725.0,
+            "high": 734.85,
+            "low": 722.7,
+            "close": 728.9,
+            "volume": 29575194,
+            "is_anomaly": false,
+            "bb_upper": 743.9,
+            "bb_middle": 715.03,
+            "bb_lower": 686.17,
+            "sma_50": 731.6
+          },
+          {
+            "date": "2026-09-25",
+            "open": 723.0,
+            "high": 739.65,
+            "low": 723.0,
+            "close": 735.6,
+            "volume": 19853034,
+            "is_anomaly": false,
+            "bb_upper": 746.47,
+            "bb_middle": 716.26,
+            "bb_lower": 686.06,
+            "sma_50": 730.15
+          },
+          {
+            "date": "2026-09-28",
+            "open": 731.6,
+            "high": 733.0,
+            "low": 718.1,
+            "close": 719.05,
+            "volume": 21675579,
+            "is_anomaly": false,
+            "bb_upper": 746.38,
+            "bb_middle": 716.2,
+            "bb_lower": 686.03,
+            "sma_50": 728.14
+          },
+          {
+            "date": "2026-09-29",
+            "open": 713.7,
+            "high": 722.7,
+            "low": 706.25,
+            "close": 722.7,
+            "volume": 42755901,
+            "is_anomaly": false,
+            "bb_upper": 747.0,
+            "bb_middle": 716.89,
+            "bb_lower": 686.78,
+            "sma_50": 727.04
+          },
+          {
+            "date": "2026-09-30",
+            "open": 711.5,
+            "high": 720.3,
+            "low": 708.7,
+            "close": 708.7,
+            "volume": 39365496,
+            "is_anomaly": false,
+            "bb_upper": 746.98,
+            "bb_middle": 716.73,
+            "bb_lower": 686.47,
+            "sma_50": 725.98
+          },
+          {
+            "date": "2026-10-01",
+            "open": 708.4,
+            "high": 721.3,
+            "low": 707.1,
+            "close": 721.2,
+            "volume": 37389857,
+            "is_anomaly": false,
+            "bb_upper": 747.1,
+            "bb_middle": 717.75,
+            "bb_lower": 688.39,
+            "sma_50": 725.35
+          },
+          {
+            "date": "2026-10-05",
+            "open": 731.95,
+            "high": 734.2,
+            "low": 701.25,
+            "close": 704.8,
+            "volume": 66056690,
+            "is_anomaly": false,
+            "bb_upper": 747.17,
+            "bb_middle": 717.65,
+            "bb_lower": 688.14,
+            "sma_50": 724.5
+          },
+          {
+            "date": "2026-10-06",
+            "open": 705.6,
+            "high": 714.7,
+            "low": 701.0,
+            "close": 711.45,
+            "volume": 26568270,
+            "is_anomaly": false,
+            "bb_upper": 747.16,
+            "bb_middle": 717.62,
+            "bb_lower": 688.08,
+            "sma_50": 723.87
+          },
+          {
+            "date": "2026-10-07",
+            "open": 708.55,
+            "high": 711.0,
+            "low": 701.7,
+            "close": 702.75,
+            "volume": 29944008,
+            "is_anomaly": false,
+            "bb_upper": 747.37,
+            "bb_middle": 717.23,
+            "bb_lower": 687.1,
+            "sma_50": 723.13
+          },
+          {
+            "date": "2026-10-08",
+            "open": 704.05,
+            "high": 705.8,
+            "low": 690.5,
+            "close": 692.25,
+            "volume": 26808765,
+            "is_anomaly": false,
+            "bb_upper": 748.25,
+            "bb_middle": 716.7,
+            "bb_lower": 685.15,
+            "sma_50": 722.27
+          },
+          {
+            "date": "2026-10-09",
+            "open": 696.6,
+            "high": 710.15,
+            "low": 695.3,
+            "close": 707.25,
+            "volume": 18397972,
+            "is_anomaly": false,
+            "bb_upper": 746.44,
+            "bb_middle": 717.7,
+            "bb_lower": 688.97,
+            "sma_50": 721.45
+          },
+          {
+            "date": "2026-10-12",
+            "open": 707.5,
+            "high": 711.85,
+            "low": 700.35,
+            "close": 704.9,
+            "volume": 18197879,
+            "is_anomaly": false,
+            "bb_upper": 745.43,
+            "bb_middle": 718.26,
+            "bb_lower": 691.09,
+            "sma_50": 720.47
+          },
+          {
+            "date": "2026-10-13",
+            "open": 707.0,
+            "high": 716.5,
+            "low": 705.1,
+            "close": 714.0,
+            "volume": 18838639,
+            "is_anomaly": false,
+            "bb_upper": 745.4,
+            "bb_middle": 718.55,
+            "bb_lower": 691.7,
+            "sma_50": 719.79
+          },
+          {
+            "date": "2026-10-14",
+            "open": 712.3,
+            "high": 718.55,
+            "low": 707.95,
+            "close": 710.7,
+            "volume": 23945373,
+            "is_anomaly": false,
+            "bb_upper": 745.32,
+            "bb_middle": 718.26,
+            "bb_lower": 691.19,
+            "sma_50": 718.94
+          },
+          {
+            "date": "2026-10-15",
+            "open": 715.0,
+            "high": 728.0,
+            "low": 710.7,
+            "close": 726.85,
+            "volume": 37365177,
+            "is_anomaly": false,
+            "bb_upper": 745.83,
+            "bb_middle": 718.52,
+            "bb_lower": 691.22,
+            "sma_50": 718.64
+          },
+          {
+            "date": "2026-10-16",
+            "open": 727.9,
+            "high": 734.9,
+            "low": 724.3,
+            "close": 728.85,
+            "volume": 28936902,
+            "is_anomaly": false,
+            "bb_upper": 746.87,
+            "bb_middle": 719.31,
+            "bb_lower": 691.76,
+            "sma_50": 718.51
+          },
+          {
+            "date": "2026-10-19",
+            "open": 733.4,
+            "high": 733.4,
+            "low": 707.15,
+            "close": 712.0,
+            "volume": 33524133,
+            "is_anomaly": false,
+            "bb_upper": 745.53,
+            "bb_middle": 718.36,
+            "bb_lower": 691.2,
+            "sma_50": 718.07
+          },
+          {
+            "date": "2026-10-21",
+            "open": 709.55,
+            "high": 715.4,
+            "low": 698.25,
+            "close": 706.95,
+            "volume": 26573703,
+            "is_anomaly": false,
+            "bb_upper": 742.43,
+            "bb_middle": 716.74,
+            "bb_lower": 691.05,
+            "sma_50": 717.59
+          },
+          {
+            "date": "2026-10-22",
+            "open": 701.45,
+            "high": 703.35,
+            "low": 689.1,
+            "close": 694.05,
+            "volume": 60280576,
+            "is_anomaly": true,
+            "bb_upper": 739.94,
+            "bb_middle": 714.51,
+            "bb_lower": 689.08,
+            "sma_50": 716.85
+          },
+          {
+            "date": "2026-10-23",
+            "open": 692.55,
+            "high": 696.8,
+            "low": 686.85,
+            "close": 692.8,
+            "volume": 18989022,
+            "is_anomaly": false,
+            "bb_upper": 737.11,
+            "bb_middle": 712.29,
+            "bb_lower": 687.46,
+            "sma_50": 716.12
+          },
+          {
+            "date": "2026-10-26",
+            "open": 692.1,
+            "high": 693.8,
+            "low": 684.0,
+            "close": 688.05,
+            "volume": 23489755,
+            "is_anomaly": false,
+            "bb_upper": 736.02,
+            "bb_middle": 710.24,
+            "bb_lower": 684.47,
+            "sma_50": 715.31
+          },
+          {
+            "date": "2026-10-27",
+            "open": 689.7,
+            "high": 690.25,
+            "low": 678.65,
+            "close": 680.2,
+            "volume": 40614930,
+            "is_anomaly": false,
+            "bb_upper": 733.68,
+            "bb_middle": 707.48,
+            "bb_lower": 681.27,
+            "sma_50": 714.41
+          },
+          {
+            "date": "2026-10-28",
+            "open": 674.15,
+            "high": 687.1,
+            "low": 669.2,
+            "close": 685.3,
+            "volume": 28534206,
+            "is_anomaly": false,
+            "bb_upper": 733.18,
+            "bb_middle": 705.79,
+            "bb_lower": 678.4,
+            "sma_50": 713.58
+          },
+          {
+            "date": "2026-10-29",
+            "open": 681.2,
+            "high": 686.8,
+            "low": 678.1,
+            "close": 683.3,
+            "volume": 31422790,
+            "is_anomaly": false,
+            "bb_upper": 731.75,
+            "bb_middle": 703.82,
+            "bb_lower": 675.89,
+            "sma_50": 712.66
+          },
+          {
+            "date": "2026-10-30",
+            "open": 683.3,
+            "high": 695.5,
+            "low": 680.85,
+            "close": 692.8,
+            "volume": 21296902,
+            "is_anomaly": false,
+            "bb_upper": 731.27,
+            "bb_middle": 703.02,
+            "bb_lower": 674.78,
+            "sma_50": 712.06
+          },
+          {
+            "date": "2026-11-02",
+            "open": 694.3,
+            "high": 700.75,
+            "low": 688.6,
+            "close": 700.0,
+            "volume": 21480587,
+            "is_anomaly": false,
+            "bb_upper": 728.9,
+            "bb_middle": 701.96,
+            "bb_lower": 675.03,
+            "sma_50": 711.66
+          },
+          {
+            "date": "2026-11-03",
+            "open": 708.0,
+            "high": 725.8,
+            "low": 706.05,
+            "close": 725.5,
+            "volume": 42746644,
+            "is_anomaly": true,
+            "bb_upper": 731.91,
+            "bb_middle": 703.0,
+            "bb_lower": 674.08,
+            "sma_50": 711.67
+          },
+          {
+            "date": "2026-11-04",
+            "open": 722.8,
+            "high": 741.3,
+            "low": 719.25,
+            "close": 736.7,
+            "volume": 50677695,
+            "is_anomaly": false,
+            "bb_upper": 736.72,
+            "bb_middle": 704.26,
+            "bb_lower": 671.8,
+            "sma_50": 711.86
+          },
+          {
+            "date": "2026-11-05",
+            "open": 760.0,
+            "high": 762.7,
+            "low": 749.1,
+            "close": 760.0,
+            "volume": 65401905,
+            "is_anomaly": false,
+            "bb_upper": 748.02,
+            "bb_middle": 707.12,
+            "bb_lower": 666.23,
+            "sma_50": 712.48
+          },
+          {
+            "date": "2026-11-06",
+            "open": 764.4,
+            "high": 788.25,
+            "low": 754.05,
+            "close": 788.25,
+            "volume": 73482878,
+            "is_anomaly": true,
+            "bb_upper": 765.91,
+            "bb_middle": 711.92,
+            "bb_lower": 657.94,
+            "sma_50": 713.7
+          },
+          {
+            "date": "2026-11-09",
+            "open": 797.0,
+            "high": 801.9,
+            "low": 785.95,
+            "close": 798.15,
+            "volume": 64826814,
+            "is_anomaly": false,
+            "bb_upper": 782.71,
+            "bb_middle": 716.47,
+            "bb_lower": 650.22,
+            "sma_50": 715.12
+          },
+          {
+            "date": "2026-11-11",
+            "open": 810.1,
+            "high": 817.85,
+            "low": 800.55,
+            "close": 806.6,
+            "volume": 56398940,
+            "is_anomaly": false,
+            "bb_upper": 798.76,
+            "bb_middle": 721.55,
+            "bb_lower": 644.34,
+            "sma_50": 717.03
+          },
+          {
+            "date": "2026-11-12",
+            "open": 803.0,
+            "high": 815.0,
+            "low": 798.65,
+            "close": 812.3,
+            "volume": 38292509,
+            "is_anomaly": false,
+            "bb_upper": 813.54,
+            "bb_middle": 726.47,
+            "bb_lower": 639.4,
+            "sma_50": 718.87
+          },
+          {
+            "date": "2026-11-13",
+            "open": 808.0,
+            "high": 808.8,
+            "low": 798.0,
+            "close": 804.0,
+            "volume": 23437045,
+            "is_anomaly": false,
+            "bb_upper": 824.42,
+            "bb_middle": 731.13,
+            "bb_lower": 637.84,
+            "sma_50": 720.77
+          }
+        ],
+        "time_machine_actual_return_pct": null,
+        "max_drawdown_5d_pct": null,
+        "regime": {
+          "state": 0,
+          "label": "LOW_VOLATILITY",
+          "prob_high_vol": 0.583
+        },
+        "garch_volatility_forecast_pct": 23.79
+      }
+    },
+    {
+      "node": "news",
+      "data": {
+        "ticker": "HDFCBANK.NS",
+        "aggregate_sentiment_score": 0.02,
+        "headlines": [
+          {
+            "title": "HDFC Bank Limited (HDFCBANK.NS) Stock Price, News, Quote & History - Yahoo! Finance Canada",
+            "label": "neutral",
+            "score": 0.95,
+            "published_at": "Wed, 11 Nov 2026 10:52:54 GMT"
+          },
+          {
+            "title": "Stocks to Watch Today, October 5: HDFC Bank, Bajaj Finance, TCS, DLF and 4 IPO Listings - NiftyTrader",
+            "label": "neutral",
+            "score": 0.934,
+            "published_at": "Mon, 05 Oct 2026 07:00:00 GMT"
+          },
+          {
+            "title": "Stocks to watch, March 19: Manappuram Finance, HDFC Bank, Nazara Tech, HPCL, BPCL, Asian Paints, GR Infra, Mazagon Dock - Upstox",
+            "label": "neutral",
+            "score": 0.91,
+            "published_at": "Wed, 18 Mar 2026 07:00:00 GMT"
+          },
+          {
+            "title": "HDFC Bank Limited (HDB) Stock Price, News, Quote & History - Yahoo! Finance Canada",
+            "label": "neutral",
+            "score": 0.949,
+            "published_at": "Wed, 11 Nov 2026 05:59:32 GMT"
+          },
+          {
+            "title": "India's HDFC Bank beats Q3 profit forecast, plans listing consumer finance unit - Reuters",
+            "label": "neutral",
+            "score": 0.857,
+            "published_at": "Tue, 16 Jan 2024 08:00:00 GMT"
+          },
+          {
+            "title": "Bajaj Finance, HDFC Bank, YES Bank, Bandhan Bank: What Q3 updates of private sector entities in BFSI space show - Upstox",
+            "label": "neutral",
+            "score": 0.943,
+            "published_at": "Sun, 04 Jan 2026 08:00:00 GMT"
+          },
+          {
+            "title": "India\u2019s largest private lender HDFC Bank sees shares rise after CEO announces surprise exit - CNBC",
+            "label": "neutral",
+            "score": 0.483,
+            "published_at": "Mon, 31 Aug 2026 07:00:00 GMT"
+          },
+          {
+            "title": "5 Stocks Near 52-Week Lows: What the Numbers Say (HDFC Bank, Tata Power, Muthoot Finance) - Equitymaster",
+            "label": "neutral",
+            "score": 0.657,
+            "published_at": "Wed, 04 Nov 2026 08:00:00 GMT"
+          }
+        ]
+      }
+    },
+    {
+      "node": "bull",
+      "data": {
+        "bull_thesis": "\u2022 Trend regime is BULLISH with 5-day momentum at 5.79%, supporting an active Half-Kelly capacity allocation of 10.72%.\n\u2022 RSI-14 sits at 85.41 with contained 95% daily VaR of -2.25%, providing an asymmetrical entry window against 23.32% annualized vol.\n\u2022 Aggregate news sentiment reads 0.02 with 2 price/volume anomalies reflecting institutional accumulation."
+      }
+    },
+    {
+      "node": "bear",
+      "data": {
+        "bear_thesis": "\u2022 Tail risk is severe: 95% daily VaR of -2.25% with 23.32% annualized vol exposes any 10.72% allocation to fat-tail liquidation.\n\u2022 14-day RSI sits at 85.41; any momentum stalling will trigger abrupt mean-reversion and trap retail longs chasing 804.0.\n\u2022 2 price/volume anomalies in 10 sessions combined with headline sentiment (0.02) flag institutional distribution risk."
+      }
+    },
+    {
+      "node": "cro",
+      "data": {
+        "action": "SHORT",
+        "verdict": "SHORT",
+        "confidence": 88,
+        "recommended_allocation_pct": 10.72,
+        "stop_loss_pct": 4.43,
+        "kill_switch_reason": "Continuation of parabolic squeeze above 2x ATR trailing stop (4.43%).",
+        "verdict_summary": "Parabolic overbought exhaustion detected (14-day RSI: 85.41 >= 75, 5-day Return: 5.79%). Mean reversion to historical trend lines expected; tactical SHORT sizing approved at 10.72% with ATR stop at 4.43%.",
+        "top_drivers": {
+          "positive": [
+            {
+              "feature": "close_gt_sma20",
+              "value": true,
+              "impact": "+28.4%"
+            },
+            {
+              "feature": "sentiment_score",
+              "value": 0.02,
+              "impact": "+22.1%"
+            },
+            {
+              "feature": "momentum_5d",
+              "value": 5.79,
+              "impact": "+14.2%"
+            }
+          ],
+          "negative": [
+            {
+              "feature": "daily_VaR_95",
+              "value": -2.25,
+              "impact": "-31.2%"
+            },
+            {
+              "feature": "volatility",
+              "value": 23.32,
+              "impact": "-24.5%"
+            },
+            {
+              "feature": "isolation_forest_anomalies",
+              "value": 2,
+              "impact": "-20.8%"
+            }
+          ]
+        },
+        "calibrated_probabilities": {
+          "DOWN": 0.64,
+          "FLAT": 0.24,
+          "UP": 0.12
+        },
+        "conformal_prediction_set": [
+          "SHORT"
+        ],
+        "confidence_breakdown": {
+          "raw_model_confidence": 88,
+          "agreement_penalty": 0.0,
+          "anomaly_penalty": 7.0,
+          "regime_penalty": 0.0,
+          "calibrated_confidence": 88
+        }
       }
     }
   ]
