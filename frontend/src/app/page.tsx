@@ -588,6 +588,12 @@ export default function TerminalPage() {
               onChange={(e) => setCutoffDate(e.target.value)}
               className="bg-[#090A0F] border border-[#1E2230] rounded-md px-2.5 py-1 text-xs font-mono text-white focus:outline-none focus:border-[#F59E0B]"
             />
+            <span className="text-[11px] font-mono text-[#94A3B8]" aria-live="polite">
+              Data shown as of:{' '}
+              <span className="font-semibold text-white">
+                {lastCloseDate || (isRunning ? 'Loading…' : 'Unavailable')}
+              </span>
+            </span>
             {cutoffDate && (
               <button
                 onClick={handleResetCutoff}
