@@ -13,6 +13,10 @@ import yfinance as yf
 
 from .cache import get_disk_cache
 
+# Bump when price semantics change. v2 stores unadjusted daily closes, so old
+# auto-adjusted cache entries must never be reused.
+OHLCV_CACHE_VERSION = "v2-unadjusted"
+
 
 def _clean_series(s: pd.Series) -> pd.Series:
     """Sanitize inf/nan values in a pandas Series."""
@@ -46,38 +50,61 @@ class MarketDataFetcher:
         use_cache: bool = True,
     ) -> pd.DataFrame:
         """
-        Download historical OHLCV data.
-        Flattens MultiIndex, standardizes column names, removes timezone offsets.
+        Download historical OHLCV data for the requested ticker.
+        Uses unadjusted daily closes (auto_adjust=False), flattens MultiIndex,
+        standardizes column names, and removes timezone offsets.
         """
         clean_ticker = ticker.strip().upper()
-        cache_key = f"ohlcv:{clean_ticker}:{start_date}:{end_date}:{period}"
+        cache_key = (
+            f"ohlcv:{OHLCV_CACHE_VERSION}:{clean_ticker}:"
+            f"{start_date}:{end_date}:{period}"
+        )
 
         if use_cache:
             cached = self.cache.get(cache_key)
             if cached is not None and isinstance(cached, pd.DataFrame) and not cached.empty:
                 return cached.copy()
 
-        # Download from yfinance
+        # Download from yfinance. auto_adjust=False is required so Close is the
+        # actual traded daily close for this ticker, not a back-adjusted series.
         try:
             if start_date and end_date:
-                df = yf.download(clean_ticker, start=start_date, end=end_date, progress=False)
+                df = yf.download(
+                    clean_ticker,
+                    start=start_date,
+                    end=end_date,
+                    progress=False,
+                    auto_adjust=False,
+                )
             elif start_date:
-                df = yf.download(clean_ticker, start=start_date, progress=False)
+                df = yf.download(
+                    clean_ticker,
+                    start=start_date,
+                    progress=False,
+                    auto_adjust=False,
+                )
             else:
-                df = yf.download(clean_ticker, period=period, progress=False)
+                df = yf.download(
+                    clean_ticker,
+                    period=period,
+                    progress=False,
+                    auto_adjust=False,
+                )
         except Exception:
             df = pd.DataFrame()
 
-        # Fallback to Ticker.history if download returned empty
+        # Fallback to Ticker.history (same ticker only) if download returned empty
         if df is None or df.empty:
             try:
                 t_obj = yf.Ticker(clean_ticker)
                 if start_date and end_date:
-                    df = t_obj.history(start=start_date, end=end_date)
+                    df = t_obj.history(
+                        start=start_date, end=end_date, auto_adjust=False
+                    )
                 elif start_date:
-                    df = t_obj.history(start=start_date)
+                    df = t_obj.history(start=start_date, auto_adjust=False)
                 else:
-                    df = t_obj.history(period=period)
+                    df = t_obj.history(period=period, auto_adjust=False)
             except Exception:
                 df = pd.DataFrame()
 

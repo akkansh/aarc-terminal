@@ -1,6 +1,6 @@
 import os
-import json
 import asyncio
+import json
 from pathlib import Path
 from typing import Optional, Dict, Any, List
 from dotenv import load_dotenv
@@ -8,11 +8,12 @@ from dotenv import load_dotenv
 # Ensure .env is loaded before anything else
 ROOT_ENV_PATH = Path(__file__).resolve().parent.parent / ".env"
 load_dotenv(dotenv_path=ROOT_ENV_PATH, override=True)
-from fastapi import FastAPI, Query
+from fastapi import FastAPI, Query, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sse_starlette.sse import EventSourceResponse
 
 from backend.graph import stream_committee
+import yfinance as yf
 
 app = FastAPI(
     title="Autonomous Adversarial Risk Committee (AARC) API",
@@ -53,39 +54,6 @@ def save_to_demo_cache(key: str, events: List[Dict[str, Any]]):
         print(f"[CACHE] Error saving to demo cache: {e}")
 
 
-def get_cached_events_for_fallback(ticker: str, cutoff_date: Optional[str]) -> Optional[List[Dict[str, Any]]]:
-    cache = load_demo_cache()
-    if not cache:
-        return None
-
-    clean_t = ticker.strip().upper()
-    c_date = cutoff_date.strip() if cutoff_date else ""
-    key = f"{clean_t}_{c_date}"
-
-    # Exact match
-    if key in cache:
-        return cache[key]
-    
-    # Match by ticker alone
-    for k in cache:
-        if k.startswith(f"{clean_t}_"):
-            return cache[k]
-    
-    # Generic fallback to any available cache entry (e.g. RELIANCE.NS)
-    for k in ["RELIANCE.NS_", "RELIANCE.NS", "NVDA_", "NVDA"]:
-        if k in cache:
-            # Clone and adapt ticker name
-            copied = json.loads(json.dumps(cache[k]))
-            for ev in copied:
-                if ev.get("node") == "quant" and "data" in ev:
-                    ev["data"]["ticker"] = clean_t
-            return copied
-
-    # Return first available entry in cache
-    first_key = next(iter(cache.keys()))
-    return cache[first_key]
-
-
 @app.get("/health")
 @app.get("/")
 async def health_check():
@@ -93,6 +61,52 @@ async def health_check():
         "status": "healthy",
         "service": "Autonomous Adversarial Risk Committee (AARC)"
     }
+
+
+@app.get("/api/instrument")
+async def instrument_name(ticker: str = Query(min_length=1, max_length=32)):
+    """Resolve only an exact symbol match; never assign a different company's name."""
+    symbol = ticker.strip().upper()
+    try:
+        search = await asyncio.to_thread(yf.Search, symbol, max_results=10, news_count=0)
+        for quote in search.quotes:
+            if str(quote.get("symbol", "")).upper() == symbol:
+                name = quote.get("longname") or quote.get("shortname")
+                if name:
+                    return {"ticker": symbol, "name": name}
+    except Exception as exc:
+        print(f"[INSTRUMENT] Lookup failed for {symbol}: {exc}")
+    return {"ticker": symbol, "name": None}
+
+
+@app.get("/api/instruments/search")
+async def search_instruments(q: str = Query(min_length=1, max_length=80)):
+    """Search company names and symbols, returning only equity listings."""
+    query = q.strip()
+    if not query:
+        return {"results": []}
+    try:
+        search = await asyncio.to_thread(yf.Search, query, max_results=20, news_count=0)
+        results = []
+        seen = set()
+        for quote in search.quotes:
+            if quote.get("quoteType", "").upper() != "EQUITY":
+                continue
+            symbol = quote.get("symbol")
+            name = quote.get("longname") or quote.get("shortname")
+            if not isinstance(symbol, str) or not isinstance(name, str) or not symbol or not name:
+                continue
+            symbol = symbol.upper()
+            if symbol in seen:
+                continue
+            seen.add(symbol)
+            results.append({"ticker": symbol, "name": name, "exchange": quote.get("exchDisp") or quote.get("exchange") or ""})
+            if len(results) == 8:
+                break
+        return {"results": results}
+    except Exception as exc:
+        print(f"[INSTRUMENT] Search failed: {exc}")
+        raise HTTPException(status_code=503, detail="Stock search is temporarily unavailable") from exc
 
 
 @app.get("/api/stream")
@@ -104,46 +118,48 @@ async def stream_committee_endpoint(
     SSE endpoint that streams node completion events:
     quant -> news -> bull -> bear -> cro
     as `data: <json>\\n\\n`.
-    Includes failsafe demo caching.
+    Failures are reported explicitly as `node: error` events; demo-cache replay is
+    intentionally disabled so a request for one ticker can never be served another.
     """
     clean_t = ticker.strip().upper()
     cleaned_cutoff = cutoff_date.strip() if cutoff_date and cutoff_date.strip() else None
     cache_key = f"{clean_t}_{cleaned_cutoff or ''}"
 
     async def event_generator():
-        recorded_events = []
-        stream_failed = False
+        recorded_events: List[Dict[str, Any]] = []
 
         try:
             async for node_event in stream_committee(ticker=clean_t, cutoff_date=cleaned_cutoff):
-                if node_event.get("node") == "error":
-                    stream_failed = True
-                    break
                 recorded_events.append(node_event)
                 yield {
                     "data": json.dumps(node_event, allow_nan=False)
                 }
 
-            # If stream succeeded with all 5 nodes, save to demo cache
-            if not stream_failed and len(recorded_events) >= 5:
-                save_to_demo_cache(cache_key, recorded_events)
-            elif stream_failed:
-                raise RuntimeError("Node reported error during execution")
+                # Do not replay cache after a failure: surface the error event and stop.
+                if node_event.get("node") == "error":
+                    return
 
-        except Exception as e:
-            print(f"[STREAM] Execution failed or encountered error: {e}. Falling back to demo cache...")
-            cached_events = get_cached_events_for_fallback(clean_t, cleaned_cutoff)
-            if cached_events:
-                # Stream cached events with small realistic intervals
-                for cached_ev in cached_events:
-                    yield {
-                        "data": json.dumps(cached_ev, allow_nan=False)
-                    }
-                    await asyncio.sleep(0.3)
+            # Only persist a fully successful run; incomplete streams are reported as errors.
+            if recorded_events and recorded_events[-1].get("node") == "index_complete":
+                return
+            if len(recorded_events) >= 5:
+                save_to_demo_cache(cache_key, recorded_events)
             else:
                 yield {
-                    "data": json.dumps({"node": "error", "data": {"stage": "failsafe", "error": str(e)}})
+                    "data": json.dumps({
+                        "node": "error",
+                        "data": {
+                            "stage": "stream",
+                            "error": "Committee stream ended before all nodes completed",
+                        },
+                    })
                 }
+
+        except Exception as e:
+            print(f"[STREAM] Execution failed or encountered error: {e}")
+            yield {
+                "data": json.dumps({"node": "error", "data": {"stage": "stream", "error": str(e)}})
+            }
 
     return EventSourceResponse(event_generator())
 

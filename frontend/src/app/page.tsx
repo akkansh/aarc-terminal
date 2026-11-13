@@ -24,6 +24,12 @@ import {
   Compass,
   Sliders,
 } from 'lucide-react';
+import {
+  currencySymbolForTicker,
+  formatMarketValue,
+  isIndexTicker,
+  latestChartPoint,
+} from '@/lib/marketDisplay';
 
 const CandlestickChart = dynamic(() => import('@/components/CandlestickChart'), {
   ssr: false,
@@ -82,10 +88,18 @@ interface HeadlineItem {
   published_at?: string;
 }
 
+interface StockSuggestion {
+  ticker: string;
+  name: string;
+  exchange: string;
+}
+
 interface NewsData {
   ticker: string;
-  aggregate_sentiment_score: number;
+  aggregate_sentiment_score: number | null;
   headlines: HeadlineItem[];
+  news_available?: boolean;
+  news_error?: string;
 }
 
 interface BullData {
@@ -106,13 +120,51 @@ interface CROVerdict {
   verdict_summary: string;
 }
 
-const PRESET_TICKERS = ['RELIANCE.NS', 'TCS.NS', 'HDFCBANK.NS', 'ZOMATO.NS', 'NVDA'];
+const PRESET_TICKERS = [
+  // Popular India large caps
+  'RELIANCE.NS',
+  'TCS.NS',
+  'HDFCBANK.NS',
+  'INFY.NS',
+  'ICICIBANK.NS',
+  'ZOMATO.NS',
+  // Popular US large caps
+  'NVDA',
+  'AVGO',
+  'AAPL',
+  'MSFT',
+  'GOOGL',
+  'AMZN',
+  'TSLA',
+  // India benchmark indices
+  '^NSEI',
+  '^NSEBANK',
+  '^BSESN',
+];
+
+const TICKER_NAMES: Record<string, string> = {
+  'RELIANCE.NS': 'Reliance Industries Limited', 'TCS.NS': 'Tata Consultancy Services Limited',
+  'HDFCBANK.NS': 'HDFC Bank Limited', 'INFY.NS': 'Infosys Limited',
+  'ICICIBANK.NS': 'ICICI Bank Limited', 'ZOMATO.NS': 'Zomato Limited',
+  NVDA: 'NVIDIA Corporation', AVGO: 'Broadcom Inc.', AAPL: 'Apple Inc.',
+  MSFT: 'Microsoft Corporation', GOOGL: 'Alphabet Inc.', AMZN: 'Amazon.com, Inc.',
+  TSLA: 'Tesla, Inc.', '^NSEI': 'NIFTY 50', '^NSEBANK': 'NIFTY Bank',
+  '^BSESN': 'S&P BSE SENSEX',
+};
+const STORAGE_KEY = 'aarc.activeTicker';
 
 export default function TerminalPage() {
   const [mounted, setMounted] = useState(false);
   const [ticker, setTicker] = useState('RELIANCE.NS');
+  const [resolvedName, setResolvedName] = useState<{ ticker: string; name: string } | null>(null);
   const [customTicker, setCustomTicker] = useState('');
+  const [suggestions, setSuggestions] = useState<StockSuggestion[]>([]);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchLoading, setSearchLoading] = useState(false);
+  const [searchError, setSearchError] = useState('');
+  const [highlightedSuggestion, setHighlightedSuggestion] = useState(-1);
   const [cutoffDate, setCutoffDate] = useState('');
+  const [appliedCutoff, setAppliedCutoff] = useState('');
   const [isRunning, setIsRunning] = useState(false);
   const [activeStep, setActiveStep] = useState(0); // 0 to 5
   const [showOutcome, setShowOutcome] = useState(false);
@@ -130,8 +182,14 @@ export default function TerminalPage() {
 
   useEffect(() => {
     setMounted(true);
-    // Auto-run initial demo on mount
-    runCommittee('RELIANCE.NS', '');
+    let initialTicker = 'RELIANCE.NS';
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY)?.trim().toUpperCase();
+      if (saved && /^[A-Z0-9^.=\-]{1,32}$/.test(saved)) initialTicker = saved;
+    } catch {
+      // Storage may be unavailable in private browsing.
+    }
+    runCommittee(initialTicker, '');
     return () => {
       if (eventSourceRef.current) {
         eventSourceRef.current.close();
@@ -139,12 +197,56 @@ export default function TerminalPage() {
     };
   }, []);
 
+  useEffect(() => {
+    if (TICKER_NAMES[ticker]) return;
+    const controller = new AbortController();
+    fetch(`http://localhost:8000/api/instrument?${new URLSearchParams({ ticker })}`, { signal: controller.signal })
+      .then((response) => response.ok ? response.json() : null)
+      .then((data) => {
+        if (data?.ticker === ticker && typeof data.name === 'string') {
+          setResolvedName({ ticker, name: data.name });
+        }
+      })
+      .catch(() => {});
+    return () => controller.abort();
+  }, [ticker]);
+
+  useEffect(() => {
+    const query = customTicker.trim();
+    if (!searchOpen || !query) return;
+    const controller = new AbortController();
+    setSuggestions([]);
+    setSearchError('');
+    setSearchLoading(true);
+    setHighlightedSuggestion(-1);
+    const timer = window.setTimeout(async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:8000/api/instruments/search?${new URLSearchParams({ q: query })}`,
+          { signal: controller.signal },
+        );
+        if (!response.ok) throw new Error('Stock search is temporarily unavailable');
+        const data = await response.json();
+        if (!controller.signal.aborted) setSuggestions(data.results);
+      } catch {
+        if (!controller.signal.aborted) setSearchError('Stock search is temporarily unavailable. You can still enter a ticker symbol.');
+      } finally {
+        if (!controller.signal.aborted) setSearchLoading(false);
+      }
+    }, 300);
+    return () => { window.clearTimeout(timer); controller.abort(); };
+  }, [customTicker, searchOpen]);
+
   const runCommittee = (targetTicker: string, targetCutoff: string) => {
+    const cleanT = targetTicker.trim().toUpperCase();
+    setTicker(cleanT);
+    try { localStorage.setItem(STORAGE_KEY, cleanT); } catch { /* storage is optional */ }
     if (eventSourceRef.current) {
       eventSourceRef.current.close();
     }
 
     setIsRunning(true);
+    setAppliedCutoff(targetCutoff);
     setActiveStep(1);
     setErrorMsg(null);
     setShowOutcome(false);
@@ -156,7 +258,6 @@ export default function TerminalPage() {
     setBearData(null);
     setCroData(null);
 
-    const cleanT = targetTicker.trim().toUpperCase();
     const query = new URLSearchParams({ ticker: cleanT });
     if (targetCutoff.trim()) {
       query.append('cutoff_date', targetCutoff.trim());
@@ -184,6 +285,9 @@ export default function TerminalPage() {
         } else if (node === 'bear') {
           setBearData(data);
           setActiveStep(5);
+        } else if (node === 'index_complete') {
+          setIsRunning(false);
+          es.close();
         } else if (node === 'cro') {
           setCroData(data);
           setIsRunning(false);
@@ -199,21 +303,45 @@ export default function TerminalPage() {
     };
 
     es.onerror = () => {
-      // In case of network interruption, stream concludes
+      setErrorMsg('Connection to the backend was interrupted');
       setIsRunning(false);
       es.close();
     };
   };
 
   const handleRun = () => {
-    const selected = customTicker.trim() ? customTicker.trim().toUpperCase() : ticker;
-    setTicker(selected);
-    runCommittee(selected, cutoffDate);
+    const input = customTicker.trim();
+    if (!input) {
+      runCommittee(ticker, cutoffDate);
+      return;
+    }
+    const exact = suggestions.find((item) => item.ticker === input.toUpperCase());
+    if (exact) {
+      selectSuggestion(exact);
+    } else if (searchLoading) {
+      setSearchError('Wait for search results, then select a stock.');
+    } else if (suggestions.length || !/^[A-Za-z0-9^.\-=]{1,32}$/.test(input)) {
+      setSearchOpen(true);
+      setSearchError('Select a stock from the results, or enter its exact ticker symbol.');
+    } else {
+      setSearchOpen(false);
+      runCommittee(input.toUpperCase(), cutoffDate);
+    }
+  };
+
+  const selectSuggestion = (item: StockSuggestion) => {
+    setResolvedName({ ticker: item.ticker, name: item.name });
+    setCustomTicker('');
+    setSearchOpen(false);
+    setSearchError('');
+    setSuggestions([]);
+    runCommittee(item.ticker, cutoffDate);
   };
 
   const handleSelectPreset = (t: string) => {
     setTicker(t);
     setCustomTicker('');
+    setSearchOpen(false);
     runCommittee(t, cutoffDate);
   };
 
@@ -236,7 +364,24 @@ export default function TerminalPage() {
     runCommittee(ticker, '');
   };
 
-  const currencySymbol = ticker.includes('.NS') || ticker.includes('.BO') ? '₹' : '$';
+  const currencySymbol = currencySymbolForTicker(ticker);
+  const isIndex = isIndexTicker(ticker);
+  const instrumentName = TICKER_NAMES[ticker] || (resolvedName?.ticker === ticker ? resolvedName.name : null);
+  const priceUnit = isIndex ? 'pts' : '';
+  const lastChartPoint = latestChartPoint(quantData?.chart_data);
+  const lastClose = lastChartPoint?.close ?? null;
+  const lastCloseDate = lastChartPoint?.date ?? null;
+  const newsAvailable = !!newsData && newsData.news_available !== false;
+  const sentimentScore =
+    newsAvailable && typeof newsData?.aggregate_sentiment_score === 'number'
+      ? newsData.aggregate_sentiment_score
+      : null;
+  const pendingCustomTicker = customTicker.trim().toUpperCase();
+  const showPendingCustom = pendingCustomTicker !== '' && pendingCustomTicker !== ticker;
+
+  if (!mounted) {
+    return <div className="min-h-screen bg-[#090A0F] p-6 text-xs font-mono text-[#94A3B8]">Loading dashboard...</div>;
+  }
 
   return (
     <div className="min-h-screen bg-[#090A0F] text-[#E2E8F0] p-4 lg:p-6 space-y-6">
@@ -274,8 +419,54 @@ export default function TerminalPage() {
         </div>
       </header>
 
+      {/* PIPELINE ERROR BANNER */}
+      {errorMsg && (
+        <section
+          role="alert"
+          className="flex items-start gap-3 rounded-xl border border-[#F43F5E]/40 bg-[#F43F5E]/10 px-4 py-3 text-xs"
+        >
+          <AlertTriangle className="h-4 w-4 text-[#F43F5E] shrink-0 mt-0.5" />
+          <div className="space-y-0.5">
+            <div className="font-mono font-bold uppercase tracking-wider text-[#F43F5E]">
+              Pipeline Error
+            </div>
+            <p className="text-[#E2E8F0]">
+              {errorMsg}. No cached or demo result was substituted, so any displayed
+              telemetry may be incomplete.
+            </p>
+          </div>
+        </section>
+      )}
+
       {/* TOP COMMAND BAR */}
       <section className="bg-[#12141C] border border-[#1E2230] rounded-xl p-4 space-y-4">
+        <div className="flex flex-wrap items-center gap-2 text-xs font-mono">
+          <span className="text-[#64748B] uppercase tracking-wider">Active Ticker:</span>
+          <span className="px-2 py-1 rounded bg-[#10B981]/10 text-[#10B981] border border-[#10B981]/40 font-bold">
+            {ticker}
+          </span>
+          <span className="text-white font-semibold">{instrumentName || 'Instrument name unavailable'}</span>
+          <span className="px-2 py-1 rounded bg-[#090A0F] text-[#94A3B8] border border-[#1E2230]">
+            {isIndex ? 'Index (points)' : 'Daily close'}
+          </span>
+          {appliedCutoff && (
+            <span className="px-2 py-1 rounded bg-[#F59E0B]/10 text-[#F59E0B] border border-[#F59E0B]/30">
+              Requested cutoff: {appliedCutoff}
+            </span>
+          )}
+          {showPendingCustom && (
+            <span className="px-2 py-1 rounded bg-[#090A0F] text-[#94A3B8] border border-[#1E2230]">
+              Pending custom: <span className="text-white font-bold">{pendingCustomTicker}</span>
+            </span>
+          )}
+        </div>
+
+        {isIndex && (
+          <div role="status" className="rounded-lg border border-[#F59E0B]/40 bg-[#F59E0B]/10 px-3 py-2 text-xs text-[#FCD34D]">
+            Index analysis only: an index cannot be traded directly. No trade recommendation or allocation is generated.
+          </div>
+        )}
+
         <div className="flex flex-wrap items-center justify-between gap-4">
           {/* Quick Select Pills */}
           <div className="flex items-center gap-2 flex-wrap">
@@ -287,7 +478,7 @@ export default function TerminalPage() {
                 key={t}
                 onClick={() => handleSelectPreset(t)}
                 className={`px-3 py-1.5 rounded-lg text-xs font-mono font-medium transition-all ${
-                  ticker === t && !customTicker
+                  ticker === t
                     ? 'bg-[#10B981] text-[#090A0F] font-bold shadow-md shadow-[#10B981]/25 border border-[#10B981]'
                     : 'bg-[#090A0F] text-[#94A3B8] border border-[#1E2230] hover:border-[#2A3042] hover:text-white'
                 }`}
@@ -303,12 +494,61 @@ export default function TerminalPage() {
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-[#64748B]" />
               <input
                 type="text"
-                placeholder="Custom Ticker..."
+                placeholder="Company or ticker..."
                 value={customTicker}
-                onChange={(e) => setCustomTicker(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleRun()}
+                role="combobox"
+                aria-label="Search company name or ticker"
+                aria-autocomplete="list"
+                aria-expanded={searchOpen && !!customTicker.trim()}
+                aria-controls="stock-search-results"
+                aria-activedescendant={highlightedSuggestion >= 0 ? `stock-result-${highlightedSuggestion}` : undefined}
+                onFocus={() => setSearchOpen(true)}
+                onBlur={() => setSearchOpen(false)}
+                onChange={(e) => { setCustomTicker(e.target.value); setSearchOpen(true); }}
+                onKeyDown={(e) => {
+                  if (e.key === 'ArrowDown' && suggestions.length) {
+                    e.preventDefault();
+                    setSearchOpen(true);
+                    setHighlightedSuggestion((i) => Math.min(i + 1, suggestions.length - 1));
+                  } else if (e.key === 'ArrowUp' && suggestions.length) {
+                    e.preventDefault();
+                    setHighlightedSuggestion((i) => Math.max(i - 1, 0));
+                  } else if (e.key === 'Escape') {
+                    setSearchOpen(false);
+                  } else if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (searchOpen && highlightedSuggestion >= 0 && suggestions[highlightedSuggestion]) {
+                      selectSuggestion(suggestions[highlightedSuggestion]);
+                    } else {
+                      handleRun();
+                    }
+                  }
+                }}
                 className="bg-[#090A0F] border border-[#1E2230] rounded-lg pl-9 pr-3 py-1.5 text-xs font-mono text-white placeholder-[#64748B] focus:outline-none focus:border-[#10B981] w-36 sm:w-44"
               />
+              {searchOpen && customTicker.trim() && (
+                <div className="absolute z-50 mt-1 w-80 max-w-[85vw] rounded-lg border border-[#2A3042] bg-[#12141C] shadow-xl">
+                  {searchLoading ? (
+                    <p role="status" className="p-3 text-xs text-[#94A3B8]">Searching stocks...</p>
+                  ) : suggestions.length > 0 ? (
+                    <ul id="stock-search-results" role="listbox" className="max-h-64 overflow-y-auto py-1">
+                      {suggestions.map((item, index) => (
+                        <li key={item.ticker} id={`stock-result-${index}`} role="option" aria-selected={highlightedSuggestion === index}>
+                          <button type="button" onMouseDown={(e) => e.preventDefault()} onClick={() => selectSuggestion(item)}
+                            className={`w-full px-3 py-2 text-left text-xs hover:bg-[#1E2230] ${highlightedSuggestion === index ? 'bg-[#1E2230]' : ''}`}>
+                            <span className="font-mono font-bold text-[#10B981]">{item.ticker}</span>
+                            <span className="ml-2 text-[#E2E8F0]">{item.name}</span>
+                            {item.exchange && <span className="block mt-0.5 text-[#64748B]">{item.exchange}</span>}
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p role="status" className="p-3 text-xs text-[#94A3B8]">No matching stocks found.</p>
+                  )}
+                  {searchError && <p role="status" className="border-t border-[#1E2230] p-3 text-xs text-[#F59E0B]">{searchError}</p>}
+                </div>
+              )}
             </div>
 
             <button
@@ -382,9 +622,11 @@ export default function TerminalPage() {
             {[
               { id: 1, label: '[1] Quant ML', ready: !!quantData },
               { id: 2, label: '[2] FinBERT NLP', ready: !!newsData },
-              { id: 3, label: '[3] Bull Agent', ready: !!bullData },
-              { id: 4, label: '[4] Short-Seller', ready: !!bearData },
-              { id: 5, label: '[5] CRO Verdict', ready: !!croData },
+              ...(!isIndex ? [
+                { id: 3, label: '[3] Bull Agent', ready: !!bullData },
+                { id: 4, label: '[4] Short-Seller', ready: !!bearData },
+                { id: 5, label: '[5] CRO Verdict', ready: !!croData },
+              ] : []),
             ].map((step) => {
               const isCurrent = activeStep === step.id && isRunning;
               const isDone = step.ready;
@@ -421,12 +663,17 @@ export default function TerminalPage() {
         {/* Card 1: Price & Annualized Vol */}
         <div className="bg-[#12141C] border border-[#1E2230] rounded-xl p-4 flex flex-col justify-between">
           <div className="flex items-center justify-between text-xs text-[#94A3B8]">
-            <span className="uppercase tracking-wider font-medium">Spot Price & Volatility</span>
+            <span className="uppercase tracking-wider font-medium">Last Daily Close & Volatility</span>
             <Activity className="h-4 w-4 text-[#06B6D4]" />
           </div>
           <div className="my-2">
             <div className="text-2xl font-bold font-mono text-white">
-              {quantData ? `${currencySymbol}${quantData.current_price.toLocaleString()}` : '---'}
+              {lastClose !== null ? formatMarketValue(lastClose, ticker) : '---'}
+            </div>
+            <div className="mt-1 text-[10px] font-mono text-[#64748B]">
+              {lastCloseDate
+                ? `Daily close • as of ${lastCloseDate} (not live)`
+                : 'Daily close as-of unavailable'}
             </div>
           </div>
           <div className="flex items-center justify-between text-xs font-mono pt-2 border-t border-[#1E2230]/60">
@@ -440,7 +687,7 @@ export default function TerminalPage() {
         {/* Card 2: 95% Daily VaR & Suggested Stop Loss */}
         <div className="bg-[#12141C] border border-[#1E2230] rounded-xl p-4 flex flex-col justify-between">
           <div className="flex items-center justify-between text-xs text-[#94A3B8]">
-            <span className="uppercase tracking-wider font-medium">95% Daily VaR & ATR Stop</span>
+            <span className="uppercase tracking-wider font-medium">{isIndex ? '95% Daily VaR' : '95% Daily VaR & ATR Stop'}</span>
             <ShieldAlert className="h-4 w-4 text-[#F43F5E]" />
           </div>
           <div className="my-2">
@@ -448,12 +695,12 @@ export default function TerminalPage() {
               {quantData ? `${quantData.daily_VaR_95_pct}%` : '---'}
             </div>
           </div>
-          <div className="flex items-center justify-between text-xs font-mono pt-2 border-t border-[#1E2230]/60">
+          {!isIndex && <div className="flex items-center justify-between text-xs font-mono pt-2 border-t border-[#1E2230]/60">
             <span className="text-[#94A3B8]">Stop (2x ATR):</span>
             <span className="font-bold text-[#E2E8F0]">
               {quantData ? `${quantData.suggested_stop_loss_atr_pct}%` : '---'}
             </span>
-          </div>
+          </div>}
         </div>
 
         {/* Card 3: Isolation Forest Anomalies Count */}
@@ -492,12 +739,12 @@ export default function TerminalPage() {
               </span>
             )}
           </div>
-          <div className="flex items-center justify-between text-xs font-mono pt-2 border-t border-[#1E2230]/60">
+          {!isIndex && <div className="flex items-center justify-between text-xs font-mono pt-2 border-t border-[#1E2230]/60">
             <span className="text-[#94A3B8]">Half-Kelly Cap:</span>
             <span className="font-bold text-[#10B981]">
               {quantData ? `${quantData.half_kelly_allocation_pct}%` : '---'}
             </span>
-          </div>
+          </div>}
         </div>
 
         {/* Card 4: FinBERT Sentiment Score */}
@@ -509,22 +756,28 @@ export default function TerminalPage() {
           <div className="my-2 flex items-baseline justify-between">
             <div
               className={`text-2xl font-bold font-mono ${
-                (newsData?.aggregate_sentiment_score ?? 0) >= 0.1
+                sentimentScore !== null && sentimentScore >= 0.1
                   ? 'text-[#10B981]'
-                  : (newsData?.aggregate_sentiment_score ?? 0) <= -0.1
+                  : sentimentScore !== null && sentimentScore <= -0.1
                   ? 'text-[#F43F5E]'
+                  : newsData && !newsAvailable
+                  ? 'text-[#F59E0B]'
                   : 'text-[#94A3B8]'
               }`}
             >
-              {newsData
-                ? `${newsData.aggregate_sentiment_score > 0 ? '+' : ''}${newsData.aggregate_sentiment_score}`
+              {newsData && !newsAvailable
+                ? 'N/A'
+                : sentimentScore !== null
+                ? `${sentimentScore > 0 ? '+' : ''}${sentimentScore}`
                 : '---'}
             </div>
             {newsData && (
               <span className="text-[11px] font-mono text-[#94A3B8]">
-                {newsData.aggregate_sentiment_score > 0.15
+                {!newsAvailable
+                  ? 'UNAVAILABLE'
+                  : sentimentScore !== null && sentimentScore > 0.15
                   ? 'BULLISH'
-                  : newsData.aggregate_sentiment_score < -0.15
+                  : sentimentScore !== null && sentimentScore < -0.15
                   ? 'BEARISH'
                   : 'NEUTRAL'}
               </span>
@@ -536,13 +789,13 @@ export default function TerminalPage() {
               <div className="w-1/2 bg-gradient-to-r from-[#F43F5E] to-transparent"></div>
               <div className="w-1/2 bg-gradient-to-r from-transparent to-[#10B981]"></div>
               {/* Pointer Marker */}
-              {newsData && (
+              {sentimentScore !== null && (
                 <div
                   className="absolute top-0 bottom-0 w-1.5 bg-white shadow-md shadow-white rounded-full transition-all"
                   style={{
                     left: `${Math.max(
                       2,
-                      Math.min(96, ((newsData.aggregate_sentiment_score + 1) / 2) * 100)
+                      Math.min(96, ((sentimentScore + 1) / 2) * 100)
                     )}%`,
                   }}
                 />
@@ -560,7 +813,7 @@ export default function TerminalPage() {
       {/* ROW 2: MAIN SPLIT ARENA */}
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* LEFT COLUMN: 60-Day Recharts + FinBERT News (7 cols) */}
-        <div className="lg:col-span-7 space-y-6">
+        <div className={`${isIndex ? 'lg:col-span-12' : 'lg:col-span-7'} space-y-6`}>
           {/* Candlestick & Volume Chart Card */}
           <div className="bg-[#12141C] border border-[#1E2230] rounded-xl p-4 space-y-3 shadow-lg">
             <div className="flex items-center justify-between border-b border-[#1E2230] pb-2.5">
@@ -693,8 +946,8 @@ export default function TerminalPage() {
                     <span className="text-xs text-[#94A3B8] font-normal">σ</span>
                   </div>
                   <div className="text-[10px] font-mono text-[#64748B] flex justify-between">
-                    <span>SMA20: {quantData?.sma20_val ? `${currencySymbol}${quantData.sma20_val}` : '---'}</span>
-                    <span>SMA50: {quantData?.sma50_val ? `${currencySymbol}${quantData.sma50_val}` : '---'}</span>
+                    <span>SMA20: {quantData?.sma20_val ? formatMarketValue(quantData.sma20_val, ticker) : '---'}</span>
+                    <span>SMA50: {quantData?.sma50_val ? formatMarketValue(quantData.sma50_val, ticker) : '---'}</span>
                   </div>
                 </div>
 
@@ -722,7 +975,7 @@ export default function TerminalPage() {
                     {quantData?.bb_width_pct !== undefined ? `${quantData.bb_width_pct.toFixed(2)}%` : '---'}
                   </div>
                   <div className="text-[10px] font-mono text-[#64748B] truncate">
-                    Bands: {quantData?.bb_lower ? `${currencySymbol}${quantData.bb_lower}` : '---'} - {quantData?.bb_upper ? `${currencySymbol}${quantData.bb_upper}` : '---'}
+                    Bands: {quantData?.bb_lower ? formatMarketValue(quantData.bb_lower, ticker) : '---'} - {quantData?.bb_upper ? formatMarketValue(quantData.bb_upper, ticker) : '---'}
                   </div>
                 </div>
               </div>
@@ -735,7 +988,7 @@ export default function TerminalPage() {
               <div className="flex items-center gap-2">
                 <Layers className="h-4 w-4 text-[#10B981]" />
                 <h3 className="text-xs font-semibold uppercase tracking-wider text-white">
-                  FinBERT Scored Live Headlines ({newsData?.headlines.length ?? 0}/8)
+                  FinBERT Headlines for {ticker} ({newsData?.headlines.length ?? 0}/8)
                 </h3>
               </div>
               <span className="text-[10px] font-mono text-[#64748B]">Google News RSS</span>
@@ -782,7 +1035,9 @@ export default function TerminalPage() {
                 })
               ) : (
                 <div className="py-8 text-center text-xs text-[#64748B] font-mono">
-                  {isRunning ? 'Scraping and analyzing news headlines...' : 'Awaiting news sentiment data'}
+                  {newsData && !newsAvailable
+                    ? `News unavailable: ${newsData.news_error || 'No headlines available'}`
+                    : isRunning ? 'Scraping and analyzing news headlines...' : 'Awaiting news sentiment data'}
                 </div>
               )}
             </div>
@@ -790,7 +1045,7 @@ export default function TerminalPage() {
         </div>
 
         {/* RIGHT COLUMN: Bull Analyst & Short-Seller Duel (5 cols) */}
-        <div className="lg:col-span-5 space-y-6">
+        {!isIndex && <div className="lg:col-span-5 space-y-6">
           {/* Card 1: Bull Analyst (Emerald border) */}
           <div className="bg-[#12141C] border border-[#1E2230] border-l-4 border-l-[#10B981] rounded-xl p-5 space-y-3 shadow-lg">
             <div className="flex items-center justify-between border-b border-[#1E2230] pb-3">
@@ -876,11 +1131,11 @@ export default function TerminalPage() {
               )}
             </div>
           </div>
-        </div>
+        </div>}
       </section>
 
       {/* ROW 3: CHIEF RISK OFFICER (CRO) FINAL VERDICT BANNER */}
-      <section className="bg-[#12141C] border border-[#1E2230] rounded-xl p-6 shadow-2xl relative overflow-hidden">
+      {!isIndex && <section className="bg-[#12141C] border border-[#1E2230] rounded-xl p-6 shadow-2xl relative overflow-hidden">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-4 border-b border-[#1E2230]">
           {/* Verdict Title & Badge */}
           <div className="space-y-2">
@@ -957,7 +1212,7 @@ export default function TerminalPage() {
         </div>
 
         {/* TIME MACHINE OUTCOME REVEAL ACCORDION */}
-        {quantData && (quantData.time_machine_actual_return_pct !== null || cutoffDate) && (
+        {quantData && (quantData.time_machine_actual_return_pct !== null || appliedCutoff) && (
           <div className="mt-5 pt-4 border-t border-[#1E2230]/70">
             <button
               onClick={() => setShowOutcome(!showOutcome)}
@@ -965,7 +1220,7 @@ export default function TerminalPage() {
             >
               <span className="flex items-center gap-2">
                 <Clock className="h-4 w-4" />
-                REVEAL ACTUAL 5-DAY OUTCOME ({cutoffDate || 'Cutoff Window'})
+                REVEAL ACTUAL 5-DAY OUTCOME ({appliedCutoff || 'Cutoff Window'})
               </span>
               {showOutcome ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
             </button>
@@ -1019,7 +1274,7 @@ export default function TerminalPage() {
             )}
           </div>
         )}
-      </section>
+      </section>}
     </div>
   );
 }
