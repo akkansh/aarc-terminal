@@ -323,6 +323,8 @@ async def evaluate_risk_consolidated(
             "calibrated_confidence": cro_verdict.get("confidence"),
             "raw_confidence": cro_verdict.get("raw_confidence"),
             "bayesian_calibration": cro_verdict.get("bayesian_calibration"),
+            "regime_gating": cro_verdict.get("regime_gating"),
+            "temperature_scaling": cro_verdict.get("temperature_scaling"),
             "confidence_breakdown": cro_verdict.get("confidence_breakdown"),
             "regime": quant_data.get("hmm_regime"),
             "garch_volatility": {

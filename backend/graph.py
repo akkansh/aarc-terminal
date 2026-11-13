@@ -309,19 +309,32 @@ Instructions:
                 cal_conf, tracker_telemetry = tracker.calibrate_confidence(result["confidence"], ticker)
 
                 bayesian_calibrator = BetaBinomialConfidenceCalibrator()
-                bayes_conf, bayes_telemetry = bayesian_calibrator.calibrate_score(result["confidence"], ticker)
+                bayes_conf, bayes_telemetry = bayesian_calibrator.calibrate_score(
+                    raw_ai_confidence=result["confidence"],
+                    ticker=ticker,
+                    hmm_regime=quant_data.get("hmm_regime"),
+                    action=result["action"],
+                    volatility_shock_ratio=quant_data.get("volatility_shock_ratio", 1.0),
+                )
 
                 result["raw_confidence"] = result["confidence"]
                 result["confidence"] = bayes_conf
                 result["rolling_accuracy_telemetry"] = tracker_telemetry
                 result["bayesian_calibration"] = bayes_telemetry
+                result["temperature_scaling"] = bayes_telemetry.get("temperature_scaling", {})
+                result["regime_gating"] = bayes_telemetry.get("regime_gating", {})
 
                 if result["action"] in ("LONG", "SHORT"):
                     alloc_mult = bayes_telemetry.get("bayesian_allocation_multiplier", 1.0)
+                    if bayes_telemetry.get("regime_gating", {}).get("is_suppressed", False):
+                        alloc_mult = 0.0
                     if temp_anomaly.get("is_temporal_anomaly", False):
                         alloc_mult *= 0.85
                     result["recommended_allocation_pct"] = round(result["recommended_allocation_pct"] * alloc_mult, 2)
-                    result["recommended_allocation_pct"] = max(4.5, min(kelly, result["recommended_allocation_pct"]))
+                    if alloc_mult > 0:
+                        result["recommended_allocation_pct"] = max(4.5, min(kelly, result["recommended_allocation_pct"]))
+                    else:
+                        result["recommended_allocation_pct"] = 0.0
 
                 tracker.log_prediction(ticker, result["action"], result["raw_confidence"], price, datetime.date.today().isoformat(), var)
 
@@ -373,14 +386,25 @@ Instructions:
     calibrated_conf, tracker_telemetry = tracker.calibrate_confidence(conf, ticker)
 
     bayesian_calibrator = BetaBinomialConfidenceCalibrator()
-    bayes_conf, bayes_telemetry = bayesian_calibrator.calibrate_score(conf, ticker)
+    bayes_conf, bayes_telemetry = bayesian_calibrator.calibrate_score(
+        raw_ai_confidence=conf,
+        ticker=ticker,
+        hmm_regime=quant_data.get("hmm_regime"),
+        action=action,
+        volatility_shock_ratio=quant_data.get("volatility_shock_ratio", 1.0),
+    )
 
     if action in ("LONG", "SHORT"):
         alloc_mult = bayes_telemetry.get("bayesian_allocation_multiplier", 1.0) * tracker_telemetry.get("allocation_multiplier", 1.0)
+        if bayes_telemetry.get("regime_gating", {}).get("is_suppressed", False):
+            alloc_mult = 0.0
         if temp_anomaly.get("is_temporal_anomaly", False):
             alloc_mult *= 0.85
         alloc = round(alloc * alloc_mult, 2)
-        alloc = max(4.5, min(kelly, alloc))
+        if alloc_mult > 0:
+            alloc = max(4.5, min(kelly, alloc))
+        else:
+            alloc = 0.0
     else:
         alloc = 0.0
 
@@ -390,6 +414,10 @@ Instructions:
     if temp_anomaly.get("is_temporal_anomaly", False) and action != "REJECT_TRADE":
         recon_err = temp_anomaly.get("reconstruction_error", 0.0)
         kill = f"{kill} [LSTM Autoencoder Alert: Sequential anomaly flagged with reconstruction error {recon_err:.3f}]"
+
+    if bayes_telemetry.get("regime_gating", {}).get("is_suppressed", False):
+        supp_reason = bayes_telemetry["regime_gating"].get("suppression_reason", "Regime uncertainty")
+        kill = f"{kill} [Gated Alert: {supp_reason}]"
 
     return {
         "action": action,
@@ -402,6 +430,8 @@ Instructions:
         "verdict_summary": summary,
         "rolling_accuracy_telemetry": tracker_telemetry,
         "bayesian_calibration": bayes_telemetry,
+        "temperature_scaling": bayes_telemetry.get("temperature_scaling", {}),
+        "regime_gating": bayes_telemetry.get("regime_gating", {}),
     }
 
 
@@ -542,6 +572,9 @@ async def stream_committee(ticker: str, cutoff_date: Optional[str] = None):
         cro_verdict["conformal_prediction_set"] = conformal_set
         tracker_meta = cro_verdict.get("rolling_accuracy_telemetry", {})
         bayes_meta = cro_verdict.get("bayesian_calibration", {})
+        regime_meta = cro_verdict.get("regime_gating", {})
+        temp_meta = cro_verdict.get("temperature_scaling", {})
+
         cro_verdict["confidence_breakdown"] = {
             "raw_model_confidence": cro_verdict.get("raw_confidence", conf),
             "bayesian_expected_accuracy_pct": bayes_meta.get("posterior_mean_accuracy_pct", 70.0),
@@ -555,6 +588,10 @@ async def stream_committee(ticker: str, cutoff_date: Optional[str] = None):
             "agreement_penalty": 0.0 if conf >= 80 else 4.0,
             "anomaly_penalty": min(16.0, quant_data.get("recent_10d_anomalies", 0) * 3.5),
             "regime_penalty": 5.0 if quant_data.get("annualized_volatility", 0.0) > 25.0 else 0.0,
+            "regime_scale_factor": regime_meta.get("regime_scale_factor", 1.0),
+            "is_regime_suppressed": regime_meta.get("is_suppressed", False),
+            "forgetting_factor_lambda": bayes_meta.get("forgetting_factor_lambda", 0.85),
+            "temperature_scaled_prob": temp_meta.get("temperature_scaled_probability"),
             "calibrated_confidence": conf,
         }
         cro_verdict["hmm_regime"] = quant_data.get("hmm_regime", {})

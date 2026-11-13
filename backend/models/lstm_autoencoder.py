@@ -7,6 +7,11 @@ import torch
 import torch.nn as nn
 from sklearn.preprocessing import RobustScaler
 
+from backend.models.temperature_scaling import (
+    scale_reconstruction_error_temperature,
+    DEFAULT_LSTM_TEMPERATURE,
+)
+
 
 def _winsorize_series(s: pd.Series, lower_q: float = 0.01, upper_q: float = 0.99) -> pd.Series:
     """Clips extreme outlier spikes to protect neural sequence latent representations."""
@@ -89,6 +94,7 @@ class LSTMTemporalAnomalyDetector:
         epochs: int = 20,
         lr: float = 0.005,
         random_state: int = 42,
+        temperature: float = DEFAULT_LSTM_TEMPERATURE,
     ):
         self.seq_len = seq_len
         self.hidden_dim = hidden_dim
@@ -96,6 +102,7 @@ class LSTMTemporalAnomalyDetector:
         self.epochs = epochs
         self.lr = lr
         self.random_state = random_state
+        self.temperature = temperature
 
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
         self.scaler = RobustScaler()
@@ -164,10 +171,13 @@ class LSTMTemporalAnomalyDetector:
             return {
                 "is_temporal_anomaly": False,
                 "temporal_anomaly_score": 0.0,
+                "calibrated_anomaly_confidence": 0.05,
                 "reconstruction_error": 0.0,
                 "threshold": 1.0,
+                "iqr": 0.1,
                 "feature_breakdown": {},
                 "recent_10d_temporal_count": 0,
+                "temperature_scaling": {},
             }
 
         scaled = self.scaler.fit_transform(raw_feats)
@@ -227,6 +237,14 @@ class LSTMTemporalAnomalyDetector:
         # Normalized anomaly score in [0.0, 1.0]
         score = float(np.clip(latest_err / (threshold * 1.5 + 1e-6), 0.0, 1.0))
 
+        # Temperature-scaled calibrated anomaly confidence
+        cal_prob, temp_telemetry = scale_reconstruction_error_temperature(
+            reconstruction_error=latest_err,
+            threshold=threshold,
+            iqr=iqr,
+            temperature=self.temperature,
+        )
+
         # Feature error breakdown on the latest bar of the sequence
         latest_feat_errors = sq_err[-1, -1, :] if len(sq_err) > 0 else np.zeros(input_dim)
         feature_breakdown = {
@@ -241,8 +259,11 @@ class LSTMTemporalAnomalyDetector:
         return {
             "is_temporal_anomaly": is_anomaly,
             "temporal_anomaly_score": round(score, 3),
+            "calibrated_anomaly_confidence": round(cal_prob, 4),
             "reconstruction_error": round(latest_err, 4),
             "threshold": round(threshold, 4),
+            "iqr": round(iqr, 4),
             "feature_breakdown": feature_breakdown,
             "recent_10d_temporal_count": recent_10d_count,
+            "temperature_scaling": temp_telemetry,
         }
