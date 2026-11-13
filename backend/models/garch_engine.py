@@ -46,12 +46,18 @@ class GARCHVolatilityEngine:
         hist_var_95 = float(np.percentile(clean_ret, (1.0 - confidence_level) * 100.0) * 100.0) if n_obs >= 20 else -2.5
 
         if n_obs < 40:
+            hist_es_95 = float(clean_ret[clean_ret <= (hist_var_95 / 100.0)].mean() * 100.0) if any(clean_ret <= (hist_var_95 / 100.0)) else (hist_var_95 * 1.3)
             return {
                 "conditional_vol_daily_pct": round(std_sample * 100.0, 2),
                 "conditional_vol_annual_pct": round(hist_ann_vol, 2),
                 "dynamic_garch_var_95_pct": round(hist_var_95, 2),
+                "dynamic_garch_es_95_pct": round(float(hist_es_95), 2),
                 "garch_vol_forecast_annual_pct": round(hist_ann_vol, 2),
                 "volatility_shock_ratio": 1.0,
+                "var_breach_count": 0,
+                "var_breach_frequency_pct": 5.0,
+                "empirical_coverage_pct": 95.0,
+                "kupiec_pof_pvalue": 1.0,
                 "is_garch_converged": False,
                 "model_summary": "Sample Standard Deviation (Insufficient observations for GARCH)",
             }
@@ -91,12 +97,42 @@ class GARCHVolatilityEngine:
             # Expressed as a negative percentage return (e.g., -2.85%)
             dynamic_var_daily_pct = -(abs(mu_hat) + abs(q_alpha) * cond_vol_daily)
 
-            # 3. Forward Volatility Forecast over horizon
+            # 3. Dynamic Expected Shortfall (ES 95% / Conditional VaR)
+            alpha_tail = max(1e-4, 1.0 - confidence_level)
+            if self.dist.lower() in ("studentst", "t") and "nu" in res.params:
+                std_factor = np.sqrt((nu - 2.0) / nu)
+                t_raw_q = student_t.ppf(alpha_tail, df=nu)
+                f_q = student_t.pdf(t_raw_q, df=nu)
+                es_factor = (f_q / alpha_tail) * ((nu + t_raw_q**2) / (nu - 1.0)) * std_factor
+                dynamic_es_daily_pct = -(abs(mu_hat) + es_factor * cond_vol_daily)
+            else:
+                from scipy.stats import norm
+                dynamic_es_daily_pct = -(abs(mu_hat) + (norm.pdf(1.644853) / alpha_tail) * cond_vol_daily)
+
+            # 4. In-Sample VaR Breach Backtest & Kupiec POF Testing
+            cond_var_series = -(abs(mu_hat) + abs(q_alpha) * res.conditional_volatility)
+            breaches = int((ret_pct < cond_var_series).sum())
+            breach_freq = float(breaches / len(ret_pct))
+            empirical_coverage = float(1.0 - breach_freq)
+
+            p_val_kupiec = 1.0
+            if breaches > 0 and breach_freq < 1.0:
+                n = len(ret_pct)
+                p0 = alpha_tail
+                p_hat = breach_freq
+                lr_stat = -2.0 * (
+                    (n - breaches) * np.log((1.0 - p0) / (1.0 - p_hat))
+                    + breaches * np.log(p0 / p_hat)
+                )
+                from scipy.stats import chi2
+                p_val_kupiec = float(1.0 - chi2.cdf(max(0.0, lr_stat), df=1))
+
+            # 5. Forward Volatility Forecast over horizon
             forecasts = res.forecast(horizon=horizon_days)
             var_horizon_daily = float(forecasts.variance.values[-1, -1])
             forward_vol_annual = float(np.sqrt(max(0.01, var_horizon_daily) * 252))
 
-            # 4. Volatility Shock Ratio (current conditional vol vs historical 60d realized vol)
+            # 6. Volatility Shock Ratio (current conditional vol vs historical 60d realized vol)
             hist_60d_vol = float(clean_ret.tail(60).std() * 100.0) if n_obs >= 60 else (std_sample * 100.0)
             shock_ratio = round(cond_vol_daily / max(0.01, hist_60d_vol), 2)
 
@@ -104,8 +140,13 @@ class GARCHVolatilityEngine:
                 "conditional_vol_daily_pct": round(cond_vol_daily, 2),
                 "conditional_vol_annual_pct": round(cond_vol_annual, 2),
                 "dynamic_garch_var_95_pct": round(dynamic_var_daily_pct, 2),
+                "dynamic_garch_es_95_pct": round(dynamic_es_daily_pct, 2),
                 "garch_vol_forecast_annual_pct": round(forward_vol_annual, 2),
                 "volatility_shock_ratio": shock_ratio,
+                "var_breach_count": breaches,
+                "var_breach_frequency_pct": round(breach_freq * 100.0, 2),
+                "empirical_coverage_pct": round(empirical_coverage * 100.0, 2),
+                "kupiec_pof_pvalue": round(p_val_kupiec, 4),
                 "is_garch_converged": bool(res.convergence_flag == 0),
                 "model_summary": f"GARCH({self.p},{self.q})-{self.dist} (Persistence: {round(float(res.params.get('alpha[1]', 0.1) + res.params.get('beta[1]', 0.8)), 3)})",
             }
@@ -120,13 +161,19 @@ class GARCHVolatilityEngine:
             ewma_vol_daily = np.sqrt(ewma_var) * 100.0
             ewma_vol_annual = ewma_vol_daily * np.sqrt(252)
             ewma_var_95 = -(1.645 * ewma_vol_daily)
+            ewma_es_95 = -(2.063 * ewma_vol_daily)
 
             return {
                 "conditional_vol_daily_pct": round(ewma_vol_daily, 2),
                 "conditional_vol_annual_pct": round(ewma_vol_annual, 2),
                 "dynamic_garch_var_95_pct": round(ewma_var_95, 2),
+                "dynamic_garch_es_95_pct": round(ewma_es_95, 2),
                 "garch_vol_forecast_annual_pct": round(ewma_vol_annual, 2),
                 "volatility_shock_ratio": 1.0,
+                "var_breach_count": 0,
+                "var_breach_frequency_pct": 5.0,
+                "empirical_coverage_pct": 95.0,
+                "kupiec_pof_pvalue": 1.0,
                 "is_garch_converged": False,
                 "model_summary": f"RiskMetrics EWMA Fallback (GARCH error: {str(e)[:40]})",
             }

@@ -130,6 +130,16 @@ def test_confidence_update_and_status_endpoints(client):
     assert "posterior_summary" in data
     assert data["posterior_summary"]["posterior_mean_accuracy"] > 0.0
 
+    # Test POST /api/confidence/update with high-confidence divergence penalty
+    res_div = client.post("/api/confidence/update", json={
+        "is_hit": False,
+        "ticker": "TCS.NS",
+        "is_high_conf_divergence": True,
+    })
+    assert res_div.status_code == 200
+    data_div = res_div.json()
+    assert data_div["is_high_conf_divergence"] is True
+
     # Test GET /api/confidence/status
     res2 = client.get("/api/confidence/status?ticker=TCS.NS")
     assert res2.status_code == 200
@@ -137,6 +147,15 @@ def test_confidence_update_and_status_endpoints(client):
     assert data2["ticker"] == "TCS.NS"
     assert "posterior_summary" in data2
     assert "credible_interval_90" in data2["posterior_summary"]
+
+    # Test GET /api/calibration/metrics
+    res3 = client.get("/api/calibration/metrics?ticker=TCS.NS")
+    assert res3.status_code == 200
+    data3 = res3.json()
+    assert data3["ticker"] == "TCS.NS"
+    assert "metrics" in data3
+    assert "brier_metrics" in data3["metrics"]
+    assert "walk_forward_metrics" in data3["metrics"]
 
 
 def test_risk_evaluate_endpoint(client, monkeypatch):
@@ -158,8 +177,13 @@ def test_risk_evaluate_endpoint(client, monkeypatch):
     assert data["action"] in ("LONG", "SHORT", "REJECT_TRADE")
     assert "calibrated_confidence" in data
     assert "bayesian_calibration" in data
+    assert "brier_metrics" in data
+    assert "walk_forward_validation" in data
+    assert "tail_risk_grounding" in data
     assert "regime" in data
     assert "garch_volatility" in data
+    assert "expected_shortfall_95_pct" in data["garch_volatility"]
+    assert "empirical_coverage_pct" in data["garch_volatility"]
     assert "sequential_anomaly" in data
     assert "sentiment_and_tone_shift" in data
     assert "risk_boundaries" in data

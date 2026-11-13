@@ -191,6 +191,7 @@ async def stream_committee_endpoint(
 class ConfidenceUpdateRequest(BaseModel):
     is_hit: bool = Field(description="Whether the previous risk or direction prediction was accurate")
     ticker: Optional[str] = Field(default=None, description="Optional asset ticker symbol")
+    is_high_conf_divergence: bool = Field(default=False, description="Whether actual price movement breached thresholds despite high confidence (>=80%)")
 
 
 @app.get("/api/regime/status")
@@ -351,12 +352,20 @@ async def evaluate_risk_consolidated(
             "regime_gating": cro_verdict.get("regime_gating"),
             "temperature_scaling": cro_verdict.get("temperature_scaling"),
             "confidence_breakdown": cro_verdict.get("confidence_breakdown"),
+            "brier_metrics": cro_verdict.get("brier_metrics"),
+            "walk_forward_validation": cro_verdict.get("walk_forward_validation"),
+            "tail_risk_grounding": cro_verdict.get("tail_risk_grounding"),
+            "rolling_accuracy_telemetry": cro_verdict.get("rolling_accuracy_telemetry"),
             "regime": quant_data.get("hmm_regime"),
             "garch_volatility": {
                 "5d_forecast_annual_pct": quant_data.get("garch_vol_forecast_pct"),
                 "historical_annual_vol_pct": quant_data.get("annualized_volatility"),
                 "volatility_shock_ratio": quant_data.get("volatility_shock_ratio"),
                 "daily_VaR_95_pct": quant_data.get("daily_VaR_95_pct"),
+                "expected_shortfall_95_pct": quant_data.get("expected_shortfall_95_pct"),
+                "empirical_coverage_pct": quant_data.get("empirical_coverage_pct"),
+                "var_breach_frequency_pct": quant_data.get("var_breach_frequency_pct"),
+                "kupiec_pof_pvalue": quant_data.get("kupiec_pof_pvalue"),
             },
             "sequential_anomaly": quant_data.get("temporal_anomaly"),
             "ensemble_isolation_forest": quant_data.get("anomaly_telemetry"),
@@ -388,14 +397,20 @@ async def update_bayesian_confidence(body: ConfidenceUpdateRequest = Body(...)):
     """
     Bayesian confidence updating endpoint:
     Increments alpha on successful risk/anomaly prediction and beta on false positives.
+    If is_high_conf_divergence is flagged, applies an asymmetric evidence penalty.
     Updates the Beta-Binomial conjugate posterior moments and 90% credible intervals.
     """
     calibrator = BetaBinomialConfidenceCalibrator()
-    summary = calibrator.update_evidence(is_hit=body.is_hit, ticker=body.ticker)
+    summary = calibrator.update_evidence(
+        is_hit=body.is_hit,
+        ticker=body.ticker,
+        is_high_conf_divergence=body.is_high_conf_divergence,
+    )
     return {
         "status": "success",
         "ticker": body.ticker,
         "is_hit": body.is_hit,
+        "is_high_conf_divergence": body.is_high_conf_divergence,
         "posterior_summary": summary,
     }
 
@@ -410,6 +425,26 @@ async def get_confidence_status(ticker: Optional[str] = Query(default=None)):
     return {
         "ticker": ticker or "GLOBAL",
         "posterior_summary": summary,
+    }
+
+
+@app.get("/api/calibration/metrics")
+async def get_calibration_metrics(
+    ticker: Optional[str] = Query(default=None, description="Optional asset ticker symbol"),
+):
+    """
+    Exposes rolling Brier Score loss, Brier Skill Score (BSS), Walk-Forward Validation
+    out-of-sample metrics, and compound outcome statistics.
+    """
+    from backend.calibration.rolling_tracker import RollingAccuracyTracker
+    tracker = RollingAccuracyTracker()
+    clean_t = ticker.strip().upper() if ticker else None
+    if clean_t:
+        clean_t = TICKER_ALIASES.get(clean_t, clean_t)
+    metrics = tracker.get_rolling_metrics_and_calibration_multiplier(clean_t)
+    return {
+        "ticker": clean_t or "GLOBAL",
+        "metrics": metrics,
     }
 
 

@@ -265,3 +265,171 @@ def test_exponential_decay_forgetting_factor_lambda(tmp_path):
     )
     assert final_conf >= 80
     assert cal_meta["forgetting_factor_lambda"] == 0.85
+
+
+def test_brier_score_loss_optimization():
+    from backend.calibration.brier_optimizer import BrierScoreCalibrator
+
+    brier = BrierScoreCalibrator()
+
+    # Synthetic well-calibrated predictions
+    probs_good = np.array([0.9, 0.85, 0.8, 0.2, 0.15, 0.1, 0.88, 0.75])
+    outcomes_good = np.array([1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0])
+    metrics_good = brier.compute_brier_metrics(probs_good, outcomes_good)
+
+    assert metrics_good["brier_score"] < 0.12
+    assert metrics_good["brier_skill_score"] > 0.30
+    assert metrics_good["is_well_calibrated"] is True
+
+    # Synthetic poorly calibrated predictions (inverted conviction)
+    probs_bad = np.array([0.95, 0.90, 0.85, 0.80, 0.88, 0.92])
+    outcomes_bad = np.array([0.0, 0.0, 1.0, 0.0, 0.0, 0.0])
+    metrics_bad = brier.compute_brier_metrics(probs_bad, outcomes_bad)
+
+    assert metrics_bad["brier_score"] > 0.40
+    assert metrics_bad["brier_skill_score"] < 0.0
+    assert metrics_bad["is_well_calibrated"] is False
+
+    # Temperature optimization for Brier loss
+    opt_t, opt_info = brier.optimize_temperature_for_brier(
+        raw_confidences=np.array([90, 85, 80, 75, 70, 65]),
+        realized_outcomes=np.array([1, 1, 1, 0, 0, 0]),
+    )
+    assert 0.4 <= opt_t <= 2.5
+    assert "min_brier_loss" in opt_info
+
+    # Calibrating with poor Brier skill collapses confidence toward base rate
+    cal_c, tele = brier.calibrate_confidence_via_brier(90, probs_bad, outcomes_bad)
+    assert cal_c <= 68
+    assert tele["brier_adjustment_factor"] < 1.0
+
+
+def test_walk_forward_validation_gating():
+    from backend.calibration.walk_forward import WalkForwardValidator
+
+    wfv = WalkForwardValidator(target_high_conf_hit_rate=0.75)
+
+    # Historical predictions where high confidence predictions suffered severe drawdowns (hit rate 33%)
+    degraded_predictions = [
+        {"raw_confidence": 88, "outcome": "MISS", "resolved": True},
+        {"raw_confidence": 85, "outcome": "MISS", "resolved": True},
+        {"raw_confidence": 82, "outcome": "HIT", "resolved": True},
+        {"raw_confidence": 70, "outcome": "HIT", "resolved": True},
+        {"raw_confidence": 65, "outcome": "MISS", "resolved": True},
+        {"raw_confidence": 60, "outcome": "HIT", "resolved": True},
+    ]
+
+    metrics = wfv.evaluate_walk_forward_metrics(degraded_predictions)
+    assert metrics["is_gated"] is True
+    assert metrics["high_conf_hit_rate"] <= 0.40
+    assert metrics["wfv_scaling_factor"] < 0.85
+    assert "WFV Gating Applied" in metrics["gating_reason"]
+
+    # Ingest into Bayesian Calibrator: should strictly cap confidence at <= 75%
+    calibrator = BetaBinomialConfidenceCalibrator()
+    gated_score, tele = calibrator.calibrate_score(
+        raw_ai_confidence=92,
+        walk_forward_metrics=metrics,
+    )
+    assert gated_score <= 75
+    assert tele["walk_forward_validation"]["is_gated"] is True
+
+
+def test_compound_directional_and_risk_containment_outcomes(tmp_path):
+    from backend.calibration.rolling_tracker import RollingAccuracyTracker
+
+    tracker_storage = str(tmp_path / "rolling_test.json")
+    tracker = RollingAccuracyTracker(storage_path=tracker_storage)
+
+    # Create 10 bars of OHLCV history
+    dates = pd.date_range(end=pd.Timestamp.now().normalize(), periods=10, freq="B")
+    
+    # Scenario A: LONG trade where low price breached stop-loss (-3.5%) before recovering (+2.0%)
+    # Compound evaluation MUST mark this as MISS due to stop-loss breach
+    p0 = 100.0
+    prices_a = [100.0, 98.0, 96.0, 96.2, 99.0, 102.0, 103.0, 103.0, 104.0, 105.0]
+    lows_a =   [ 99.0, 97.0, 95.8, 95.5, 98.0, 101.0, 102.0, 102.0, 103.0, 104.0] # 95.5 breaches 3% stop on 100
+    highs_a =  [101.0, 99.0, 97.0, 98.0, 100.0, 103.0, 104.0, 104.0, 105.0, 106.0]
+
+    df_a = pd.DataFrame({
+        "Open": prices_a,
+        "High": highs_a,
+        "Low": lows_a,
+        "Close": prices_a,
+        "Volume": [1000] * 10,
+    }, index=dates)
+
+    ev_id = tracker.log_prediction(
+        ticker="RELIANCE.NS",
+        action="LONG",
+        raw_confidence=88,
+        current_price=100.0,
+        date_str=dates[0].strftime("%Y-%m-%d"),
+        garch_var_pct=-2.5,
+        stop_loss_pct=3.0,
+    )
+
+    tracker.resolve_outcomes("RELIANCE.NS", df_a)
+    events = tracker._read_events()
+    assert len(events) == 1
+    ev = events[0]
+    assert ev["resolved"] is True
+    assert ev["risk_contained"] is False  # Min low was 95.5 (< 97.0)
+    assert ev["directional_win"] is True  # Final 5d close was 102.0 (+2.0%)
+    assert ev["outcome"] == "MISS"        # Compound requires BOTH
+    assert ev["high_conf_divergence"] is True  # Conf 88 >= 80 and outcome == MISS
+
+
+def test_expected_shortfall_and_var_grounding():
+    from backend.models.garch_engine import GARCHVolatilityEngine
+
+    engine = GARCHVolatilityEngine(p=1, q=1, dist="StudentsT")
+    np.random.seed(42)
+    # Generate 300 returns with heavy negative outliers
+    returns = np.random.standard_t(df=4.0, size=300) * 0.015
+    ret_series = pd.Series(returns)
+
+    garch_res = engine.compute_dynamic_volatility_and_var(ret_series, confidence_level=0.95)
+
+    assert "dynamic_garch_es_95_pct" in garch_res
+    assert "empirical_coverage_pct" in garch_res
+    assert "kupiec_pof_pvalue" in garch_res
+
+    # Expected Shortfall must be strictly more conservative than VaR: |ES_95| >= |VaR_95|
+    es = abs(garch_res["dynamic_garch_es_95_pct"])
+    var = abs(garch_res["dynamic_garch_var_95_pct"])
+    assert es >= var
+
+    # Confidence Grounding test in Bayesian Calibrator:
+    # If empirical coverage is 91.2%, calibrated score cannot exceed 91%
+    calibrator = BetaBinomialConfidenceCalibrator()
+    gated_conf, tele = calibrator.calibrate_score(
+        raw_ai_confidence=96,
+        empirical_coverage_pct=91.2,
+        expected_shortfall_pct=-4.2,  # Shock ES expands beyond 3.5%
+    )
+    assert gated_conf <= 91
+    assert tele["tail_risk_grounding"]["es_grounding_cap_pct"] == 91
+    assert tele["tail_risk_grounding"]["es_penalty_factor"] < 1.0
+
+
+def test_high_confidence_divergence_asymmetric_penalty(tmp_path):
+    storage = str(tmp_path / "asymmetric_test.json")
+    calibrator = BetaBinomialConfidenceCalibrator(
+        alpha_0=10.0,
+        beta_0=2.0,
+        gamma=0.90,
+        storage_path=storage,
+    )
+
+    # Initial high posterior accuracy: 10 / 12 = 83.3%
+    init_summary = calibrator.get_posterior_summary("TCS.NS")
+    assert pytest.approx(init_summary["posterior_mean_accuracy"], abs=1e-2) == 0.83
+
+    # High confidence divergence occurs: model asserted high conviction but trade failed
+    calibrator.update_evidence(is_hit=False, ticker="TCS.NS", is_high_conf_divergence=True)
+
+    diverged_summary = calibrator.get_posterior_summary("TCS.NS")
+    # Beta should receive +2.5 penalty and alpha should be decayed by 0.70 * 0.90
+    assert diverged_summary["beta"] >= 4.0
+    assert diverged_summary["posterior_mean_accuracy"] < 0.65

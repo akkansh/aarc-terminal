@@ -76,14 +76,21 @@ class BetaBinomialConfidenceCalibrator:
         except Exception as e:
             print(f"[BAYESIAN ERROR]: Failed to persist state: {e}")
 
-    def update_evidence(self, is_hit: bool, ticker: Optional[str] = None) -> Dict[str, Any]:
+    def update_evidence(
+        self,
+        is_hit: bool,
+        ticker: Optional[str] = None,
+        is_high_conf_divergence: bool = False,
+    ) -> Dict[str, Any]:
         """
         Bayesian online update with exponential decay forgetting factor (lambda = 0.85):
           alpha_t = lambda * alpha_{t-1} + I(HIT)
           beta_t  = lambda * beta_{t-1}  + I(MISS)
 
-        Directly multiplies existing alpha and beta values by lambda before adding evidence,
-        allowing the AI's confidence score to quickly recover from historical regime errors.
+        If is_high_conf_divergence is True (model asserted >=80% confidence but suffered
+        a realized stop-loss breach or directional failure), applies an immediate asymmetric penalty:
+          alpha_t = 0.70 * lambda * alpha_{t-1}
+          beta_t  = lambda * beta_{t-1} + 2.5
         """
         with self._lock:
             state = self._load_state()
@@ -96,8 +103,13 @@ class BetaBinomialConfidenceCalibrator:
             # Multiply existing alpha and beta by decay factor lambda
             decayed_a = max(1.0, self.gamma * old_a)
             decayed_b = max(1.0, self.gamma * old_b)
-            new_a = decayed_a + (1.0 if is_hit else 0.0)
-            new_b = decayed_b + (0.0 if is_hit else 1.0)
+
+            if is_high_conf_divergence:
+                new_a = max(1.0, decayed_a * 0.70)
+                new_b = decayed_b + 2.5
+            else:
+                new_a = decayed_a + (1.0 if is_hit else 0.0)
+                new_b = decayed_b + (0.0 if is_hit else 1.0)
 
             g["alpha"] = round(new_a, 4)
             g["beta"] = round(new_b, 4)
@@ -111,8 +123,15 @@ class BetaBinomialConfidenceCalibrator:
                 t_old_a = float(t_state.get("alpha", self.alpha_0))
                 t_old_b = float(t_state.get("beta", self.beta_0))
 
-                t_a = max(1.0, self.gamma * t_old_a) + (1.0 if is_hit else 0.0)
-                t_b = max(1.0, self.gamma * t_old_b) + (0.0 if is_hit else 1.0)
+                t_decayed_a = max(1.0, self.gamma * t_old_a)
+                t_decayed_b = max(1.0, self.gamma * t_old_b)
+
+                if is_high_conf_divergence:
+                    t_a = max(1.0, t_decayed_a * 0.70)
+                    t_b = t_decayed_b + 2.5
+                else:
+                    t_a = t_decayed_a + (1.0 if is_hit else 0.0)
+                    t_b = t_decayed_b + (0.0 if is_hit else 1.0)
 
                 t_state["alpha"] = round(t_a, 4)
                 t_state["beta"] = round(t_b, 4)
@@ -166,15 +185,15 @@ class BetaBinomialConfidenceCalibrator:
         action: str = "LONG",
         volatility_shock_ratio: float = 1.0,
         temperature: Optional[float] = None,
+        expected_shortfall_pct: Optional[float] = None,
+        empirical_coverage_pct: Optional[float] = None,
+        brier_metrics: Optional[Dict[str, Any]] = None,
+        walk_forward_metrics: Optional[Dict[str, Any]] = None,
     ) -> Tuple[int, Dict[str, Any]]:
         """
         Calibrates raw AI confidence score against the Bayesian posterior, temperature scaling,
-        and Gaussian HMM regime gating:
-
-        1. Temperature Scaling: Scales logits so strong signals cleanly cross 0.80+.
-        2. Bayesian Posterior Blending: Weights recent empirical hit-rate without rigid historical penalties.
-        3. Regime-Conditional Gating: Allows high confidence (>80) in clean/trending regimes,
-           while suppressing low-tier alerts and capping confidence in panic/choppy regimes.
+        Gaussian HMM regime gating, rolling Brier Score loss, Walk-Forward Validation (WFV),
+        and quantitative Expected Shortfall (ES) tail risk grounding.
 
         Returns: (calibrated_confidence: int [25, 95], telemetry: Dict)
         """
@@ -196,7 +215,6 @@ class BetaBinomialConfidenceCalibrator:
         blended_prob = (w_model * scaled_prob) + ((1.0 - w_model) * post_mean)
 
         # Dynamic uncertainty penalty proportional to posterior spread and historical inaccuracy
-        # (Prevents rigid -15% deductions that previously trapped scores in the 60s)
         uncertainty_penalty = float(np.clip(1.2 * post_std * max(0.0, 0.80 - post_mean), 0.0, 0.08))
         calibrated_prob = max(ci_lower, blended_prob - uncertainty_penalty)
 
@@ -210,13 +228,89 @@ class BetaBinomialConfidenceCalibrator:
             volatility_shock_ratio=volatility_shock_ratio,
         )
 
-        final_conf = gated_conf
+        # 4. Brier Score Loss & Probabilistic Skill Gating
+        brier_telemetry: Dict[str, Any] = {}
+        if brier_metrics:
+            bss = float(brier_metrics.get("brier_skill_score", 0.0))
+            bs = float(brier_metrics.get("brier_score", 0.22))
+            n_samples = int(brier_metrics.get("sample_size", 0))
+            if n_samples >= 4:
+                if bss <= 0.0 or bs >= 0.25:
+                    # Inverted or zero skill: shrink toward base rate and impose strict 65 cap
+                    brier_factor = max(0.65, 1.0 + bss)
+                    gated_conf = min(65, int(round(gated_conf * brier_factor)))
+                elif bss >= 0.25 and bs <= 0.14:
+                    brier_factor = min(1.12, 1.0 + 0.3 * bss)
+                    gated_conf = int(round(gated_conf * brier_factor))
+                else:
+                    brier_factor = 1.0 + 0.15 * bss
+                    gated_conf = int(round(gated_conf * brier_factor))
+                brier_telemetry = {
+                    "brier_score": bs,
+                    "brier_skill_score": bss,
+                    "brier_adjustment_factor": round(brier_factor, 3),
+                    "is_well_calibrated": brier_metrics.get("is_well_calibrated", False),
+                }
+            else:
+                brier_telemetry = {
+                    "status": "COLD_START_NEUTRAL",
+                    "brier_score": bs,
+                    "brier_skill_score": bss,
+                }
 
-        # Allocation multiplier
+        # 5. Walk-Forward Validation (WFV) Gating
+        wfv_telemetry: Dict[str, Any] = {}
+        is_wfv_gated = False
+        if walk_forward_metrics:
+            wfv_mult = float(walk_forward_metrics.get("wfv_scaling_factor", 1.0))
+            is_wfv_gated = bool(walk_forward_metrics.get("is_gated", False))
+            gated_conf = int(round(gated_conf * wfv_mult))
+            if is_wfv_gated:
+                # Strictly prevent AI confidence >75% when out-of-sample validation degrades
+                gated_conf = min(gated_conf, 75)
+            wfv_telemetry = {
+                "walk_forward_status": walk_forward_metrics.get("walk_forward_status", "ALIGNED"),
+                "oos_spearman_rho": walk_forward_metrics.get("oos_spearman_rho", 0.0),
+                "high_conf_hit_rate": walk_forward_metrics.get("high_conf_hit_rate", 0.75),
+                "wfv_scaling_factor": wfv_mult,
+                "is_gated": is_wfv_gated,
+                "gating_reason": walk_forward_metrics.get("gating_reason"),
+            }
+
+        # 6. Expected Shortfall (ES) & VaR Tail-Risk Grounding
+        tail_grounding_telemetry: Dict[str, Any] = {}
+        if empirical_coverage_pct is not None or expected_shortfall_pct is not None:
+            es_cap = 95
+            if empirical_coverage_pct is not None and empirical_coverage_pct > 0:
+                # Reported confidence is bounded by empirical coverage (e.g. 91% if breach freq is 9%)
+                es_cap = int(np.floor(empirical_coverage_pct))
+                if gated_conf > es_cap:
+                    gated_conf = es_cap
+
+            es_factor = 1.0
+            if expected_shortfall_pct is not None:
+                abs_es = abs(float(expected_shortfall_pct))
+                if abs_es > 3.5:
+                    # Scale down conviction if fat-tail loss exceeds 3.5% daily
+                    es_factor = max(0.70, 3.5 / abs_es)
+                    gated_conf = int(round(gated_conf * es_factor))
+
+            tail_grounding_telemetry = {
+                "empirical_coverage_pct": empirical_coverage_pct,
+                "expected_shortfall_95_pct": expected_shortfall_pct,
+                "es_grounding_cap_pct": es_cap,
+                "es_penalty_factor": round(es_factor, 3),
+            }
+
+        final_conf = int(np.clip(gated_conf, 25, 95))
+
+        # Dynamic allocation multiplier
         if regime_telemetry.get("is_suppressed", False):
             alloc_mult = 0.0
         elif ci_lower < 0.40 or "PANIC" in regime_telemetry.get("regime_name", ""):
             alloc_mult = 0.50
+        elif is_wfv_gated or (brier_telemetry.get("brier_skill_score", 0.0) < 0):
+            alloc_mult = 0.65
         elif post_mean >= 0.70 and post_std < 0.12 and final_conf >= 80:
             alloc_mult = 1.20
         else:
@@ -235,6 +329,9 @@ class BetaBinomialConfidenceCalibrator:
             "forgetting_factor_lambda": self.gamma,
             "temperature_scaling": temp_telemetry,
             "regime_gating": regime_telemetry,
+            "brier_score_gating": brier_telemetry,
+            "walk_forward_validation": wfv_telemetry,
+            "tail_risk_grounding": tail_grounding_telemetry,
         }
 
         return final_conf, telemetry

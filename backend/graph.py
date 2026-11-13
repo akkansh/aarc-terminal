@@ -315,6 +315,10 @@ Instructions:
                     hmm_regime=quant_data.get("hmm_regime"),
                     action=result["action"],
                     volatility_shock_ratio=quant_data.get("volatility_shock_ratio", 1.0),
+                    expected_shortfall_pct=quant_data.get("expected_shortfall_95_pct"),
+                    empirical_coverage_pct=quant_data.get("empirical_coverage_pct"),
+                    brier_metrics=tracker_telemetry.get("brier_metrics"),
+                    walk_forward_metrics=tracker_telemetry.get("walk_forward_metrics"),
                 )
 
                 result["raw_confidence"] = result["confidence"]
@@ -323,6 +327,9 @@ Instructions:
                 result["bayesian_calibration"] = bayes_telemetry
                 result["temperature_scaling"] = bayes_telemetry.get("temperature_scaling", {})
                 result["regime_gating"] = bayes_telemetry.get("regime_gating", {})
+                result["brier_metrics"] = tracker_telemetry.get("brier_metrics", {})
+                result["walk_forward_validation"] = tracker_telemetry.get("walk_forward_metrics", {})
+                result["tail_risk_grounding"] = bayes_telemetry.get("tail_risk_grounding", {})
 
                 if result["action"] in ("LONG", "SHORT"):
                     alloc_mult = bayes_telemetry.get("bayesian_allocation_multiplier", 1.0)
@@ -336,7 +343,16 @@ Instructions:
                     else:
                         result["recommended_allocation_pct"] = 0.0
 
-                tracker.log_prediction(ticker, result["action"], result["raw_confidence"], price, datetime.date.today().isoformat(), var)
+                tracker.log_prediction(
+                    ticker=ticker,
+                    action=result["action"],
+                    raw_confidence=result["raw_confidence"],
+                    current_price=price,
+                    date_str=datetime.date.today().isoformat(),
+                    garch_var_pct=var,
+                    stop_loss_pct=suggested_stop,
+                    expected_shortfall_pct=quant_data.get("expected_shortfall_95_pct"),
+                )
 
                 return result
             except Exception as e:
@@ -392,6 +408,10 @@ Instructions:
         hmm_regime=quant_data.get("hmm_regime"),
         action=action,
         volatility_shock_ratio=quant_data.get("volatility_shock_ratio", 1.0),
+        expected_shortfall_pct=quant_data.get("expected_shortfall_95_pct"),
+        empirical_coverage_pct=quant_data.get("empirical_coverage_pct"),
+        brier_metrics=tracker_telemetry.get("brier_metrics"),
+        walk_forward_metrics=tracker_telemetry.get("walk_forward_metrics"),
     )
 
     if action in ("LONG", "SHORT"):
@@ -409,7 +429,16 @@ Instructions:
         alloc = 0.0
 
     today_str = datetime.date.today().isoformat()
-    tracker.log_prediction(ticker, action, conf, price, today_str, var)
+    tracker.log_prediction(
+        ticker=ticker,
+        action=action,
+        raw_confidence=conf,
+        current_price=price,
+        date_str=today_str,
+        garch_var_pct=var,
+        stop_loss_pct=suggested_stop,
+        expected_shortfall_pct=quant_data.get("expected_shortfall_95_pct"),
+    )
 
     if temp_anomaly.get("is_temporal_anomaly", False) and action != "REJECT_TRADE":
         recon_err = temp_anomaly.get("reconstruction_error", 0.0)
@@ -432,6 +461,9 @@ Instructions:
         "bayesian_calibration": bayes_telemetry,
         "temperature_scaling": bayes_telemetry.get("temperature_scaling", {}),
         "regime_gating": bayes_telemetry.get("regime_gating", {}),
+        "brier_metrics": tracker_telemetry.get("brier_metrics", {}),
+        "walk_forward_validation": tracker_telemetry.get("walk_forward_metrics", {}),
+        "tail_risk_grounding": bayes_telemetry.get("tail_risk_grounding", {}),
     }
 
 
@@ -592,6 +624,12 @@ async def stream_committee(ticker: str, cutoff_date: Optional[str] = None):
             "is_regime_suppressed": regime_meta.get("is_suppressed", False),
             "forgetting_factor_lambda": bayes_meta.get("forgetting_factor_lambda", 0.85),
             "temperature_scaled_prob": temp_meta.get("temperature_scaled_probability"),
+            "brier_score": tracker_meta.get("brier_metrics", {}).get("brier_score", 0.22),
+            "brier_skill_score": tracker_meta.get("brier_metrics", {}).get("brier_skill_score", 0.0),
+            "wfv_scaling_factor": tracker_meta.get("walk_forward_metrics", {}).get("wfv_scaling_factor", 1.0),
+            "is_wfv_gated": tracker_meta.get("walk_forward_metrics", {}).get("is_gated", False),
+            "expected_shortfall_95_pct": quant_data.get("expected_shortfall_95_pct"),
+            "empirical_coverage_pct": quant_data.get("empirical_coverage_pct"),
             "calibrated_confidence": conf,
         }
         cro_verdict["hmm_regime"] = quant_data.get("hmm_regime", {})

@@ -136,8 +136,12 @@ def analyze_ticker_quant(ticker: str, cutoff_date: Optional[str] = None) -> Dict
     # Dynamic GARCH-derived parameters
     ann_vol = _clean_number(garch_metrics["conditional_vol_annual_pct"])
     var_95 = _clean_number(garch_metrics["dynamic_garch_var_95_pct"])
+    es_95 = _clean_number(garch_metrics.get("dynamic_garch_es_95_pct", var_95 * 1.25))
     garch_5d_forecast = _clean_number(garch_metrics["garch_vol_forecast_annual_pct"])
     vol_shock_ratio = _clean_number(garch_metrics["volatility_shock_ratio"])
+    empirical_cov = _clean_number(garch_metrics.get("empirical_coverage_pct", 95.0))
+    var_breach_freq = _clean_number(garch_metrics.get("var_breach_frequency_pct", 5.0))
+    kupiec_pval = _clean_number(garch_metrics.get("kupiec_pof_pvalue", 1.0))
 
     # 3. 3-State Gaussian HMM Regime Detection (Trending, Panic, Choppy)
     hmm_pipeline = MarketRegimePipeline(random_state=42)
@@ -330,6 +334,11 @@ def analyze_ticker_quant(ticker: str, cutoff_date: Optional[str] = None) -> Dict
         "bb_width_pct": bb_width_pct,
         "garch_vol_forecast_pct": garch_5d_forecast,
         "volatility_shock_ratio": vol_shock_ratio,
+        "expected_shortfall_95_pct": es_95,
+        "empirical_coverage_pct": empirical_cov,
+        "var_breach_frequency_pct": var_breach_freq,
+        "kupiec_pof_pvalue": kupiec_pval,
+        "garch_metrics": garch_metrics,
         "anomaly_telemetry": anomaly_telemetry,
         "hmm_regime": regime_telemetry,
         "temporal_anomaly": temporal_anomaly_res,
