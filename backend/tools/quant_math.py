@@ -5,6 +5,8 @@ from sklearn.ensemble import IsolationForest
 from typing import Optional, Dict, Any, List
 from backend.models.garch_engine import GARCHVolatilityEngine
 from backend.features.ensemble_anomaly import MultiTimeframeEnsembleIsolationForest
+from backend.models.hmm_regime import MarketRegimePipeline
+from backend.models.lstm_autoencoder import LSTMTemporalAnomalyDetector
 
 
 def _clean_number(val: Any) -> float:
@@ -111,7 +113,16 @@ def analyze_ticker_quant(ticker: str, cutoff_date: Optional[str] = None) -> Dict
     garch_5d_forecast = _clean_number(garch_metrics["garch_vol_forecast_annual_pct"])
     vol_shock_ratio = _clean_number(garch_metrics["volatility_shock_ratio"])
 
-    # Suggested stop loss: 2x 14-day ATR %
+    # 3. 3-State Gaussian HMM Regime Detection (Trending, Panic, Choppy)
+    hmm_pipeline = MarketRegimePipeline(random_state=42)
+    regime_telemetry = hmm_pipeline.analyze_market_regime(valid_returns)
+
+    # 4. PyTorch LSTM Autoencoder Temporal Sequence Anomaly Detection
+    lstm_detector = LSTMTemporalAnomalyDetector(seq_len=15, epochs=15, random_state=42)
+    temporal_anomaly_res = lstm_detector.fit_and_detect(history_df)
+
+    # Suggested stop loss: 2x 14-day ATR % conditioned on HMM regime
+    stop_mult = regime_telemetry.get("stop_loss_multiplier", 1.0)
     high = history_df["High"]
     low = history_df["Low"]
     prev_close = history_df["Close"].shift(1)
@@ -124,7 +135,7 @@ def analyze_ticker_quant(ticker: str, cutoff_date: Optional[str] = None) -> Dict
         atr_14 = tr.mean()
 
     if current_price > 0:
-        suggested_stop_loss_atr_pct = _clean_number(round(float((2.0 * atr_14 / current_price) * 100), 2))
+        suggested_stop_loss_atr_pct = _clean_number(round(float((2.0 * atr_14 / current_price) * 100 * stop_mult), 2))
     else:
         suggested_stop_loss_atr_pct = 0.0
 
@@ -294,6 +305,8 @@ def analyze_ticker_quant(ticker: str, cutoff_date: Optional[str] = None) -> Dict
         "garch_vol_forecast_pct": garch_5d_forecast,
         "volatility_shock_ratio": vol_shock_ratio,
         "anomaly_telemetry": anomaly_telemetry,
+        "hmm_regime": regime_telemetry,
+        "temporal_anomaly": temporal_anomaly_res,
         "chart_data": chart_data,
         "time_machine_actual_return_pct": time_machine_actual_return_pct,
         "max_drawdown_5d_pct": max_drawdown_5d_pct,

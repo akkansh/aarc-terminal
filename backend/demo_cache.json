@@ -7322,24 +7322,43 @@
       "node": "quant",
       "data": {
         "ticker": "NVDA",
-        "current_price": 160.91,
-        "annualized_volatility": 38.74,
-        "daily_VaR_95_pct": -4.19,
-        "suggested_stop_loss_atr_pct": 13.68,
-        "half_kelly_allocation_pct": 6.45,
-        "half_kelly_cap_pct": 6.45,
-        "recent_10d_anomalies": 4,
-        "rsi_14": 18.7,
-        "recent_5d_return_pct": -13.79,
+        "current_price": 162.04,
+        "annualized_volatility": 48.07,
+        "daily_VaR_95_pct": -4.92,
+        "suggested_stop_loss_atr_pct": 13.58,
+        "half_kelly_allocation_pct": 5.2,
+        "half_kelly_cap_pct": 5.2,
+        "recent_10d_anomalies": 3,
+        "rsi_14": 18.94,
+        "recent_5d_return_pct": -13.18,
         "sma20_trend": "BEARISH",
         "close_gt_sma20": false,
-        "sma20_val": 198.59,
-        "sma50_val": 214.59,
-        "sma20_z_score": -1.88,
-        "bb_upper": 238.72,
-        "bb_middle": 198.59,
-        "bb_lower": 158.46,
-        "bb_width_pct": 40.41,
+        "sma20_val": 198.65,
+        "sma50_val": 214.62,
+        "sma20_z_score": -1.83,
+        "bb_upper": 238.55,
+        "bb_middle": 198.65,
+        "bb_lower": 158.74,
+        "bb_width_pct": 40.18,
+        "garch_vol_forecast_pct": 40.33,
+        "volatility_shock_ratio": 1.1,
+        "anomaly_telemetry": {
+          "is_confirmed_anomaly": false,
+          "consensus_votes": 1,
+          "confidence_score": 0.013,
+          "timeframe_breakdown": {
+            "15d_micro": false,
+            "45d_micro": false,
+            "120d_micro": true
+          },
+          "scaled_feature_magnitudes": {
+            "return_1d": -0.53,
+            "return_5d": -1.29,
+            "volume_zscore": 0.32,
+            "parkinson_spread": 1.87,
+            "rsi_deviation": -1.16
+          }
+        },
         "chart_data": [
           {
             "date": "2026-08-21",
@@ -7413,7 +7432,7 @@
             "low": 216.57,
             "close": 217.31,
             "volume": 195116400,
-            "is_anomaly": true,
+            "is_anomaly": false,
             "bb_upper": 229.88,
             "bb_middle": 217.8,
             "bb_lower": 205.72,
@@ -7595,7 +7614,7 @@
             "low": 218.03,
             "close": 222.27,
             "volume": 190287400,
-            "is_anomaly": true,
+            "is_anomaly": false,
             "bb_upper": 231.65,
             "bb_middle": 218.72,
             "bb_lower": 205.79,
@@ -7985,7 +8004,7 @@
             "low": 200.92,
             "close": 204.64,
             "volume": 168386400,
-            "is_anomaly": true,
+            "is_anomaly": false,
             "bb_upper": 241.07,
             "bb_middle": 221.46,
             "bb_lower": 201.85,
@@ -8063,7 +8082,7 @@
             "low": 170.24,
             "close": 178.67,
             "volume": 462719300,
-            "is_anomaly": true,
+            "is_anomaly": false,
             "bb_upper": 236.09,
             "bb_middle": 209.16,
             "bb_lower": 182.24,
@@ -8076,7 +8095,7 @@
             "low": 165.89,
             "close": 168.89,
             "volume": 429273200,
-            "is_anomaly": false,
+            "is_anomaly": true,
             "bb_upper": 237.0,
             "bb_middle": 206.18,
             "bb_lower": 175.36,
@@ -8113,13 +8132,13 @@
             "open": 169.89,
             "high": 170.0,
             "low": 158.39,
-            "close": 160.91,
-            "volume": 243651386,
-            "is_anomaly": true,
-            "bb_upper": 238.72,
-            "bb_middle": 198.59,
-            "bb_lower": 158.46,
-            "sma_50": 214.59
+            "close": 162.04,
+            "volume": 267386653,
+            "is_anomaly": false,
+            "bb_upper": 238.55,
+            "bb_middle": 198.65,
+            "bb_lower": 158.74,
+            "sma_50": 214.62
           }
         ],
         "time_machine_actual_return_pct": null,
@@ -8127,64 +8146,116 @@
         "regime": {
           "state": 1,
           "label": "HIGH_VOLATILITY",
-          "prob_high_vol": 0.969
+          "prob_high_vol": 0.99
         },
-        "garch_volatility_forecast_pct": 39.51
+        "garch_volatility_forecast_pct": 49.03
       }
     },
     {
       "node": "news",
       "data": {
         "ticker": "NVDA",
-        "aggregate_sentiment_score": -0.23,
+        "aggregate_sentiment_score": -0.35,
         "headlines": [
           {
             "title": "What to Watch in Nvidia Earnings: Leadership, China, Data Center Concerns Take Center Stage - Morningstar",
             "label": "neutral",
             "score": 0.92,
-            "published_at": "Fri, 13 Nov 2026 16:14:39 GMT"
+            "published_at": "Fri, 13 Nov 2026 16:14:39 GMT",
+            "net_polarity": 0.033,
+            "heuristic_routing": "FINBERT_DIRECT",
+            "lm_matches": {
+              "pos": [],
+              "neg": []
+            }
+          },
+          {
+            "title": "What the Nvidia scandal means for the company's earnings next week - Yahoo Finance",
+            "label": "negative",
+            "score": 0.75,
+            "published_at": "Fri, 13 Nov 2026 15:59:03 GMT",
+            "net_polarity": -0.678,
+            "heuristic_routing": "HEURISTIC_CROSS_VERIFIED",
+            "lm_matches": {
+              "pos": [],
+              "neg": [
+                "scandal"
+              ]
+            }
+          },
+          {
+            "title": "How low does Nvidia\u2019s stock need to go before it\u2019s a screaming bargain? - MarketWatch",
+            "label": "neutral",
+            "score": 0.818,
+            "published_at": "Fri, 13 Nov 2026 17:07:00 GMT",
+            "net_polarity": -0.1,
+            "heuristic_routing": "FINBERT_DIRECT",
+            "lm_matches": {
+              "pos": [],
+              "neg": []
+            }
+          },
+          {
+            "title": "Nvidia's Chris Malachowsky cofounded the company and is seen as a potential successor to Huang - Yahoo Finance",
+            "label": "neutral",
+            "score": 0.927,
+            "published_at": "Fri, 13 Nov 2026 17:27:41 GMT",
+            "net_polarity": 0.031,
+            "heuristic_routing": "FINBERT_DIRECT",
+            "lm_matches": {
+              "pos": [],
+              "neg": []
+            }
+          },
+          {
+            "title": "Analysis: Nvidia\u2019s leadership crisis tests the chipmaker\u2019s role as the \u2018central bank of AI\u2019 - CNBC",
+            "label": "neutral",
+            "score": 0.465,
+            "published_at": "Wed, 11 Nov 2026 18:09:50 GMT",
+            "net_polarity": -0.069,
+            "heuristic_routing": "DAMPENED_AMBIGUOUS",
+            "lm_matches": {
+              "pos": [],
+              "neg": []
+            }
           },
           {
             "title": "Nvidia stock slips as investors digest CEO exit, broader chip sector falls - Yahoo Finance",
             "label": "negative",
             "score": 0.949,
-            "published_at": "Fri, 13 Nov 2026 15:26:39 GMT"
-          },
-          {
-            "title": "Analysis: Nvidia\u2019s leadership crisis tests the chipmaker\u2019s role as the \u2018central bank of AI\u2019 - CNBC",
-            "label": "neutral",
-            "score": 0.516,
-            "published_at": "Wed, 11 Nov 2026 18:09:50 GMT"
+            "published_at": "Fri, 13 Nov 2026 15:26:39 GMT",
+            "net_polarity": -0.938,
+            "heuristic_routing": "FINBERT_DIRECT",
+            "lm_matches": {
+              "pos": [],
+              "neg": []
+            }
           },
           {
             "title": "Nvidia stock closes down over 4% after CEO Jensen Huang announces resignation - CNBC",
             "label": "negative",
             "score": 0.96,
-            "published_at": "Thu, 12 Nov 2026 09:02:10 GMT"
+            "published_at": "Thu, 12 Nov 2026 09:02:10 GMT",
+            "net_polarity": -0.952,
+            "heuristic_routing": "FINBERT_DIRECT",
+            "lm_matches": {
+              "pos": [],
+              "neg": []
+            }
           },
           {
             "title": "Nvidia director sold nearly $1B in stock weeks before the Jensen Huang scandal broke \u2014 and no trading plan was flagged - Yahoo Finance",
             "label": "neutral",
             "score": 0.836,
-            "published_at": "Fri, 13 Nov 2026 16:00:00 GMT"
-          },
-          {
-            "title": "Michael Burry Sees A \u2018Mechanical Bid\u2019 Under NVDA Stock \u2013 Even As He Questions Nvidia\u2019s Succession Plan And Asia Sales - Yahoo Finance",
-            "label": "neutral",
-            "score": 0.573,
-            "published_at": "Fri, 13 Nov 2026 04:22:18 GMT"
-          },
-          {
-            "title": "Here are 5 new share price forecasts for Nvidia after the Huang scandal - Yahoo Finance UK",
-            "label": "neutral",
-            "score": 0.911,
-            "published_at": "Fri, 13 Nov 2026 13:38:00 GMT"
-          },
-          {
-            "title": "Finance guru shares golden investing rule amid Nvidia stock crash - Yahoo Finance",
-            "label": "neutral",
-            "score": 0.444,
-            "published_at": "Fri, 13 Nov 2026 14:48:28 GMT"
+            "published_at": "Fri, 13 Nov 2026 16:00:00 GMT",
+            "net_polarity": -0.092,
+            "heuristic_routing": "FINBERT_DIRECT",
+            "lm_matches": {
+              "pos": [],
+              "neg": [
+                "scandal"
+              ]
+            }
           }
         ]
       }
@@ -8192,13 +8263,13 @@
     {
       "node": "bull",
       "data": {
-        "bull_thesis": "\u2022 Trend regime is BEARISH with 5-day momentum at -13.79%, supporting an active Half-Kelly capacity allocation of 6.45%.\n\u2022 RSI-14 sits at 18.7 with contained 95% daily VaR of -4.19%, providing an asymmetrical entry window against 38.74% annualized vol.\n\u2022 Aggregate news sentiment reads -0.23 with 4 price/volume anomalies reflecting institutional accumulation."
+        "bull_thesis": "\u2022 Trend regime is BEARISH with 5-day momentum at -13.18%, supporting an active Half-Kelly capacity allocation of 5.2%.\n\u2022 RSI-14 sits at 18.94 with contained 95% daily VaR of -4.92%, providing an asymmetrical entry window against 48.07% annualized vol.\n\u2022 Aggregate news sentiment reads -0.35 with 3 price/volume anomalies reflecting institutional accumulation."
       }
     },
     {
       "node": "bear",
       "data": {
-        "bear_thesis": "\u2022 Tail risk is severe: 95% daily VaR of -4.19% with 38.74% annualized vol exposes any 6.45% allocation to fat-tail liquidation.\n\u2022 14-day RSI sits at 18.7; any momentum stalling will trigger abrupt mean-reversion and trap retail longs chasing 160.91.\n\u2022 4 price/volume anomalies in 10 sessions combined with headline sentiment (-0.23) flag institutional distribution risk."
+        "bear_thesis": "\u2022 Tail risk is severe: 95% daily VaR of -4.92% with 48.07% annualized vol exposes any 5.2% allocation to fat-tail liquidation.\n\u2022 14-day RSI sits at 18.94; any momentum stalling will trigger abrupt mean-reversion and trap retail longs chasing 162.04.\n\u2022 3 price/volume anomalies in 10 sessions combined with headline sentiment (-0.35) flag institutional distribution risk."
       }
     },
     {
@@ -8206,11 +8277,22 @@
       "data": {
         "action": "REJECT_TRADE",
         "verdict": "REJECT_TRADE",
+        "raw_confidence": 92,
         "confidence": 92,
         "recommended_allocation_pct": 0.0,
-        "stop_loss_pct": 13.68,
-        "kill_switch_reason": "Isolation Forest flagged critical anomaly clustering (4 anomalies >= 3) and severe tail loss (VaR -4.19% < -3.0%).",
-        "verdict_summary": "Trade rejected: Extreme microstructural anomaly clustering (4 anomalies) combined with severe tail loss risk (Daily VaR: -4.19%). Capital preservation mandate triggered.",
+        "stop_loss_pct": 13.58,
+        "kill_switch_reason": "Isolation Forest flagged critical anomaly clustering (3 anomalies >= 3) and severe tail loss (VaR -4.92% < -3.0%).",
+        "verdict_summary": "Trade rejected: Extreme microstructural anomaly clustering (3 anomalies) combined with severe tail loss risk (Daily VaR: -4.92%). Capital preservation mandate triggered.",
+        "rolling_accuracy_telemetry": {
+          "rolling_hit_rate_pct": 65.0,
+          "resolved_count": 0,
+          "confidence_multiplier": 1.0,
+          "allocation_multiplier": 1.0,
+          "status": "CALIBRATION_NEUTRAL (Insufficient sample)",
+          "recent_history": [],
+          "raw_confidence": 92,
+          "calibrated_confidence": 92
+        },
         "top_drivers": {
           "positive": [
             {
@@ -8220,29 +8302,29 @@
             },
             {
               "feature": "sentiment_score",
-              "value": -0.23,
+              "value": -0.35,
               "impact": "+22.1%"
             },
             {
               "feature": "momentum_5d",
-              "value": -13.79,
+              "value": -13.18,
               "impact": "+14.2%"
             }
           ],
           "negative": [
             {
               "feature": "daily_VaR_95",
-              "value": -4.19,
+              "value": -4.92,
               "impact": "-31.2%"
             },
             {
               "feature": "volatility",
-              "value": 38.74,
+              "value": 48.07,
               "impact": "-24.5%"
             },
             {
               "feature": "isolation_forest_anomalies",
-              "value": 4,
+              "value": 3,
               "impact": "-20.8%"
             }
           ]
@@ -8258,8 +8340,10 @@
         ],
         "confidence_breakdown": {
           "raw_model_confidence": 92,
+          "rolling_accuracy_multiplier": 1.0,
+          "rolling_hit_rate_pct": 65.0,
           "agreement_penalty": 0.0,
-          "anomaly_penalty": 14.0,
+          "anomaly_penalty": 10.5,
           "regime_penalty": 5.0,
           "calibrated_confidence": 92
         }
@@ -10110,25 +10194,25 @@
       "node": "quant",
       "data": {
         "ticker": "AVGO",
-        "current_price": 346.71,
+        "current_price": 346.74,
         "annualized_volatility": 60.81,
         "daily_VaR_95_pct": -6.07,
         "suggested_stop_loss_atr_pct": 11.68,
         "half_kelly_allocation_pct": 4.5,
         "half_kelly_cap_pct": 4.5,
         "recent_10d_anomalies": 2,
-        "rsi_14": 54.54,
-        "recent_5d_return_pct": 18.05,
+        "rsi_14": 54.55,
+        "recent_5d_return_pct": 18.06,
         "sma20_trend": "BULLISH",
         "close_gt_sma20": true,
-        "sma20_val": 330.94,
+        "sma20_val": 330.95,
         "sma50_val": 345.25,
         "sma20_z_score": 0.91,
         "bb_upper": 365.76,
-        "bb_middle": 330.94,
+        "bb_middle": 330.95,
         "bb_lower": 296.13,
         "bb_width_pct": 21.04,
-        "garch_vol_forecast_pct": 54.79,
+        "garch_vol_forecast_pct": 54.78,
         "volatility_shock_ratio": 1.24,
         "anomaly_telemetry": {
           "is_confirmed_anomaly": false,
@@ -10920,11 +11004,11 @@
             "open": 356.54,
             "high": 358.47,
             "low": 337.67,
-            "close": 346.71,
-            "volume": 18189170,
+            "close": 346.74,
+            "volume": 18241623,
             "is_anomaly": false,
             "bb_upper": 365.76,
-            "bb_middle": 330.94,
+            "bb_middle": 330.95,
             "bb_lower": 296.13,
             "sma_50": 345.25
           }
@@ -11047,13 +11131,13 @@
     {
       "node": "bull",
       "data": {
-        "bull_thesis": "\u2022 Trend regime is BULLISH with 5-day momentum at 18.05%, supporting an active Half-Kelly capacity allocation of 4.5%.\n\u2022 RSI-14 sits at 54.54 with contained 95% daily VaR of -6.07%, providing an asymmetrical entry window against 60.81% annualized vol.\n\u2022 Aggregate news sentiment reads -0.13 with 2 price/volume anomalies reflecting institutional accumulation."
+        "bull_thesis": "\u2022 Trend regime is BULLISH with 5-day momentum at 18.06%, supporting an active Half-Kelly capacity allocation of 4.5%.\n\u2022 RSI-14 sits at 54.55 with contained 95% daily VaR of -6.07%, providing an asymmetrical entry window against 60.81% annualized vol.\n\u2022 Aggregate news sentiment reads -0.13 with 2 price/volume anomalies reflecting institutional accumulation."
       }
     },
     {
       "node": "bear",
       "data": {
-        "bear_thesis": "\u2022 Tail risk is severe: 95% daily VaR of -6.07% with 60.81% annualized vol exposes any 4.5% allocation to fat-tail liquidation.\n\u2022 14-day RSI sits at 54.54; any momentum stalling will trigger abrupt mean-reversion and trap retail longs chasing 346.71.\n\u2022 2 price/volume anomalies in 10 sessions combined with headline sentiment (-0.13) flag institutional distribution risk."
+        "bear_thesis": "\u2022 Tail risk is severe: 95% daily VaR of -6.07% with 60.81% annualized vol exposes any 4.5% allocation to fat-tail liquidation.\n\u2022 14-day RSI sits at 54.55; any momentum stalling will trigger abrupt mean-reversion and trap retail longs chasing 346.74.\n\u2022 2 price/volume anomalies in 10 sessions combined with headline sentiment (-0.13) flag institutional distribution risk."
       }
     },
     {
@@ -11066,7 +11150,7 @@
         "recommended_allocation_pct": 4.5,
         "stop_loss_pct": 11.68,
         "kill_switch_reason": "Breakdown below 20-day SMA or ATR trailing stop (11.68%).",
-        "verdict_summary": "Institutional LONG execution approved: Trend structure is constructive (SMA20: BULLISH, Close: 346.71, RSI: 54.54) with positive news sentiment (-0.13). Half-Kelly capacity allocated at 4.5% with stop loss at 11.68%.",
+        "verdict_summary": "Institutional LONG execution approved: Trend structure is constructive (SMA20: BULLISH, Close: 346.74, RSI: 54.55) with positive news sentiment (-0.13). Half-Kelly capacity allocated at 4.5% with stop loss at 11.68%.",
         "rolling_accuracy_telemetry": {
           "rolling_hit_rate_pct": 65.0,
           "resolved_count": 0,
@@ -11091,7 +11175,7 @@
             },
             {
               "feature": "momentum_5d",
-              "value": 18.05,
+              "value": 18.06,
               "impact": "+14.2%"
             }
           ],

@@ -5,6 +5,7 @@ import numpy as np
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 from typing import Dict, Any, List, Optional, Union
 from backend.features.financial_lexicon import LoughranMcDonaldVerifier
+from backend.features.aspect_sentiment import AspectBasedSentimentAnalyzer
 
 _GLOBAL_FINBERT_INSTANCE = None
 
@@ -109,9 +110,17 @@ class FinBertSentimentAnalyzer:
         # Clamp to [-1.0, 1.0] and round
         aggregate_score = round(max(-1.0, min(1.0, aggregate_score)), 2)
 
+        absa = AspectBasedSentimentAnalyzer()
+        absa_result = absa.analyze_aspects_and_tone_shift(results)
+
         return {
             "aggregate_sentiment_score": aggregate_score,
-            "headlines": results
+            "headlines": results,
+            "aspect_sentiment": absa_result["aspect_scores"],
+            "composite_aspect_score": absa_result["composite_aspect_score"],
+            "tone_shift_index": absa_result["tone_shift_index"],
+            "tone_shift_regime": absa_result["tone_shift_regime"],
+            "aspect_relevance": absa_result["aspect_relevance"],
         }
 
 
@@ -157,7 +166,20 @@ def analyze_ticker_sentiment(ticker: str) -> Dict[str, Any]:
         return {
             "ticker": ticker,
             "aggregate_sentiment_score": 0.0,
-            "headlines": []
+            "headlines": [],
+            "aspect_sentiment": {
+                "risk_solvency": 0.0,
+                "liquidity_cashflow": 0.0,
+                "margin_health": 0.0,
+            },
+            "composite_aspect_score": 0.0,
+            "tone_shift_index": 0.0,
+            "tone_shift_regime": "NEUTRAL",
+            "aspect_relevance": {
+                "risk_solvency": 0,
+                "liquidity_cashflow": 0,
+                "margin_health": 0,
+            },
         }
 
     analyzer = FinBertSentimentAnalyzer.get_instance()
@@ -166,5 +188,10 @@ def analyze_ticker_sentiment(ticker: str) -> Dict[str, Any]:
     return {
         "ticker": ticker,
         "aggregate_sentiment_score": scored["aggregate_sentiment_score"],
-        "headlines": scored["headlines"]
+        "headlines": scored["headlines"],
+        "aspect_sentiment": scored.get("aspect_sentiment", {}),
+        "composite_aspect_score": scored.get("composite_aspect_score", 0.0),
+        "tone_shift_index": scored.get("tone_shift_index", 0.0),
+        "tone_shift_regime": scored.get("tone_shift_regime", "NEUTRAL"),
+        "aspect_relevance": scored.get("aspect_relevance", {}),
     }

@@ -14,6 +14,7 @@ load_dotenv(dotenv_path=ROOT_ENV_PATH, override=True)
 from backend.tools.quant_math import analyze_ticker_quant
 from backend.tools.sentiment_nlp import analyze_ticker_sentiment
 from backend.calibration.rolling_tracker import RollingAccuracyTracker
+from backend.calibration.bayesian_calibrator import BetaBinomialConfidenceCalibrator
 
 MODEL_CANDIDATES = ["gemini-3.8-flash", "gemini-2.5-flash"]
 
@@ -220,6 +221,14 @@ def run_cro_node(
     sma_trend = quant_data.get("sma20_trend", "BULLISH")
     sentiment = news_data.get("aggregate_sentiment_score", 0.0)
 
+    # Dynamic conditioning from HMM Regime & LSTM Temporal Anomaly
+    hmm_data = quant_data.get("hmm_regime", {})
+    temp_anomaly = quant_data.get("temporal_anomaly", {})
+    stop_mult = hmm_data.get("stop_loss_multiplier", 1.0)
+    suggested_stop = round(suggested_stop * stop_mult, 2)
+    kelly_scale = hmm_data.get("kelly_scale_factor", 1.0)
+    kelly = round(kelly * kelly_scale, 2)
+
     # 1. REJECT_TRADE ONLY when recent_10d_anomalies >= 3 AND daily_VaR_95_pct < -3.0
     is_reject_regime = (anomalies >= 3 and var < -3.0)
 
@@ -286,13 +295,26 @@ Instructions:
                 verdict.verdict = verdict.action
                 result = verdict.model_dump()
                 
-                # Apply Rolling Accuracy Confidence Calibration Loop
+                # Apply Rolling Accuracy & Bayesian Beta-Binomial Calibration
                 import datetime
                 tracker = RollingAccuracyTracker()
                 cal_conf, tracker_telemetry = tracker.calibrate_confidence(result["confidence"], ticker)
+
+                bayesian_calibrator = BetaBinomialConfidenceCalibrator()
+                bayes_conf, bayes_telemetry = bayesian_calibrator.calibrate_score(result["confidence"], ticker)
+
                 result["raw_confidence"] = result["confidence"]
-                result["confidence"] = cal_conf
+                result["confidence"] = bayes_conf
                 result["rolling_accuracy_telemetry"] = tracker_telemetry
+                result["bayesian_calibration"] = bayes_telemetry
+
+                if result["action"] in ("LONG", "SHORT"):
+                    alloc_mult = bayes_telemetry.get("bayesian_allocation_multiplier", 1.0)
+                    if temp_anomaly.get("is_temporal_anomaly", False):
+                        alloc_mult *= 0.85
+                    result["recommended_allocation_pct"] = round(result["recommended_allocation_pct"] * alloc_mult, 2)
+                    result["recommended_allocation_pct"] = max(4.5, min(kelly, result["recommended_allocation_pct"]))
+
                 tracker.log_prediction(ticker, result["action"], result["raw_confidence"], price, datetime.date.today().isoformat(), var)
 
                 return result
@@ -332,12 +354,19 @@ Instructions:
         kill = f"Breach of 2x ATR trailing stop ({suggested_stop}%)."
         summary = f"Controlled LONG positioning permitted at {alloc}%. Volatility ({vol}%) warrants trailing stop at {suggested_stop}%."
 
-    # Rolling Accuracy Calibration Loop
+    # Bayesian & Rolling Accuracy Calibration Loop
     import datetime
     tracker = RollingAccuracyTracker()
     calibrated_conf, tracker_telemetry = tracker.calibrate_confidence(conf, ticker)
+
+    bayesian_calibrator = BetaBinomialConfidenceCalibrator()
+    bayes_conf, bayes_telemetry = bayesian_calibrator.calibrate_score(conf, ticker)
+
     if action in ("LONG", "SHORT"):
-        alloc = round(alloc * tracker_telemetry.get("allocation_multiplier", 1.0), 2)
+        alloc_mult = bayes_telemetry.get("bayesian_allocation_multiplier", 1.0) * tracker_telemetry.get("allocation_multiplier", 1.0)
+        if temp_anomaly.get("is_temporal_anomaly", False):
+            alloc_mult *= 0.85
+        alloc = round(alloc * alloc_mult, 2)
         alloc = max(4.5, min(kelly, alloc))
     else:
         alloc = 0.0
@@ -345,16 +374,21 @@ Instructions:
     today_str = datetime.date.today().isoformat()
     tracker.log_prediction(ticker, action, conf, price, today_str, var)
 
+    if temp_anomaly.get("is_temporal_anomaly", False) and action != "REJECT_TRADE":
+        recon_err = temp_anomaly.get("reconstruction_error", 0.0)
+        kill = f"{kill} [LSTM Autoencoder Alert: Sequential anomaly flagged with reconstruction error {recon_err:.3f}]"
+
     return {
         "action": action,
         "verdict": action,
         "raw_confidence": conf,
-        "confidence": calibrated_conf,
+        "confidence": bayes_conf,
         "recommended_allocation_pct": alloc,
         "stop_loss_pct": suggested_stop,
         "kill_switch_reason": kill,
         "verdict_summary": summary,
         "rolling_accuracy_telemetry": tracker_telemetry,
+        "bayesian_calibration": bayes_telemetry,
     }
 
 
@@ -370,12 +404,15 @@ async def stream_committee(ticker: str, cutoff_date: Optional[str] = None):
     try:
         quant_data = await asyncio.to_thread(analyze_ticker_quant, clean_ticker, cutoff_date)
         vol = quant_data.get("annualized_volatility", 20.0)
+        hmm_state = quant_data.get("hmm_regime", {})
         quant_data["regime"] = {
-            "state": 1 if vol > 24.0 else 0,
-            "label": "HIGH_VOLATILITY" if vol > 24.0 else "LOW_VOLATILITY",
-            "prob_high_vol": round(min(0.99, max(0.01, vol / 40.0)), 3),
+            "state": hmm_state.get("current_state", 1 if vol > 24.0 else 0),
+            "label": hmm_state.get("state_label", "HIGH_VOLATILITY" if vol > 24.0 else "LOW_VOLATILITY"),
+            "prob_high_vol": hmm_state.get("state_probabilities", {}).get("HIGH_VOL_PANIC", round(min(0.99, max(0.01, vol / 40.0)), 3)),
+            "state_probabilities": hmm_state.get("state_probabilities", {}),
+            "kelly_scale_factor": hmm_state.get("kelly_scale_factor", 1.0),
         }
-        quant_data["garch_volatility_forecast_pct"] = round(vol * 1.02, 2)
+        quant_data["garch_volatility_forecast_pct"] = quant_data.get("garch_vol_forecast_pct", round(vol * 1.02, 2))
         yield {
             "node": "quant",
             "data": quant_data
@@ -480,8 +517,15 @@ async def stream_committee(ticker: str, cutoff_date: Optional[str] = None):
         cro_verdict["calibrated_probabilities"] = cal_probs
         cro_verdict["conformal_prediction_set"] = conformal_set
         tracker_meta = cro_verdict.get("rolling_accuracy_telemetry", {})
+        bayes_meta = cro_verdict.get("bayesian_calibration", {})
         cro_verdict["confidence_breakdown"] = {
             "raw_model_confidence": cro_verdict.get("raw_confidence", conf),
+            "bayesian_expected_accuracy_pct": bayes_meta.get("posterior_mean_accuracy_pct", 70.0),
+            "credible_interval_90": [
+                bayes_meta.get("credible_lower_bound_pct", 50.0),
+                bayes_meta.get("credible_upper_bound_pct", 85.0)
+            ],
+            "bayesian_allocation_multiplier": bayes_meta.get("bayesian_allocation_multiplier", 1.0),
             "rolling_accuracy_multiplier": tracker_meta.get("confidence_multiplier", 1.0),
             "rolling_hit_rate_pct": tracker_meta.get("rolling_hit_rate_pct", 65.0),
             "agreement_penalty": 0.0 if conf >= 80 else 4.0,
@@ -489,6 +533,11 @@ async def stream_committee(ticker: str, cutoff_date: Optional[str] = None):
             "regime_penalty": 5.0 if quant_data.get("annualized_volatility", 0.0) > 25.0 else 0.0,
             "calibrated_confidence": conf,
         }
+        cro_verdict["hmm_regime"] = quant_data.get("hmm_regime", {})
+        cro_verdict["temporal_anomaly"] = quant_data.get("temporal_anomaly", {})
+        cro_verdict["aspect_sentiment"] = news_data.get("aspect_sentiment", {})
+        cro_verdict["tone_shift_index"] = news_data.get("tone_shift_index", 0.0)
+        cro_verdict["tone_shift_regime"] = news_data.get("tone_shift_regime", "NEUTRAL")
 
         yield {
             "node": "cro",
