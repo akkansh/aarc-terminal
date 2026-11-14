@@ -246,6 +246,11 @@ def run_cro_node(
     # 3. LONG when Close > SMA20 or (sentiment > 0.15 and rsi < 75)
     is_long_regime = (close_gt_sma20 or (sentiment > 0.15 and rsi < 75.0)) and not is_short_regime and not is_reject_regime
 
+    # Keep the model's verdict aligned with the same priority as the fallback.
+    # An inconsistent model response must not turn into an unexplained rejection
+    # (or retain a narrative describing a different action).
+    expected_action = "REJECT_TRADE" if is_reject_regime else "SHORT" if is_short_regime else "LONG"
+
     prompt = f"""You are the Chief Risk Officer (CRO) of an Autonomous Adversarial Risk Committee (AARC).
 Analyze the Bull and Bear cases alongside quantitative signals and render a definitive verdict.
 
@@ -283,16 +288,10 @@ Instructions:
                 raw_data = json.loads(res.text)
                 verdict = CROVerdict.model_validate(raw_data)
 
-                # Ensure strict alignment with the institutional rules
-                if is_reject_regime:
-                    verdict.action = "REJECT_TRADE"
-                    verdict.recommended_allocation_pct = 0.0
-                elif is_short_regime and verdict.action == "LONG":
-                    verdict.action = "SHORT"
-                    verdict.recommended_allocation_pct = min(kelly, 12.0)
-                elif is_long_regime and verdict.action != "LONG":
-                    verdict.action = "LONG"
-                    verdict.recommended_allocation_pct = min(kelly, 15.0)
+                if verdict.action != expected_action:
+                    raise ValueError(
+                        f"CRO model returned {verdict.action}; risk rules require {expected_action}"
+                    )
 
                 # Set allocation floors
                 if verdict.action in ("LONG", "SHORT"):
