@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 # Ensure .env is loaded before anything else
 ROOT_ENV_PATH = Path(__file__).resolve().parent.parent / ".env"
 load_dotenv(dotenv_path=ROOT_ENV_PATH, override=True)
-from fastapi import FastAPI, Query, HTTPException, Body
+from fastapi import FastAPI, Query, HTTPException, Body, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from sse_starlette.sse import EventSourceResponse
@@ -17,6 +17,7 @@ from backend.graph import stream_committee, run_cro_node, run_bull_node, run_bea
 from backend.tools.quant_math import analyze_ticker_quant
 from backend.tools.sentiment_nlp import analyze_ticker_sentiment
 from backend.calibration.bayesian_calibrator import BetaBinomialConfidenceCalibrator
+from backend.data.news_stream import NewsStreamBroker
 import yfinance as yf
 
 app = FastAPI(
@@ -318,6 +319,92 @@ async def get_sentiment_aspects(
         }
     except Exception as exc:
         raise HTTPException(status_code=400, detail=str(exc))
+
+
+class NewsPublishRequest(BaseModel):
+    ticker: str = Field(description="Asset ticker symbol")
+    title: str = Field(description="News or regulatory filing headline")
+    source: Optional[str] = Field(default="FINANCIAL_NEWS", description="'FINANCIAL_NEWS' or 'REGULATORY_FILING'")
+    published_at: Optional[str] = Field(default=None, description="Optional publication timestamp string")
+    url: Optional[str] = Field(default=None, description="Optional source article link")
+
+
+@app.get("/api/news/stream")
+async def stream_news_feed(
+    ticker: str = Query(default="RELIANCE.NS", description="Asset ticker symbol"),
+    cutoff_date: Optional[str] = Query(default=None, description="Optional historical cutoff date (YYYY-MM-DD)"),
+):
+    """
+    Real-time Server-Sent Events (SSE) endpoint streaming live financial news,
+    regulatory disclosures, and sub-second FinBERT sentiment updates.
+    Uses an asynchronous event-driven queue listener with automatic heartbeat keepalives.
+    """
+    clean_t = ticker.strip().upper()
+    clean_t = TICKER_ALIASES.get(clean_t, clean_t)
+    broker = NewsStreamBroker.get_instance()
+
+    return EventSourceResponse(
+        broker.news_event_generator(ticker=clean_t, cutoff_date=cutoff_date)
+    )
+
+
+@app.post("/api/news/publish")
+async def publish_live_news_item(body: NewsPublishRequest = Body(...)):
+    """
+    Asynchronously ingests and publishes a live news item or regulatory filing,
+    scoring it sub-second with FinBERT and broadcasting it to all connected SSE clients.
+    """
+    clean_t = body.ticker.strip().upper()
+    clean_t = TICKER_ALIASES.get(clean_t, clean_t)
+    broker = NewsStreamBroker.get_instance()
+    event = await broker.publish_news_item(
+        ticker=clean_t,
+        title=body.title,
+        source=body.source or "FINANCIAL_NEWS",
+        published_at=body.published_at,
+        url=body.url,
+    )
+    return {
+        "status": "published",
+        "event": event,
+        "active_subscribers": broker.get_subscriber_count(clean_t),
+    }
+
+
+@app.websocket("/ws/news/{ticker}")
+async def websocket_news_stream(websocket: WebSocket, ticker: str):
+    """
+    Real-time WebSocket endpoint streaming live financial news,
+    regulatory disclosures, and sub-second FinBERT sentiment updates.
+    """
+    clean_t = ticker.strip().upper()
+    clean_t = TICKER_ALIASES.get(clean_t, clean_t)
+    await websocket.accept()
+    broker = NewsStreamBroker.get_instance()
+    queue = await broker.subscribe(clean_t)
+
+    try:
+        # Send initial snapshot immediately
+        snapshot = await broker.get_initial_snapshot(clean_t)
+        await websocket.send_text(json.dumps(snapshot))
+
+        while True:
+            try:
+                item = await asyncio.wait_for(queue.get(), timeout=12.0)
+                await websocket.send_text(json.dumps(item))
+            except asyncio.TimeoutError:
+                from datetime import datetime, timezone
+                heartbeat = {
+                    "type": "heartbeat",
+                    "ticker": clean_t,
+                    "timestamp": datetime.now(timezone.utc).isoformat(),
+                    "status": "HEALTHY_STREAMING",
+                }
+                await websocket.send_text(json.dumps(heartbeat))
+    except (WebSocketDisconnect, asyncio.CancelledError):
+        pass
+    finally:
+        await broker.unsubscribe(clean_t, queue)
 
 
 @app.get("/api/risk/evaluate")

@@ -82,10 +82,13 @@ interface QuantData {
 }
 
 interface HeadlineItem {
+  id?: string;
   title: string;
   label: string;
   score: number;
   published_at?: string;
+  source?: string;
+  net_polarity?: number;
 }
 
 interface StockSuggestion {
@@ -185,6 +188,134 @@ export default function TerminalPage() {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const eventSourceRef = useRef<EventSource | null>(null);
+
+  // Real-Time Asynchronous News EventSource Streaming State
+  const [newsStreamStatus, setNewsStreamStatus] = useState<'connected' | 'connecting' | 'disconnected'>('disconnected');
+  const [lastStreamHeartbeat, setLastStreamHeartbeat] = useState<string | null>(null);
+  const newsEventSourceRef = useRef<EventSource | null>(null);
+  const newsReconnectTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Connect native EventSource to FastAPI /api/news/stream with resilient reconnect & heartbeat
+  useEffect(() => {
+    if (!mounted) return;
+    const cleanT = (TICKER_ALIASES[ticker.toUpperCase()] || ticker).trim().toUpperCase();
+
+    const connectNewsStream = () => {
+      if (newsEventSourceRef.current) {
+        newsEventSourceRef.current.close();
+        newsEventSourceRef.current = null;
+      }
+      if (newsReconnectTimerRef.current) {
+        clearTimeout(newsReconnectTimerRef.current);
+        newsReconnectTimerRef.current = null;
+      }
+
+      setNewsStreamStatus('connecting');
+      const sseUrl = `http://localhost:8000/api/news/stream?ticker=${encodeURIComponent(cleanT)}`;
+
+      try {
+        const es = new EventSource(sseUrl);
+        newsEventSourceRef.current = es;
+
+        es.onopen = () => {
+          setNewsStreamStatus('connected');
+        };
+
+        const handleIncomingPayload = (rawStr: string) => {
+          try {
+            const payload = JSON.parse(rawStr);
+            if (payload.type === 'snapshot') {
+              setNewsData({
+                ticker: payload.ticker,
+                aggregate_sentiment_score: payload.aggregate_sentiment_score,
+                headlines: payload.headlines || [],
+                news_available: payload.news_available !== false,
+                news_error: payload.news_error,
+              });
+              setNewsStreamStatus('connected');
+            } else if (payload.type === 'news_item') {
+              const newItem: HeadlineItem = {
+                id: payload.id,
+                title: payload.title,
+                label: payload.label,
+                score: payload.score,
+                published_at: payload.published_at,
+                source: payload.source,
+                net_polarity: payload.net_polarity,
+              };
+
+              setNewsData((prev) => {
+                const existing = prev?.headlines || [];
+                // Prevent duplicate titles
+                if (existing.some((h) => h.title.trim().toLowerCase() === newItem.title.trim().toLowerCase())) {
+                  return prev;
+                }
+                const updated = [newItem, ...existing].slice(0, 30);
+                return {
+                  ticker: payload.ticker || cleanT,
+                  aggregate_sentiment_score: payload.aggregate_sentiment_score !== undefined
+                    ? payload.aggregate_sentiment_score
+                    : (prev?.aggregate_sentiment_score ?? 0),
+                  headlines: updated,
+                  news_available: true,
+                };
+              });
+              setNewsStreamStatus('connected');
+            } else if (payload.type === 'heartbeat') {
+              setLastStreamHeartbeat(payload.timestamp || new Date().toISOString());
+              setNewsStreamStatus('connected');
+            }
+          } catch (err) {
+            console.error('[NEWS STREAM JSON PARSE ERROR]', err);
+          }
+        };
+
+        es.onmessage = (event) => {
+          handleIncomingPayload(event.data);
+        };
+
+        es.addEventListener('snapshot', (event: MessageEvent) => {
+          handleIncomingPayload(event.data);
+        });
+
+        es.addEventListener('news_item', (event: MessageEvent) => {
+          handleIncomingPayload(event.data);
+        });
+
+        es.addEventListener('heartbeat', (event: MessageEvent) => {
+          handleIncomingPayload(event.data);
+        });
+
+        es.onerror = () => {
+          setNewsStreamStatus('connecting');
+          if (newsEventSourceRef.current) {
+            newsEventSourceRef.current.close();
+            newsEventSourceRef.current = null;
+          }
+          // Automatic resilient reconnection after 3.5 seconds
+          newsReconnectTimerRef.current = setTimeout(() => {
+            connectNewsStream();
+          }, 3500);
+        };
+      } catch (err) {
+        console.error('[NEWS STREAM SETUP ERROR]', err);
+        setNewsStreamStatus('disconnected');
+      }
+    };
+
+    connectNewsStream();
+
+    return () => {
+      if (newsEventSourceRef.current) {
+        newsEventSourceRef.current.close();
+        newsEventSourceRef.current = null;
+      }
+      if (newsReconnectTimerRef.current) {
+        clearTimeout(newsReconnectTimerRef.current);
+        newsReconnectTimerRef.current = null;
+      }
+    };
+  }, [ticker, mounted]);
 
   useEffect(() => {
     setMounted(true);
@@ -286,7 +417,23 @@ export default function TerminalPage() {
           setQuantData(data);
           setActiveStep(2);
         } else if (node === 'news') {
-          setNewsData(data);
+          setNewsData((prev) => {
+            if (!prev || !prev.headlines) return data;
+            const seen = new Set<string>();
+            const merged: HeadlineItem[] = [];
+            // Preserve real-time streamed items at the top
+            for (const h of [...prev.headlines, ...(data.headlines || [])]) {
+              const key = h.title.trim().toLowerCase();
+              if (!seen.has(key)) {
+                seen.add(key);
+                merged.push(h);
+              }
+            }
+            return {
+              ...data,
+              headlines: merged.slice(0, 30),
+            };
+          });
           setActiveStep(3);
         } else if (node === 'bull') {
           setBullData(data);
@@ -997,19 +1144,36 @@ export default function TerminalPage() {
             )}
           </div>
 
-          {/* 8 FinBERT Scored News Table */}
+          {/* Real-Time FinBERT News & Regulatory Stream Table */}
           <div className="bg-[#12141C] border border-[#1E2230] rounded-xl p-4 space-y-3">
             <div className="flex items-center justify-between border-b border-[#1E2230] pb-2">
               <div className="flex items-center gap-2">
                 <Layers className="h-4 w-4 text-[#10B981]" />
                 <h3 className="text-xs font-semibold uppercase tracking-wider text-white">
-                  FinBERT Headlines for {ticker} ({newsData?.headlines.length ?? 0}/8)
+                  Real-Time FinBERT News & Regulatory Stream ({newsData?.headlines.length ?? 0} ITEMS)
                 </h3>
               </div>
-              <span className="text-[10px] font-mono text-[#64748B]">Google News RSS</span>
+              <div className="flex items-center gap-2 font-mono text-[10px]">
+                {newsStreamStatus === 'connected' ? (
+                  <span className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-[#10B981]/15 text-[#10B981] border border-[#10B981]/30">
+                    <span className="h-1.5 w-1.5 rounded-full bg-[#10B981] animate-pulse" />
+                    LIVE SSE STREAM
+                  </span>
+                ) : newsStreamStatus === 'connecting' ? (
+                  <span className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-[#F59E0B]/15 text-[#F59E0B] border border-[#F59E0B]/30">
+                    <span className="h-1.5 w-1.5 rounded-full bg-[#F59E0B] animate-ping" />
+                    RECONNECTING...
+                  </span>
+                ) : (
+                  <span className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-[#64748B]/15 text-[#64748B] border border-[#64748B]/30">
+                    STREAM OFFLINE
+                  </span>
+                )}
+                <span className="text-[10px] font-mono text-[#64748B] hidden sm:inline">Google RSS + Filings</span>
+              </div>
             </div>
 
-            <div className="max-h-56 overflow-y-auto space-y-2 pr-1">
+            <div className="max-h-64 overflow-y-auto space-y-2 pr-1">
               {newsData && newsData.headlines.length > 0 ? (
                 newsData.headlines.map((item, idx) => {
                   let badge = 'bg-[#64748B]/10 text-[#94A3B8] border-[#64748B]/30';
@@ -1019,12 +1183,38 @@ export default function TerminalPage() {
                     badge = 'bg-[#F43F5E]/15 text-[#F43F5E] border-[#F43F5E]/30';
                   }
 
+                  const isRegulatory = item.source === 'REGULATORY_FILING' || 
+                    item.title.toLowerCase().includes('regulatory filing') || 
+                    item.title.toLowerCase().includes('sec form') ||
+                    item.title.toLowerCase().includes('exchange disclosure') ||
+                    item.title.toLowerCase().includes('exchange filing');
+
                   return (
                     <div
-                      key={idx}
-                      className="p-2.5 rounded-lg bg-[#090A0F] border border-[#1E2230] hover:border-[#2A3042] transition-colors flex items-start justify-between gap-3 text-xs"
+                      key={item.id || `${idx}-${item.title.slice(0, 20)}`}
+                      className={`p-2.5 rounded-lg bg-[#090A0F] border transition-all flex items-start justify-between gap-3 text-xs ${
+                        idx === 0 && item.id?.startsWith('news_')
+                          ? 'border-[#10B981]/40 shadow-sm shadow-[#10B981]/10'
+                          : 'border-[#1E2230] hover:border-[#2A3042]'
+                      }`}
                     >
                       <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-1.5 mb-1 flex-wrap">
+                          {isRegulatory ? (
+                            <span className="px-1.5 py-0.5 rounded text-[9px] font-mono font-bold uppercase tracking-wider bg-indigo-500/15 text-indigo-400 border border-indigo-500/30">
+                              REGULATORY DISCLOSURE
+                            </span>
+                          ) : (
+                            <span className="px-1.5 py-0.5 rounded text-[9px] font-mono font-bold uppercase tracking-wider bg-cyan-500/15 text-cyan-400 border border-cyan-500/30">
+                              FINANCIAL NEWS
+                            </span>
+                          )}
+                          {idx === 0 && item.id?.startsWith('news_') && (
+                            <span className="px-1.5 py-0.5 rounded text-[9px] font-mono font-bold uppercase tracking-wider bg-[#10B981]/20 text-[#10B981] border border-[#10B981]/40 animate-pulse">
+                              LIVE FLASH
+                            </span>
+                          )}
+                        </div>
                         <p className="text-[#E2E8F0] line-clamp-2 leading-relaxed">
                           {item.title}
                         </p>
@@ -1044,6 +1234,11 @@ export default function TerminalPage() {
                         <span className="text-[10px] text-[#64748B]">
                           {(item.score * 100).toFixed(1)}%
                         </span>
+                        {item.net_polarity !== undefined && (
+                          <span className={`text-[9px] font-mono ${item.net_polarity > 0 ? 'text-[#10B981]' : item.net_polarity < 0 ? 'text-[#F43F5E]' : 'text-[#64748B]'}`}>
+                            net: {item.net_polarity > 0 ? '+' : ''}{item.net_polarity.toFixed(2)}
+                          </span>
+                        )}
                       </div>
                     </div>
                   );
@@ -1052,7 +1247,7 @@ export default function TerminalPage() {
                 <div className="py-8 text-center text-xs text-[#64748B] font-mono">
                   {newsData && !newsAvailable
                     ? `News unavailable: ${newsData.news_error || 'No headlines available'}`
-                    : isRunning ? 'Scraping and analyzing news headlines...' : 'Awaiting news sentiment data'}
+                    : 'Connecting to real-time FinBERT news stream...'}
                 </div>
               )}
             </div>
