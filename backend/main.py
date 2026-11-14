@@ -19,6 +19,7 @@ from backend.tools.sentiment_nlp import analyze_ticker_sentiment
 from backend.calibration.bayesian_calibrator import BetaBinomialConfidenceCalibrator
 from backend.data.news_stream import NewsStreamBroker
 from backend.portfolio.router import portfolio_router
+from backend.risk.router import stress_router
 import yfinance as yf
 
 app = FastAPI(
@@ -38,6 +39,9 @@ app.add_middleware(
 
 # Register Portfolio Risk & Broker Gateway Router
 app.include_router(portfolio_router, prefix="/api/portfolio", tags=["portfolio"])
+
+# Register Adversarial Stress Testing Engine Router
+app.include_router(stress_router, prefix="/api/risk/stress-test", tags=["stress-test"])
 
 
 @app.get("/callback")

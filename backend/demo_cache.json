@@ -1208,25 +1208,25 @@
       "node": "quant",
       "data": {
         "ticker": "TCS.NS",
-        "current_price": 2442.4,
-        "annualized_volatility": 38.15,
+        "current_price": 2407.5,
+        "annualized_volatility": 37.97,
         "daily_VaR_95_pct": -3.51,
-        "suggested_stop_loss_atr_pct": 5.54,
-        "half_kelly_allocation_pct": 6.55,
-        "half_kelly_cap_pct": 6.55,
+        "suggested_stop_loss_atr_pct": 5.22,
+        "half_kelly_allocation_pct": 6.58,
+        "half_kelly_cap_pct": 6.58,
         "recent_10d_anomalies": 0,
-        "rsi_14": 40.25,
-        "recent_5d_return_pct": 0.26,
+        "rsi_14": 32.13,
+        "recent_5d_return_pct": -3.53,
         "sma20_trend": "BEARISH",
         "close_gt_sma20": false,
-        "sma20_val": 2472.0,
-        "sma50_val": 2293.91,
-        "sma20_z_score": -0.52,
-        "bb_upper": 2585.86,
-        "bb_middle": 2472.0,
-        "bb_lower": 2358.15,
-        "bb_width_pct": 9.21,
-        "garch_vol_forecast_pct": 38.22,
+        "sma20_val": 2477.13,
+        "sma50_val": 2294.08,
+        "sma20_z_score": -1.57,
+        "bb_upper": 2565.74,
+        "bb_middle": 2477.13,
+        "bb_lower": 2388.53,
+        "bb_width_pct": 7.15,
+        "garch_vol_forecast_pct": 38.04,
         "volatility_shock_ratio": 1.28,
         "anomaly_telemetry": {
           "is_confirmed_anomaly": false,
@@ -1238,11 +1238,11 @@
             "120d_micro": false
           },
           "scaled_feature_magnitudes": {
-            "return_1d": -0.37,
-            "return_5d": 0.14,
-            "volume_zscore": -0.4,
-            "parkinson_spread": -0.05,
-            "rsi_deviation": -0.08
+            "return_1d": -0.44,
+            "return_5d": -0.35,
+            "volume_zscore": -0.17,
+            "parkinson_spread": -0.02,
+            "rsi_deviation": -0.26
           }
         },
         "hmm_regime": {
@@ -1250,58 +1250,45 @@
           "regime_name": "LOW_VOL_TRENDING",
           "probabilities": {
             "P_Trending": 0.789,
-            "P_Panic": 0.05,
-            "P_Choppy": 0.16
+            "P_Panic": 0.051,
+            "P_Choppy": 0.159
           },
-          "regime_vol_annual_pct": 20.54,
+          "regime_vol_annual_pct": 20.6,
           "volatility_multiplier": 0.9,
           "kelly_scale_factor": 1.15,
           "stop_loss_multiplier": 1.0,
           "state_parameters": {
-            "trending_annual_vol": 16.65,
-            "panic_annual_vol": 47.09,
-            "choppy_annual_vol": 31.33
+            "trending_annual_vol": 16.71,
+            "panic_annual_vol": 47.12,
+            "choppy_annual_vol": 31.3
           }
         },
         "temporal_anomaly": {
           "is_temporal_anomaly": false,
-          "temporal_anomaly_score": 0.291,
-          "calibrated_anomaly_confidence": 0.0019,
-          "reconstruction_error": 0.6238,
-          "threshold": 1.427,
-          "iqr": 0.331,
+          "temporal_anomaly_score": 0.253,
+          "calibrated_anomaly_confidence": 0.0015,
+          "reconstruction_error": 0.5918,
+          "threshold": 1.5605,
+          "iqr": 0.3838,
           "feature_breakdown": {
-            "return_1d": 0.3961,
-            "volume_zscore": 0.2561,
-            "parkinson_spread": 0.2751,
-            "rsi_deviation": 0.7049,
-            "macd_ratio": 0.9679
+            "return_1d": 0.5914,
+            "volume_zscore": 0.0219,
+            "parkinson_spread": 0.0398,
+            "rsi_deviation": 1.1673,
+            "macd_ratio": 2.9031
           },
           "recent_10d_temporal_count": 0,
           "temperature_scaling": {
-            "reconstruction_error": 0.6238,
-            "threshold": 1.427,
-            "iqr": 0.331,
-            "normalized_excess_logit": -4.3677,
+            "reconstruction_error": 0.5918,
+            "threshold": 1.5605,
+            "iqr": 0.3838,
+            "normalized_excess_logit": -4.5433,
             "temperature": 0.7,
-            "calibrated_anomaly_probability": 0.0019,
+            "calibrated_anomaly_probability": 0.0015,
             "cleared_high_confidence": false
           }
         },
         "chart_data": [
-          {
-            "date": "2026-08-17",
-            "open": 2351.0,
-            "high": 2361.1,
-            "low": 2310.6,
-            "close": 2313.2,
-            "volume": 2237636,
-            "is_anomaly": false,
-            "bb_upper": 2533.04,
-            "bb_middle": 2365.35,
-            "bb_lower": 2197.65,
-            "sma_50": 2225.19
-          },
           {
             "date": "2026-08-18",
             "open": 2300.0,
@@ -2068,6 +2055,19 @@
             "bb_middle": 2472.0,
             "bb_lower": 2358.15,
             "sma_50": 2293.91
+          },
+          {
+            "date": "2026-11-13",
+            "open": 2438.6,
+            "high": 2450.3,
+            "low": 2400.2,
+            "close": 2407.5,
+            "volume": 3344738,
+            "is_anomaly": false,
+            "bb_upper": 2565.74,
+            "bb_middle": 2477.13,
+            "bb_lower": 2388.53,
+            "sma_50": 2294.08
           }
         ],
         "time_machine_actual_return_pct": null,
@@ -2075,19 +2075,19 @@
         "regime": {
           "state": 1,
           "label": "HIGH_VOLATILITY",
-          "prob_high_vol": 0.954,
+          "prob_high_vol": 0.949,
           "state_probabilities": {},
           "kelly_scale_factor": 1.15
         },
-        "garch_volatility_forecast_pct": 38.22
+        "garch_volatility_forecast_pct": 38.04
       }
     },
     {
       "node": "news",
       "data": {
         "ticker": "TCS.NS",
-        "aggregate_sentiment_score": 0.01,
-        "ema_smoothed_sentiment": 0.004,
+        "aggregate_sentiment_score": 0.12,
+        "ema_smoothed_sentiment": 0.193,
         "headlines": [
           {
             "title": "Tata Consultancy Services Limited (TCS.NS) stock price, news, quote and history - Yahoo Finance Singapore",
@@ -2095,6 +2095,18 @@
             "score": 0.949,
             "published_at": "Wed, 11 Nov 2026 05:03:39 GMT",
             "net_polarity": -0.009,
+            "heuristic_routing": "FINBERT_DIRECT",
+            "lm_matches": {
+              "pos": [],
+              "neg": []
+            }
+          },
+          {
+            "title": "JioBlackRock Flexi Cap Fund: 13 new stocks added, including Hindustan Zinc & IIFL Finance; 21 exits in October - Livemint",
+            "label": "positive",
+            "score": 0.859,
+            "published_at": "Sat, 14 Nov 2026 18:15:19 GMT",
+            "net_polarity": 0.85,
             "heuristic_routing": "FINBERT_DIRECT",
             "lm_matches": {
               "pos": [],
@@ -2130,14 +2142,16 @@
             }
           },
           {
-            "title": "TCS shares: JM Financial meets management; here's what it says - Business Today",
+            "title": "Anthropic IPO: If you get shares, how will your investment be taxed in India and US? Check TCS, capital gains tax rules - Livemint",
             "label": "neutral",
-            "score": 0.938,
-            "published_at": "Tue, 08 Sep 2026 07:00:00 GMT",
-            "net_polarity": 0.027,
+            "score": 0.939,
+            "published_at": "Fri, 13 Nov 2026 04:57:52 GMT",
+            "net_polarity": 0.006,
             "heuristic_routing": "FINBERT_DIRECT",
             "lm_matches": {
-              "pos": [],
+              "pos": [
+                "gains"
+              ],
               "neg": []
             }
           },
@@ -2176,18 +2190,6 @@
               "pos": [],
               "neg": []
             }
-          },
-          {
-            "title": "Tecsys Inc. (TCS.TO) Stock Price, News, Quote & History - Yahoo! Finance Canada",
-            "label": "neutral",
-            "score": 0.944,
-            "published_at": "Thu, 12 Nov 2026 21:20:11 GMT",
-            "net_polarity": -0.016,
-            "heuristic_routing": "FINBERT_DIRECT",
-            "lm_matches": {
-              "pos": [],
-              "neg": []
-            }
           }
         ],
         "news_available": true,
@@ -2197,7 +2199,7 @@
           "margin_health": 0.0
         },
         "composite_aspect_score": 0.0,
-        "tone_shift_index": 0.12,
+        "tone_shift_index": 0.41,
         "tone_shift_regime": "STABLE",
         "aspect_relevance": {
           "risk_solvency": 0,
@@ -2209,13 +2211,13 @@
     {
       "node": "bull",
       "data": {
-        "bull_thesis": "\u2022 Trend regime is BEARISH with 5-day momentum at 0.26%, supporting an active Half-Kelly capacity allocation of 6.55%.\n\u2022 RSI-14 sits at 40.25 with contained 95% daily VaR of -3.51%, providing an asymmetrical entry window against 38.15% annualized vol.\n\u2022 Aggregate news sentiment reads 0.01 with 0 price/volume anomalies reflecting institutional accumulation."
+        "bull_thesis": "\u2022 Trend regime is BEARISH with 5-day momentum at -3.53%, supporting an active Half-Kelly capacity allocation of 6.58%.\n\u2022 RSI-14 sits at 32.13 with contained 95% daily VaR of -3.51%, providing an asymmetrical entry window against 37.97% annualized vol.\n\u2022 Aggregate news sentiment reads 0.12 with 0 price/volume anomalies reflecting institutional accumulation."
       }
     },
     {
       "node": "bear",
       "data": {
-        "bear_thesis": "\u2022 Tail risk is severe: 95% daily VaR of -3.51% with 38.15% annualized vol exposes any 6.55% allocation to fat-tail liquidation.\n\u2022 14-day RSI sits at 40.25; any momentum stalling will trigger abrupt mean-reversion and trap retail longs chasing 2442.4.\n\u2022 0 price/volume anomalies in 10 sessions combined with headline sentiment (0.01) flag institutional distribution risk."
+        "bear_thesis": "\u2022 Tail risk is severe: 95% daily VaR of -3.51% with 37.97% annualized vol exposes any 6.58% allocation to fat-tail liquidation.\n\u2022 14-day RSI sits at 32.13; any momentum stalling will trigger abrupt mean-reversion and trap retail longs chasing 2407.5.\n\u2022 0 price/volume anomalies in 10 sessions combined with headline sentiment (0.12) flag institutional distribution risk."
       }
     },
     {
@@ -2224,11 +2226,11 @@
         "action": "LONG",
         "verdict": "LONG",
         "raw_confidence": 84,
-        "confidence": 95,
-        "recommended_allocation_pct": 7.53,
-        "stop_loss_pct": 5.54,
-        "kill_switch_reason": "Breakdown below 20-day SMA or ATR trailing stop (5.54%).",
-        "verdict_summary": "Institutional LONG execution approved: Trend structure is constructive (SMA20: BEARISH, Close: 2442.4, RSI: 40.25) with positive news sentiment (0.01). Half-Kelly capacity allocated at 7.53% with stop loss at 5.54%.",
+        "confidence": 96,
+        "recommended_allocation_pct": 7.57,
+        "stop_loss_pct": 5.22,
+        "kill_switch_reason": "Breakdown below 20-day SMA or ATR trailing stop (5.22%).",
+        "verdict_summary": "Institutional LONG execution approved: Trend structure is constructive (SMA20: BEARISH, Close: 2407.5, RSI: 32.13) with positive news sentiment (0.12). Half-Kelly capacity allocated at 7.57% with stop loss at 5.22%.",
         "rolling_accuracy_telemetry": {
           "rolling_hit_rate_pct": 65.0,
           "resolved_count": 0,
@@ -2241,13 +2243,13 @@
         },
         "bayesian_calibration": {
           "raw_ai_confidence": 84,
-          "calibrated_confidence": 95,
-          "posterior_mean_accuracy_pct": 82.5,
-          "credible_lower_bound_pct": 62.8,
-          "credible_upper_bound_pct": 96.1,
+          "calibrated_confidence": 96,
+          "posterior_mean_accuracy_pct": 87.1,
+          "credible_lower_bound_pct": 64.3,
+          "credible_upper_bound_pct": 99.2,
           "bayesian_allocation_multiplier": 1.2,
-          "alpha": 10.23,
-          "beta": 2.17,
+          "alpha": 6.77,
+          "beta": 1.0,
           "sample_updates": 7,
           "forgetting_factor_lambda": 0.85,
           "temperature_scaling": {
@@ -2263,12 +2265,12 @@
             "is_suppressed": false,
             "suppression_reason": null,
             "regime_scale_factor": 1.08,
-            "raw_input_confidence": 88,
-            "gated_confidence": 95,
+            "raw_input_confidence": 90,
+            "gated_confidence": 96,
             "cleared_high_confidence": true,
             "p_trending": 0.789,
-            "p_panic": 0.05,
-            "p_choppy": 0.16
+            "p_panic": 0.051,
+            "p_choppy": 0.159
           }
         },
         "temperature_scaling": {
@@ -2284,12 +2286,12 @@
           "is_suppressed": false,
           "suppression_reason": null,
           "regime_scale_factor": 1.08,
-          "raw_input_confidence": 88,
-          "gated_confidence": 95,
+          "raw_input_confidence": 90,
+          "gated_confidence": 96,
           "cleared_high_confidence": true,
           "p_trending": 0.789,
-          "p_panic": 0.05,
-          "p_choppy": 0.16
+          "p_panic": 0.051,
+          "p_choppy": 0.159
         },
         "top_drivers": {
           "positive": [
@@ -2300,12 +2302,12 @@
             },
             {
               "feature": "sentiment_score",
-              "value": 0.01,
+              "value": 0.12,
               "impact": "+22.1%"
             },
             {
               "feature": "momentum_5d",
-              "value": 0.26,
+              "value": -3.53,
               "impact": "+14.2%"
             }
           ],
@@ -2317,7 +2319,7 @@
             },
             {
               "feature": "volatility",
-              "value": 38.15,
+              "value": 37.97,
               "impact": "-24.5%"
             },
             {
@@ -2337,10 +2339,10 @@
         ],
         "confidence_breakdown": {
           "raw_model_confidence": 84,
-          "bayesian_expected_accuracy_pct": 82.5,
+          "bayesian_expected_accuracy_pct": 87.1,
           "credible_interval_90": [
-            62.8,
-            96.1
+            64.3,
+            99.2
           ],
           "bayesian_allocation_multiplier": 1.2,
           "rolling_accuracy_multiplier": 1.0,
@@ -2352,48 +2354,48 @@
           "is_regime_suppressed": false,
           "forgetting_factor_lambda": 0.85,
           "temperature_scaled_prob": 0.9091,
-          "calibrated_confidence": 95
+          "calibrated_confidence": 96
         },
         "hmm_regime": {
           "active_state": 0,
           "regime_name": "LOW_VOL_TRENDING",
           "probabilities": {
             "P_Trending": 0.789,
-            "P_Panic": 0.05,
-            "P_Choppy": 0.16
+            "P_Panic": 0.051,
+            "P_Choppy": 0.159
           },
-          "regime_vol_annual_pct": 20.54,
+          "regime_vol_annual_pct": 20.6,
           "volatility_multiplier": 0.9,
           "kelly_scale_factor": 1.15,
           "stop_loss_multiplier": 1.0,
           "state_parameters": {
-            "trending_annual_vol": 16.65,
-            "panic_annual_vol": 47.09,
-            "choppy_annual_vol": 31.33
+            "trending_annual_vol": 16.71,
+            "panic_annual_vol": 47.12,
+            "choppy_annual_vol": 31.3
           }
         },
         "temporal_anomaly": {
           "is_temporal_anomaly": false,
-          "temporal_anomaly_score": 0.291,
-          "calibrated_anomaly_confidence": 0.0019,
-          "reconstruction_error": 0.6238,
-          "threshold": 1.427,
-          "iqr": 0.331,
+          "temporal_anomaly_score": 0.253,
+          "calibrated_anomaly_confidence": 0.0015,
+          "reconstruction_error": 0.5918,
+          "threshold": 1.5605,
+          "iqr": 0.3838,
           "feature_breakdown": {
-            "return_1d": 0.3961,
-            "volume_zscore": 0.2561,
-            "parkinson_spread": 0.2751,
-            "rsi_deviation": 0.7049,
-            "macd_ratio": 0.9679
+            "return_1d": 0.5914,
+            "volume_zscore": 0.0219,
+            "parkinson_spread": 0.0398,
+            "rsi_deviation": 1.1673,
+            "macd_ratio": 2.9031
           },
           "recent_10d_temporal_count": 0,
           "temperature_scaling": {
-            "reconstruction_error": 0.6238,
-            "threshold": 1.427,
-            "iqr": 0.331,
-            "normalized_excess_logit": -4.3677,
+            "reconstruction_error": 0.5918,
+            "threshold": 1.5605,
+            "iqr": 0.3838,
+            "normalized_excess_logit": -4.5433,
             "temperature": 0.7,
-            "calibrated_anomaly_probability": 0.0019,
+            "calibrated_anomaly_probability": 0.0015,
             "cleared_high_confidence": false
           }
         },
@@ -2402,7 +2404,7 @@
           "liquidity_cashflow": 0.0,
           "margin_health": 0.0
         },
-        "tone_shift_index": 0.12,
+        "tone_shift_index": 0.41,
         "tone_shift_regime": "STABLE"
       }
     }
@@ -8204,84 +8206,84 @@
       "node": "quant",
       "data": {
         "ticker": "NVDA",
-        "current_price": 162.79,
-        "annualized_volatility": 47.78,
-        "daily_VaR_95_pct": -4.89,
-        "suggested_stop_loss_atr_pct": 21.63,
-        "half_kelly_allocation_pct": 5.23,
-        "half_kelly_cap_pct": 5.23,
+        "current_price": 162.85,
+        "annualized_volatility": 47.69,
+        "daily_VaR_95_pct": -4.87,
+        "suggested_stop_loss_atr_pct": 21.62,
+        "half_kelly_allocation_pct": 5.24,
+        "half_kelly_cap_pct": 5.24,
         "recent_10d_anomalies": 3,
-        "rsi_14": 19.1,
-        "recent_5d_return_pct": -12.78,
+        "rsi_14": 19.12,
+        "recent_5d_return_pct": -12.75,
         "sma20_trend": "BEARISH",
         "close_gt_sma20": false,
         "sma20_val": 198.69,
         "sma50_val": 214.65,
-        "sma20_z_score": -1.81,
-        "bb_upper": 238.45,
+        "sma20_z_score": -1.8,
+        "bb_upper": 238.44,
         "bb_middle": 198.69,
-        "bb_lower": 158.92,
-        "bb_width_pct": 40.02,
-        "garch_vol_forecast_pct": 40.06,
+        "bb_lower": 158.94,
+        "bb_width_pct": 40.01,
+        "garch_vol_forecast_pct": 40.01,
         "volatility_shock_ratio": 1.1,
         "anomaly_telemetry": {
           "is_confirmed_anomaly": true,
           "consensus_votes": 2,
-          "confidence_score": 0.019,
+          "confidence_score": 0.02,
           "timeframe_breakdown": {
             "15d_micro": false,
             "45d_micro": true,
             "120d_micro": true
           },
           "scaled_feature_magnitudes": {
-            "return_1d": -0.43,
+            "return_1d": -0.42,
             "return_5d": -1.25,
-            "volume_zscore": 0.41,
+            "volume_zscore": 0.58,
             "parkinson_spread": 1.86,
-            "rsi_deviation": -0.99
+            "rsi_deviation": -1.0
           }
         },
         "hmm_regime": {
           "active_state": 1,
           "regime_name": "HIGH_VOL_PANIC",
           "probabilities": {
-            "P_Trending": 0.139,
-            "P_Panic": 0.726,
-            "P_Choppy": 0.135
+            "P_Trending": 0.168,
+            "P_Panic": 0.719,
+            "P_Choppy": 0.113
           },
-          "regime_vol_annual_pct": 48.96,
+          "regime_vol_annual_pct": 48.81,
           "volatility_multiplier": 1.8,
           "kelly_scale_factor": 0.5,
           "stop_loss_multiplier": 1.6,
           "state_parameters": {
-            "trending_annual_vol": 32.32,
-            "panic_annual_vol": 55.03,
-            "choppy_annual_vol": 33.52
+            "trending_annual_vol": 32.17,
+            "panic_annual_vol": 55.18,
+            "choppy_annual_vol": 32.92
           }
         },
         "temporal_anomaly": {
-          "is_temporal_anomaly": true,
-          "temporal_anomaly_score": 0.842,
-          "calibrated_anomaly_confidence": 0.948,
-          "reconstruction_error": 1.099,
-          "threshold": 0.8703,
-          "iqr": 0.2025,
+          "is_temporal_anomaly": false,
+          "temporal_anomaly_score": 0.584,
+          "calibrated_anomaly_confidence": 0.2059,
+          "reconstruction_error": 0.7959,
+          "threshold": 0.9088,
+          "iqr": 0.2151,
           "feature_breakdown": {
-            "return_1d": 0.0307,
-            "volume_zscore": 0.1088,
-            "parkinson_spread": 5.0492,
-            "rsi_deviation": 0.1463,
-            "macd_ratio": 1.4505
+            "return_1d": 0.0118,
+            "volume_zscore": 0.0003,
+            "parkinson_spread": 3.1227,
+            "rsi_deviation": 0.1196,
+            "macd_ratio": 0.3934
           },
-          "recent_10d_temporal_count": 4,
+          "recent_10d_temporal_count": 0,
           "temperature_scaling": {
-            "reconstruction_error": 1.099,
-            "threshold": 0.8703,
-            "iqr": 0.2025,
-            "normalized_excess_logit": 2.0327,
+            "reconstruction_error": 0.7959,
+            "threshold": 0.9088,
+            "iqr": 0.2151,
+            "normalized_excess_logit": -0.9447,
             "temperature": 0.7,
-            "calibrated_anomaly_probability": 0.948,
-            "cleared_high_confidence": true
+            "calibrated_anomaly_probability": 0.2059,
+            "cleared_high_confidence": false
           }
         },
         "chart_data": [
@@ -9054,15 +9056,15 @@
           },
           {
             "date": "2026-11-13",
-            "open": 169.89,
+            "open": 169.91,
             "high": 170.0,
             "low": 158.39,
-            "close": 162.79,
-            "volume": 304096129,
+            "close": 162.85,
+            "volume": 363819700,
             "is_anomaly": true,
-            "bb_upper": 238.45,
+            "bb_upper": 238.44,
             "bb_middle": 198.69,
-            "bb_lower": 158.92,
+            "bb_lower": 158.94,
             "sma_50": 214.65
           }
         ],
@@ -9075,7 +9077,7 @@
           "state_probabilities": {},
           "kelly_scale_factor": 0.5
         },
-        "garch_volatility_forecast_pct": 40.06
+        "garch_volatility_forecast_pct": 40.01
       }
     },
     {
@@ -9083,8 +9085,20 @@
       "data": {
         "ticker": "NVDA",
         "aggregate_sentiment_score": -0.24,
-        "ema_smoothed_sentiment": -0.12,
+        "ema_smoothed_sentiment": -0.366,
         "headlines": [
+          {
+            "title": "Nvidia Stock Falls Below $165 After Its CEO Resigns: Is It a Bargain Buy? - Yahoo Finance",
+            "label": "negative",
+            "score": 0.931,
+            "published_at": "Sat, 14 Nov 2026 14:01:02 GMT",
+            "net_polarity": -0.92,
+            "heuristic_routing": "FINBERT_DIRECT",
+            "lm_matches": {
+              "pos": [],
+              "neg": []
+            }
+          },
           {
             "title": "What to Watch in Nvidia Earnings: Leadership, China, Data Center Concerns Take Center Stage - Morningstar",
             "label": "neutral",
@@ -9098,88 +9112,72 @@
             }
           },
           {
-            "title": "How low does Nvidia\u2019s stock need to go before it\u2019s a screaming bargain? - MarketWatch",
+            "title": "Analysis: Nvidia\u2019s leadership crisis tests the chipmaker\u2019s role as the \u2018central bank of AI\u2019 - CNBC",
             "label": "neutral",
-            "score": 0.818,
-            "published_at": "Fri, 13 Nov 2026 17:07:00 GMT",
-            "net_polarity": -0.1,
-            "heuristic_routing": "FINBERT_DIRECT",
-            "lm_matches": {
-              "pos": [],
-              "neg": []
-            }
-          },
-          {
-            "title": "Nvidia director sold nearly $1B in stock weeks before the Jensen Huang scandal broke \u2014 and no trading plan was flagged - Yahoo Finance",
-            "label": "neutral",
-            "score": 0.836,
-            "published_at": "Fri, 13 Nov 2026 16:00:00 GMT",
-            "net_polarity": -0.092,
-            "heuristic_routing": "FINBERT_DIRECT",
-            "lm_matches": {
-              "pos": [],
-              "neg": [
-                "scandal"
-              ]
-            }
-          },
-          {
-            "title": "After Jensen Huang\u2019s exit, what top financial advisors are doing with Nvidia: Exclusive CNBC poll - CNBC",
-            "label": "neutral",
-            "score": 0.937,
-            "published_at": "Fri, 13 Nov 2026 17:01:26 GMT",
-            "net_polarity": -0.009,
-            "heuristic_routing": "FINBERT_DIRECT",
-            "lm_matches": {
-              "pos": [],
-              "neg": []
-            }
-          },
-          {
-            "title": "Nvidia stock slips as investors digest CEO exit, broader chip sector falls - Yahoo Finance",
-            "label": "negative",
-            "score": 0.949,
-            "published_at": "Fri, 13 Nov 2026 15:26:39 GMT",
-            "net_polarity": -0.938,
-            "heuristic_routing": "FINBERT_DIRECT",
-            "lm_matches": {
-              "pos": [],
-              "neg": []
-            }
-          },
-          {
-            "title": "What the Nvidia scandal means for the company's earnings next week - Yahoo Finance",
-            "label": "negative",
-            "score": 0.75,
-            "published_at": "Fri, 13 Nov 2026 15:59:03 GMT",
-            "net_polarity": -0.678,
-            "heuristic_routing": "HEURISTIC_CROSS_VERIFIED",
-            "lm_matches": {
-              "pos": [],
-              "neg": [
-                "scandal"
-              ]
-            }
-          },
-          {
-            "title": "Nvidia's Chris Malachowsky cofounded the company and is seen as a potential successor to Huang - Yahoo Finance",
-            "label": "neutral",
-            "score": 0.927,
-            "published_at": "Fri, 13 Nov 2026 17:27:41 GMT",
-            "net_polarity": 0.031,
-            "heuristic_routing": "FINBERT_DIRECT",
-            "lm_matches": {
-              "pos": [],
-              "neg": []
-            }
-          },
-          {
-            "title": "How Nvidia's stock decline could impact your 401(k) and portfolio - Yahoo Finance",
-            "label": "neutral",
-            "score": 0.641,
-            "published_at": "Fri, 13 Nov 2026 18:19:13 GMT",
-            "net_polarity": -0.182,
+            "score": 0.465,
+            "published_at": "Wed, 11 Nov 2026 18:09:50 GMT",
+            "net_polarity": -0.069,
             "heuristic_routing": "DAMPENED_AMBIGUOUS",
+            "lm_matches": {
+              "pos": [],
+              "neg": []
+            }
+          },
+          {
+            "title": "NVIDIA Corporation (NVDA) stock price, news, quote and history - Yahoo Finance UK",
+            "label": "neutral",
+            "score": 0.949,
+            "published_at": "Fri, 13 Nov 2026 23:16:02 GMT",
+            "net_polarity": -0.003,
+            "heuristic_routing": "FINBERT_DIRECT",
+            "lm_matches": {
+              "pos": [],
+              "neg": []
+            }
+          },
+          {
+            "title": "Should You Buy Nvidia Stock Before Nov. 17? - Yahoo Finance",
+            "label": "neutral",
+            "score": 0.941,
+            "published_at": "Sat, 14 Nov 2026 11:05:02 GMT",
+            "net_polarity": 0.012,
+            "heuristic_routing": "FINBERT_DIRECT",
+            "lm_matches": {
+              "pos": [],
+              "neg": []
+            }
+          },
+          {
+            "title": "Nvidia stock slips as investors digest CEO exit, broader chip sell-off accelerates - Yahoo Finance",
+            "label": "negative",
+            "score": 0.944,
+            "published_at": "Fri, 13 Nov 2026 21:04:14 GMT",
+            "net_polarity": -0.929,
+            "heuristic_routing": "FINBERT_DIRECT",
+            "lm_matches": {
+              "pos": [],
+              "neg": []
+            }
+          },
+          {
+            "title": "Is Nvidia Worth This Much Less Without Jensen Huang? - Yahoo Finance",
+            "label": "neutral",
+            "score": 0.909,
+            "published_at": "Sat, 14 Nov 2026 06:49:00 GMT",
+            "net_polarity": 0.051,
+            "heuristic_routing": "FINBERT_DIRECT",
+            "lm_matches": {
+              "pos": [],
+              "neg": []
+            }
+          },
+          {
+            "title": "'Nothing has changed': Why some Nvidia stock bulls aren't wavering after Jensen Huang ouster - Yahoo Finance",
+            "label": "neutral",
+            "score": 0.781,
+            "published_at": "Fri, 13 Nov 2026 20:45:22 GMT",
+            "net_polarity": -0.113,
+            "heuristic_routing": "FINBERT_DIRECT",
             "lm_matches": {
               "pos": [],
               "neg": []
@@ -9193,7 +9191,7 @@
           "margin_health": 0.0
         },
         "composite_aspect_score": 0.0,
-        "tone_shift_index": 0.69,
+        "tone_shift_index": -0.29,
         "tone_shift_regime": "STABLE",
         "aspect_relevance": {
           "risk_solvency": 0,
@@ -9205,13 +9203,13 @@
     {
       "node": "bull",
       "data": {
-        "bull_thesis": "\u2022 Trend regime is BEARISH with 5-day momentum at -12.78%, supporting an active Half-Kelly capacity allocation of 5.23%.\n\u2022 RSI-14 sits at 19.1 with contained 95% daily VaR of -4.89%, providing an asymmetrical entry window against 47.78% annualized vol.\n\u2022 Aggregate news sentiment reads -0.24 with 3 price/volume anomalies reflecting institutional accumulation."
+        "bull_thesis": "\u2022 Trend regime is BEARISH with 5-day momentum at -12.75%, supporting an active Half-Kelly capacity allocation of 5.24%.\n\u2022 RSI-14 sits at 19.12 with contained 95% daily VaR of -4.87%, providing an asymmetrical entry window against 47.69% annualized vol.\n\u2022 Aggregate news sentiment reads -0.24 with 3 price/volume anomalies reflecting institutional accumulation."
       }
     },
     {
       "node": "bear",
       "data": {
-        "bear_thesis": "\u2022 Tail risk is severe: 95% daily VaR of -4.89% with 47.78% annualized vol exposes any 5.23% allocation to fat-tail liquidation.\n\u2022 14-day RSI sits at 19.1; any momentum stalling will trigger abrupt mean-reversion and trap retail longs chasing 162.79.\n\u2022 3 price/volume anomalies in 10 sessions combined with headline sentiment (-0.24) flag institutional distribution risk."
+        "bear_thesis": "\u2022 Tail risk is severe: 95% daily VaR of -4.87% with 47.69% annualized vol exposes any 5.24% allocation to fat-tail liquidation.\n\u2022 14-day RSI sits at 19.12; any momentum stalling will trigger abrupt mean-reversion and trap retail longs chasing 162.85.\n\u2022 3 price/volume anomalies in 10 sessions combined with headline sentiment (-0.24) flag institutional distribution risk."
       }
     },
     {
@@ -9222,9 +9220,9 @@
         "raw_confidence": 92,
         "confidence": 95,
         "recommended_allocation_pct": 0.0,
-        "stop_loss_pct": 34.61,
-        "kill_switch_reason": "Isolation Forest flagged critical anomaly clustering (3 anomalies >= 3) and severe tail loss (VaR -4.89% < -3.0%).",
-        "verdict_summary": "Trade rejected: Extreme microstructural anomaly clustering (3 anomalies) combined with severe tail loss risk (Daily VaR: -4.89%). Capital preservation mandate triggered.",
+        "stop_loss_pct": 34.59,
+        "kill_switch_reason": "Isolation Forest flagged critical anomaly clustering (3 anomalies >= 3) and severe tail loss (VaR -4.87% < -3.0%).",
+        "verdict_summary": "Trade rejected: Extreme microstructural anomaly clustering (3 anomalies) combined with severe tail loss risk (Daily VaR: -4.87%). Capital preservation mandate triggered.",
         "rolling_accuracy_telemetry": {
           "rolling_hit_rate_pct": 65.0,
           "resolved_count": 0,
@@ -9238,13 +9236,13 @@
         "bayesian_calibration": {
           "raw_ai_confidence": 92,
           "calibrated_confidence": 95,
-          "posterior_mean_accuracy_pct": 83.4,
-          "credible_lower_bound_pct": 64.4,
-          "credible_upper_bound_pct": 96.3,
+          "posterior_mean_accuracy_pct": 87.1,
+          "credible_lower_bound_pct": 64.3,
+          "credible_upper_bound_pct": 99.2,
           "bayesian_allocation_multiplier": 0.5,
-          "alpha": 10.85,
-          "beta": 2.17,
-          "sample_updates": 8,
+          "alpha": 6.77,
+          "beta": 1.0,
+          "sample_updates": 7,
           "forgetting_factor_lambda": 0.85,
           "temperature_scaling": {
             "raw_probability": 0.92,
@@ -9259,12 +9257,12 @@
             "is_suppressed": false,
             "suppression_reason": null,
             "regime_scale_factor": 1.05,
-            "raw_input_confidence": 92,
+            "raw_input_confidence": 93,
             "gated_confidence": 95,
             "cleared_high_confidence": true,
-            "p_trending": 0.139,
-            "p_panic": 0.726,
-            "p_choppy": 0.135
+            "p_trending": 0.168,
+            "p_panic": 0.719,
+            "p_choppy": 0.113
           }
         },
         "temperature_scaling": {
@@ -9280,12 +9278,12 @@
           "is_suppressed": false,
           "suppression_reason": null,
           "regime_scale_factor": 1.05,
-          "raw_input_confidence": 92,
+          "raw_input_confidence": 93,
           "gated_confidence": 95,
           "cleared_high_confidence": true,
-          "p_trending": 0.139,
-          "p_panic": 0.726,
-          "p_choppy": 0.135
+          "p_trending": 0.168,
+          "p_panic": 0.719,
+          "p_choppy": 0.113
         },
         "top_drivers": {
           "positive": [
@@ -9301,19 +9299,19 @@
             },
             {
               "feature": "momentum_5d",
-              "value": -12.78,
+              "value": -12.75,
               "impact": "+14.2%"
             }
           ],
           "negative": [
             {
               "feature": "daily_VaR_95",
-              "value": -4.89,
+              "value": -4.87,
               "impact": "-31.2%"
             },
             {
               "feature": "volatility",
-              "value": 47.78,
+              "value": 47.69,
               "impact": "-24.5%"
             },
             {
@@ -9334,10 +9332,10 @@
         ],
         "confidence_breakdown": {
           "raw_model_confidence": 92,
-          "bayesian_expected_accuracy_pct": 83.4,
+          "bayesian_expected_accuracy_pct": 87.1,
           "credible_interval_90": [
-            64.4,
-            96.3
+            64.3,
+            99.2
           ],
           "bayesian_allocation_multiplier": 0.5,
           "rolling_accuracy_multiplier": 1.0,
@@ -9355,43 +9353,43 @@
           "active_state": 1,
           "regime_name": "HIGH_VOL_PANIC",
           "probabilities": {
-            "P_Trending": 0.139,
-            "P_Panic": 0.726,
-            "P_Choppy": 0.135
+            "P_Trending": 0.168,
+            "P_Panic": 0.719,
+            "P_Choppy": 0.113
           },
-          "regime_vol_annual_pct": 48.96,
+          "regime_vol_annual_pct": 48.81,
           "volatility_multiplier": 1.8,
           "kelly_scale_factor": 0.5,
           "stop_loss_multiplier": 1.6,
           "state_parameters": {
-            "trending_annual_vol": 32.32,
-            "panic_annual_vol": 55.03,
-            "choppy_annual_vol": 33.52
+            "trending_annual_vol": 32.17,
+            "panic_annual_vol": 55.18,
+            "choppy_annual_vol": 32.92
           }
         },
         "temporal_anomaly": {
-          "is_temporal_anomaly": true,
-          "temporal_anomaly_score": 0.842,
-          "calibrated_anomaly_confidence": 0.948,
-          "reconstruction_error": 1.099,
-          "threshold": 0.8703,
-          "iqr": 0.2025,
+          "is_temporal_anomaly": false,
+          "temporal_anomaly_score": 0.584,
+          "calibrated_anomaly_confidence": 0.2059,
+          "reconstruction_error": 0.7959,
+          "threshold": 0.9088,
+          "iqr": 0.2151,
           "feature_breakdown": {
-            "return_1d": 0.0307,
-            "volume_zscore": 0.1088,
-            "parkinson_spread": 5.0492,
-            "rsi_deviation": 0.1463,
-            "macd_ratio": 1.4505
+            "return_1d": 0.0118,
+            "volume_zscore": 0.0003,
+            "parkinson_spread": 3.1227,
+            "rsi_deviation": 0.1196,
+            "macd_ratio": 0.3934
           },
-          "recent_10d_temporal_count": 4,
+          "recent_10d_temporal_count": 0,
           "temperature_scaling": {
-            "reconstruction_error": 1.099,
-            "threshold": 0.8703,
-            "iqr": 0.2025,
-            "normalized_excess_logit": 2.0327,
+            "reconstruction_error": 0.7959,
+            "threshold": 0.9088,
+            "iqr": 0.2151,
+            "normalized_excess_logit": -0.9447,
             "temperature": 0.7,
-            "calibrated_anomaly_probability": 0.948,
-            "cleared_high_confidence": true
+            "calibrated_anomaly_probability": 0.2059,
+            "cleared_high_confidence": false
           }
         },
         "aspect_sentiment": {
@@ -9399,7 +9397,7 @@
           "liquidity_cashflow": 0.0,
           "margin_health": 0.0
         },
-        "tone_shift_index": 0.69,
+        "tone_shift_index": -0.29,
         "tone_shift_regime": "STABLE"
       }
     }
@@ -10615,11 +10613,11 @@
       "data": {
         "ticker": "HDFCBANK.NS",
         "current_price": 804.0,
-        "annualized_volatility": 23.32,
-        "daily_VaR_95_pct": -2.25,
+        "annualized_volatility": 31.77,
+        "daily_VaR_95_pct": -3.27,
         "suggested_stop_loss_atr_pct": 4.43,
-        "half_kelly_allocation_pct": 10.72,
-        "half_kelly_cap_pct": 10.72,
+        "half_kelly_allocation_pct": 7.87,
+        "half_kelly_cap_pct": 7.87,
         "recent_10d_anomalies": 2,
         "rsi_14": 85.41,
         "recent_5d_return_pct": 5.79,
@@ -10632,6 +10630,68 @@
         "bb_middle": 731.13,
         "bb_lower": 637.84,
         "bb_width_pct": 25.52,
+        "garch_vol_forecast_pct": 29.78,
+        "volatility_shock_ratio": 1.35,
+        "anomaly_telemetry": {
+          "is_confirmed_anomaly": false,
+          "consensus_votes": 0,
+          "confidence_score": 0.0,
+          "timeframe_breakdown": {
+            "15d_micro": false,
+            "45d_micro": false,
+            "120d_micro": false
+          },
+          "scaled_feature_magnitudes": {
+            "return_1d": -0.34,
+            "return_5d": 1.16,
+            "volume_zscore": -0.38,
+            "parkinson_spread": -0.19,
+            "rsi_deviation": 1.25
+          }
+        },
+        "hmm_regime": {
+          "active_state": 0,
+          "regime_name": "LOW_VOL_TRENDING",
+          "probabilities": {
+            "P_Trending": 0.371,
+            "P_Panic": 0.368,
+            "P_Choppy": 0.261
+          },
+          "regime_vol_annual_pct": 23.23,
+          "volatility_multiplier": 0.9,
+          "kelly_scale_factor": 1.15,
+          "stop_loss_multiplier": 1.0,
+          "state_parameters": {
+            "trending_annual_vol": 11.88,
+            "panic_annual_vol": 34.92,
+            "choppy_annual_vol": 22.85
+          }
+        },
+        "temporal_anomaly": {
+          "is_temporal_anomaly": true,
+          "temporal_anomaly_score": 0.75,
+          "calibrated_anomaly_confidence": 0.8173,
+          "reconstruction_error": 1.1749,
+          "threshold": 1.0444,
+          "iqr": 0.224,
+          "feature_breakdown": {
+            "return_1d": 0.4883,
+            "volume_zscore": 0.6201,
+            "parkinson_spread": 0.6869,
+            "rsi_deviation": 2.6572,
+            "macd_ratio": 6.4098
+          },
+          "recent_10d_temporal_count": 2,
+          "temperature_scaling": {
+            "reconstruction_error": 1.1749,
+            "threshold": 1.0444,
+            "iqr": 0.224,
+            "normalized_excess_logit": 1.0486,
+            "temperature": 0.7,
+            "calibrated_anomaly_probability": 0.8173,
+            "cleared_high_confidence": true
+          }
+        },
         "chart_data": [
           {
             "date": "2026-08-18",
@@ -10644,7 +10704,7 @@
             "bb_upper": 757.98,
             "bb_middle": 737.84,
             "bb_lower": 717.69,
-            "sma_50": 768.99
+            "sma_50": 770.99
           },
           {
             "date": "2026-08-19",
@@ -10657,7 +10717,7 @@
             "bb_upper": 756.48,
             "bb_middle": 736.18,
             "bb_lower": 715.88,
-            "sma_50": 768.86
+            "sma_50": 770.62
           },
           {
             "date": "2026-08-20",
@@ -10670,7 +10730,7 @@
             "bb_upper": 755.24,
             "bb_middle": 735.07,
             "bb_lower": 714.9,
-            "sma_50": 768.67
+            "sma_50": 770.18
           },
           {
             "date": "2026-08-21",
@@ -10683,7 +10743,7 @@
             "bb_upper": 754.42,
             "bb_middle": 734.28,
             "bb_lower": 714.14,
-            "sma_50": 768.56
+            "sma_50": 769.83
           },
           {
             "date": "2026-08-24",
@@ -10696,7 +10756,7 @@
             "bb_upper": 753.86,
             "bb_middle": 733.75,
             "bb_lower": 713.64,
-            "sma_50": 767.94
+            "sma_50": 768.96
           },
           {
             "date": "2026-08-25",
@@ -10709,7 +10769,7 @@
             "bb_upper": 753.64,
             "bb_middle": 733.36,
             "bb_lower": 713.07,
-            "sma_50": 767.19
+            "sma_50": 767.97
           },
           {
             "date": "2026-08-26",
@@ -10722,7 +10782,7 @@
             "bb_upper": 751.5,
             "bb_middle": 732.31,
             "bb_lower": 713.11,
-            "sma_50": 766.29
+            "sma_50": 766.81
           },
           {
             "date": "2026-08-27",
@@ -10731,11 +10791,11 @@
             "low": 710.0,
             "close": 711.0,
             "volume": 46515020,
-            "is_anomaly": true,
+            "is_anomaly": false,
             "bb_upper": 748.76,
             "bb_middle": 730.16,
             "bb_lower": 711.56,
-            "sma_50": 765.03
+            "sma_50": 765.29
           },
           {
             "date": "2026-08-28",
@@ -10926,7 +10986,7 @@
             "low": 715.25,
             "close": 731.0,
             "volume": 39400710,
-            "is_anomaly": true,
+            "is_anomaly": false,
             "bb_upper": 737.2,
             "bb_middle": 713.35,
             "bb_lower": 689.51,
@@ -11056,7 +11116,7 @@
             "low": 701.25,
             "close": 704.8,
             "volume": 66056690,
-            "is_anomaly": false,
+            "is_anomaly": true,
             "bb_upper": 747.17,
             "bb_middle": 717.65,
             "bb_lower": 688.14,
@@ -11212,7 +11272,7 @@
             "low": 689.1,
             "close": 694.05,
             "volume": 60280576,
-            "is_anomaly": true,
+            "is_anomaly": false,
             "bb_upper": 739.94,
             "bb_middle": 714.51,
             "bb_lower": 689.08,
@@ -11316,7 +11376,7 @@
             "low": 706.05,
             "close": 725.5,
             "volume": 42746644,
-            "is_anomaly": true,
+            "is_anomaly": false,
             "bb_upper": 731.91,
             "bb_middle": 703.0,
             "bb_lower": 674.08,
@@ -11342,7 +11402,7 @@
             "low": 749.1,
             "close": 760.0,
             "volume": 65401905,
-            "is_anomaly": false,
+            "is_anomaly": true,
             "bb_upper": 748.02,
             "bb_middle": 707.12,
             "bb_lower": 666.23,
@@ -11406,7 +11466,7 @@
             "high": 808.8,
             "low": 798.0,
             "close": 804.0,
-            "volume": 23437045,
+            "volume": 23442886,
             "is_anomaly": false,
             "bb_upper": 824.42,
             "bb_middle": 731.13,
@@ -11417,80 +11477,145 @@
         "time_machine_actual_return_pct": null,
         "max_drawdown_5d_pct": null,
         "regime": {
-          "state": 0,
-          "label": "LOW_VOLATILITY",
-          "prob_high_vol": 0.583
+          "state": 1,
+          "label": "HIGH_VOLATILITY",
+          "prob_high_vol": 0.794,
+          "state_probabilities": {},
+          "kelly_scale_factor": 1.15
         },
-        "garch_volatility_forecast_pct": 23.79
+        "garch_volatility_forecast_pct": 29.78
       }
     },
     {
       "node": "news",
       "data": {
         "ticker": "HDFCBANK.NS",
-        "aggregate_sentiment_score": 0.02,
+        "aggregate_sentiment_score": -0.05,
+        "ema_smoothed_sentiment": -0.181,
         "headlines": [
           {
-            "title": "HDFC Bank Limited (HDFCBANK.NS) Stock Price, News, Quote & History - Yahoo! Finance Canada",
+            "title": "HDFC Bank Limited (HDFCBANK.NS) stock price, news, quote and history - Yahoo Finance Singapore",
             "label": "neutral",
-            "score": 0.95,
-            "published_at": "Wed, 11 Nov 2026 10:52:54 GMT"
+            "score": 0.951,
+            "published_at": "Sat, 14 Nov 2026 07:01:35 GMT",
+            "net_polarity": -0.001,
+            "heuristic_routing": "FINBERT_DIRECT",
+            "lm_matches": {
+              "pos": [],
+              "neg": []
+            }
+          },
+          {
+            "title": "HDFC Bank, Bajaj Finance, Reliance Industries: Market cap of top 10 companies shrinks \u20b91.55 lakh crore in one week - Upstox",
+            "label": "negative",
+            "score": 0.962,
+            "published_at": "Sun, 25 Oct 2026 07:00:00 GMT",
+            "net_polarity": -0.946,
+            "heuristic_routing": "FINBERT_DIRECT",
+            "lm_matches": {
+              "pos": [],
+              "neg": []
+            }
           },
           {
             "title": "Stocks to Watch Today, October 5: HDFC Bank, Bajaj Finance, TCS, DLF and 4 IPO Listings - NiftyTrader",
             "label": "neutral",
             "score": 0.934,
-            "published_at": "Mon, 05 Oct 2026 07:00:00 GMT"
+            "published_at": "Mon, 05 Oct 2026 07:00:00 GMT",
+            "net_polarity": 0.037,
+            "heuristic_routing": "FINBERT_DIRECT",
+            "lm_matches": {
+              "pos": [],
+              "neg": []
+            }
+          },
+          {
+            "title": "\u20b985,000 crore gone! PB Fintech to HDFC Bank \u2014 these 5 financial stocks witness highest wealth erosion on IRDAI's move - Livemint",
+            "label": "positive",
+            "score": 0.396,
+            "published_at": "Thu, 24 Sep 2026 07:00:00 GMT",
+            "net_polarity": 0.222,
+            "heuristic_routing": "DAMPENED_AMBIGUOUS",
+            "lm_matches": {
+              "pos": [],
+              "neg": []
+            }
           },
           {
             "title": "Stocks to watch, March 19: Manappuram Finance, HDFC Bank, Nazara Tech, HPCL, BPCL, Asian Paints, GR Infra, Mazagon Dock - Upstox",
             "label": "neutral",
             "score": 0.91,
-            "published_at": "Wed, 18 Mar 2026 07:00:00 GMT"
+            "published_at": "Wed, 18 Mar 2026 07:00:00 GMT",
+            "net_polarity": 0.068,
+            "heuristic_routing": "FINBERT_DIRECT",
+            "lm_matches": {
+              "pos": [],
+              "neg": []
+            }
           },
           {
-            "title": "HDFC Bank Limited (HDB) Stock Price, News, Quote & History - Yahoo! Finance Canada",
+            "title": "5 Stocks Near 52-Week Lows: What the Numbers Say (HDFC Bank, Tata Power, Muthoot Finance) - Equitymaster",
             "label": "neutral",
-            "score": 0.949,
-            "published_at": "Wed, 11 Nov 2026 05:59:32 GMT"
+            "score": 0.592,
+            "published_at": "Wed, 04 Nov 2026 08:00:00 GMT",
+            "net_polarity": -0.204,
+            "heuristic_routing": "DAMPENED_AMBIGUOUS",
+            "lm_matches": {
+              "pos": [],
+              "neg": []
+            }
           },
           {
-            "title": "India's HDFC Bank beats Q3 profit forecast, plans listing consumer finance unit - Reuters",
-            "label": "neutral",
-            "score": 0.857,
-            "published_at": "Tue, 16 Jan 2024 08:00:00 GMT"
+            "title": "BYD India ties up with HDFC Bank for dealer finance - The Hindu",
+            "label": "positive",
+            "score": 0.521,
+            "published_at": "Wed, 10 Aug 2022 07:00:00 GMT",
+            "net_polarity": 0.428,
+            "heuristic_routing": "DAMPENED_AMBIGUOUS",
+            "lm_matches": {
+              "pos": [],
+              "neg": []
+            }
           },
           {
             "title": "Bajaj Finance, HDFC Bank, YES Bank, Bandhan Bank: What Q3 updates of private sector entities in BFSI space show - Upstox",
             "label": "neutral",
             "score": 0.943,
-            "published_at": "Sun, 04 Jan 2026 08:00:00 GMT"
-          },
-          {
-            "title": "India\u2019s largest private lender HDFC Bank sees shares rise after CEO announces surprise exit - CNBC",
-            "label": "neutral",
-            "score": 0.483,
-            "published_at": "Mon, 31 Aug 2026 07:00:00 GMT"
-          },
-          {
-            "title": "5 Stocks Near 52-Week Lows: What the Numbers Say (HDFC Bank, Tata Power, Muthoot Finance) - Equitymaster",
-            "label": "neutral",
-            "score": 0.657,
-            "published_at": "Wed, 04 Nov 2026 08:00:00 GMT"
+            "published_at": "Sun, 04 Jan 2026 08:00:00 GMT",
+            "net_polarity": 0.016,
+            "heuristic_routing": "FINBERT_DIRECT",
+            "lm_matches": {
+              "pos": [],
+              "neg": []
+            }
           }
-        ]
+        ],
+        "news_available": true,
+        "aspect_sentiment": {
+          "risk_solvency": 0.0,
+          "liquidity_cashflow": 0.0,
+          "margin_health": 0.0
+        },
+        "composite_aspect_score": 0.0,
+        "tone_shift_index": -1.57,
+        "tone_shift_regime": "SHARP_DETERIORATION",
+        "aspect_relevance": {
+          "risk_solvency": 0,
+          "liquidity_cashflow": 0,
+          "margin_health": 0
+        }
       }
     },
     {
       "node": "bull",
       "data": {
-        "bull_thesis": "\u2022 Trend regime is BULLISH with 5-day momentum at 5.79%, supporting an active Half-Kelly capacity allocation of 10.72%.\n\u2022 RSI-14 sits at 85.41 with contained 95% daily VaR of -2.25%, providing an asymmetrical entry window against 23.32% annualized vol.\n\u2022 Aggregate news sentiment reads 0.02 with 2 price/volume anomalies reflecting institutional accumulation."
+        "bull_thesis": "\u2022 Trend regime is BULLISH with 5-day momentum at 5.79%, supporting an active Half-Kelly capacity allocation of 7.87%.\n\u2022 RSI-14 sits at 85.41 with contained 95% daily VaR of -3.27%, providing an asymmetrical entry window against 31.77% annualized vol.\n\u2022 Aggregate news sentiment reads -0.05 with 2 price/volume anomalies reflecting institutional accumulation."
       }
     },
     {
       "node": "bear",
       "data": {
-        "bear_thesis": "\u2022 Tail risk is severe: 95% daily VaR of -2.25% with 23.32% annualized vol exposes any 10.72% allocation to fat-tail liquidation.\n\u2022 14-day RSI sits at 85.41; any momentum stalling will trigger abrupt mean-reversion and trap retail longs chasing 804.0.\n\u2022 2 price/volume anomalies in 10 sessions combined with headline sentiment (0.02) flag institutional distribution risk."
+        "bear_thesis": "\u2022 Tail risk is severe: 95% daily VaR of -3.27% with 31.77% annualized vol exposes any 7.87% allocation to fat-tail liquidation.\n\u2022 14-day RSI sits at 85.41; any momentum stalling will trigger abrupt mean-reversion and trap retail longs chasing 804.0.\n\u2022 2 price/volume anomalies in 10 sessions combined with headline sentiment (-0.05) flag institutional distribution risk."
       }
     },
     {
@@ -11498,11 +11623,74 @@
       "data": {
         "action": "SHORT",
         "verdict": "SHORT",
-        "confidence": 88,
-        "recommended_allocation_pct": 10.72,
+        "raw_confidence": 88,
+        "confidence": 94,
+        "recommended_allocation_pct": 9.05,
         "stop_loss_pct": 4.43,
-        "kill_switch_reason": "Continuation of parabolic squeeze above 2x ATR trailing stop (4.43%).",
-        "verdict_summary": "Parabolic overbought exhaustion detected (14-day RSI: 85.41 >= 75, 5-day Return: 5.79%). Mean reversion to historical trend lines expected; tactical SHORT sizing approved at 10.72% with ATR stop at 4.43%.",
+        "kill_switch_reason": "Continuation of parabolic squeeze above 2x ATR trailing stop (4.43%). [LSTM Autoencoder Alert: Sequential anomaly flagged with reconstruction error 1.175]",
+        "verdict_summary": "Parabolic overbought exhaustion detected (14-day RSI: 85.41 >= 75, 5-day Return: 5.79%). Mean reversion to historical trend lines expected; tactical SHORT sizing approved at 9.05% with ATR stop at 4.43%.",
+        "rolling_accuracy_telemetry": {
+          "rolling_hit_rate_pct": 65.0,
+          "resolved_count": 0,
+          "confidence_multiplier": 1.0,
+          "allocation_multiplier": 1.0,
+          "status": "CALIBRATION_NEUTRAL (Insufficient sample)",
+          "recent_history": [],
+          "raw_confidence": 88,
+          "calibrated_confidence": 88
+        },
+        "bayesian_calibration": {
+          "raw_ai_confidence": 88,
+          "calibrated_confidence": 94,
+          "posterior_mean_accuracy_pct": 87.1,
+          "credible_lower_bound_pct": 64.3,
+          "credible_upper_bound_pct": 99.2,
+          "bayesian_allocation_multiplier": 1.2,
+          "alpha": 6.77,
+          "beta": 1.0,
+          "sample_updates": 7,
+          "forgetting_factor_lambda": 0.85,
+          "temperature_scaling": {
+            "raw_probability": 0.88,
+            "temperature": 0.72,
+            "raw_logit": 1.9924,
+            "scaled_logit": 2.7673,
+            "temperature_scaled_probability": 0.9409
+          },
+          "regime_gating": {
+            "regime_name": "LOW_VOL_TRENDING",
+            "regime_status": "CLEAN_TRENDING_PROMOTED",
+            "is_suppressed": false,
+            "suppression_reason": null,
+            "regime_scale_factor": 1.02,
+            "raw_input_confidence": 92,
+            "gated_confidence": 94,
+            "cleared_high_confidence": true,
+            "p_trending": 0.371,
+            "p_panic": 0.368,
+            "p_choppy": 0.261
+          }
+        },
+        "temperature_scaling": {
+          "raw_probability": 0.88,
+          "temperature": 0.72,
+          "raw_logit": 1.9924,
+          "scaled_logit": 2.7673,
+          "temperature_scaled_probability": 0.9409
+        },
+        "regime_gating": {
+          "regime_name": "LOW_VOL_TRENDING",
+          "regime_status": "CLEAN_TRENDING_PROMOTED",
+          "is_suppressed": false,
+          "suppression_reason": null,
+          "regime_scale_factor": 1.02,
+          "raw_input_confidence": 92,
+          "gated_confidence": 94,
+          "cleared_high_confidence": true,
+          "p_trending": 0.371,
+          "p_panic": 0.368,
+          "p_choppy": 0.261
+        },
         "top_drivers": {
           "positive": [
             {
@@ -11512,7 +11700,7 @@
             },
             {
               "feature": "sentiment_score",
-              "value": 0.02,
+              "value": -0.05,
               "impact": "+22.1%"
             },
             {
@@ -11524,12 +11712,12 @@
           "negative": [
             {
               "feature": "daily_VaR_95",
-              "value": -2.25,
+              "value": -3.27,
               "impact": "-31.2%"
             },
             {
               "feature": "volatility",
-              "value": 23.32,
+              "value": 31.77,
               "impact": "-24.5%"
             },
             {
@@ -11549,11 +11737,73 @@
         ],
         "confidence_breakdown": {
           "raw_model_confidence": 88,
+          "bayesian_expected_accuracy_pct": 87.1,
+          "credible_interval_90": [
+            64.3,
+            99.2
+          ],
+          "bayesian_allocation_multiplier": 1.2,
+          "rolling_accuracy_multiplier": 1.0,
+          "rolling_hit_rate_pct": 65.0,
           "agreement_penalty": 0.0,
           "anomaly_penalty": 7.0,
-          "regime_penalty": 0.0,
-          "calibrated_confidence": 88
-        }
+          "regime_penalty": 5.0,
+          "regime_scale_factor": 1.02,
+          "is_regime_suppressed": false,
+          "forgetting_factor_lambda": 0.85,
+          "temperature_scaled_prob": 0.9409,
+          "calibrated_confidence": 94
+        },
+        "hmm_regime": {
+          "active_state": 0,
+          "regime_name": "LOW_VOL_TRENDING",
+          "probabilities": {
+            "P_Trending": 0.371,
+            "P_Panic": 0.368,
+            "P_Choppy": 0.261
+          },
+          "regime_vol_annual_pct": 23.23,
+          "volatility_multiplier": 0.9,
+          "kelly_scale_factor": 1.15,
+          "stop_loss_multiplier": 1.0,
+          "state_parameters": {
+            "trending_annual_vol": 11.88,
+            "panic_annual_vol": 34.92,
+            "choppy_annual_vol": 22.85
+          }
+        },
+        "temporal_anomaly": {
+          "is_temporal_anomaly": true,
+          "temporal_anomaly_score": 0.75,
+          "calibrated_anomaly_confidence": 0.8173,
+          "reconstruction_error": 1.1749,
+          "threshold": 1.0444,
+          "iqr": 0.224,
+          "feature_breakdown": {
+            "return_1d": 0.4883,
+            "volume_zscore": 0.6201,
+            "parkinson_spread": 0.6869,
+            "rsi_deviation": 2.6572,
+            "macd_ratio": 6.4098
+          },
+          "recent_10d_temporal_count": 2,
+          "temperature_scaling": {
+            "reconstruction_error": 1.1749,
+            "threshold": 1.0444,
+            "iqr": 0.224,
+            "normalized_excess_logit": 1.0486,
+            "temperature": 0.7,
+            "calibrated_anomaly_probability": 0.8173,
+            "cleared_high_confidence": true
+          }
+        },
+        "aspect_sentiment": {
+          "risk_solvency": 0.0,
+          "liquidity_cashflow": 0.0,
+          "margin_health": 0.0
+        },
+        "tone_shift_index": -1.57,
+        "tone_shift_regime": "SHARP_DETERIORATION"
       }
     }
   ],
@@ -23396,6 +23646,1210 @@
         },
         "tone_shift_index": 0.37,
         "tone_shift_regime": "STABLE"
+      }
+    }
+  ],
+  "TSLA_": [
+    {
+      "node": "quant",
+      "data": {
+        "ticker": "TSLA",
+        "current_price": 390.22,
+        "annualized_volatility": 49.76,
+        "daily_VaR_95_pct": -5.08,
+        "suggested_stop_loss_atr_pct": 9.31,
+        "half_kelly_allocation_pct": 4.5,
+        "half_kelly_cap_pct": 4.5,
+        "recent_10d_anomalies": 1,
+        "rsi_14": 49.53,
+        "recent_5d_return_pct": 8.93,
+        "sma20_trend": "BULLISH",
+        "close_gt_sma20": true,
+        "sma20_val": 385.36,
+        "sma50_val": 374.74,
+        "sma20_z_score": 0.29,
+        "bb_upper": 419.11,
+        "bb_middle": 385.36,
+        "bb_lower": 351.61,
+        "bb_width_pct": 17.52,
+        "garch_vol_forecast_pct": 49.87,
+        "volatility_shock_ratio": 1.04,
+        "anomaly_telemetry": {
+          "is_confirmed_anomaly": false,
+          "consensus_votes": 0,
+          "confidence_score": 0.0,
+          "timeframe_breakdown": {
+            "15d_micro": false,
+            "45d_micro": false,
+            "120d_micro": false
+          },
+          "scaled_feature_magnitudes": {
+            "return_1d": -0.32,
+            "return_5d": 0.78,
+            "volume_zscore": -0.1,
+            "parkinson_spread": 0.58,
+            "rsi_deviation": -0.02
+          }
+        },
+        "hmm_regime": {
+          "active_state": 0,
+          "regime_name": "LOW_VOL_TRENDING",
+          "probabilities": {
+            "P_Trending": 0.424,
+            "P_Panic": 0.265,
+            "P_Choppy": 0.311
+          },
+          "regime_vol_annual_pct": 45.26,
+          "volatility_multiplier": 0.9,
+          "kelly_scale_factor": 1.15,
+          "stop_loss_multiplier": 1.0,
+          "state_parameters": {
+            "trending_annual_vol": 33.08,
+            "panic_annual_vol": 72.16,
+            "choppy_annual_vol": 38.96
+          }
+        },
+        "temporal_anomaly": {
+          "is_temporal_anomaly": false,
+          "temporal_anomaly_score": 0.401,
+          "calibrated_anomaly_confidence": 0.0154,
+          "reconstruction_error": 0.6655,
+          "threshold": 1.1061,
+          "iqr": 0.2725,
+          "feature_breakdown": {
+            "return_1d": 0.2942,
+            "volume_zscore": 0.0448,
+            "parkinson_spread": 0.8219,
+            "rsi_deviation": 0.0404,
+            "macd_ratio": 0.0423
+          },
+          "recent_10d_temporal_count": 0,
+          "temperature_scaling": {
+            "reconstruction_error": 0.6655,
+            "threshold": 1.1061,
+            "iqr": 0.2725,
+            "normalized_excess_logit": -2.9103,
+            "temperature": 0.7,
+            "calibrated_anomaly_probability": 0.0154,
+            "cleared_high_confidence": false
+          }
+        },
+        "chart_data": [
+          {
+            "date": "2026-08-21",
+            "open": 349.88,
+            "high": 366.5,
+            "low": 346.9,
+            "close": 362.86,
+            "volume": 59224000,
+            "is_anomaly": false,
+            "bb_upper": 360.85,
+            "bb_middle": 328.14,
+            "bb_lower": 295.43,
+            "sma_50": 365.86
+          },
+          {
+            "date": "2026-08-24",
+            "open": 361.41,
+            "high": 363.24,
+            "low": 348.26,
+            "close": 348.95,
+            "volume": 39190500,
+            "is_anomaly": false,
+            "bb_upper": 362.82,
+            "bb_middle": 330.13,
+            "bb_lower": 297.43,
+            "sma_50": 364.85
+          },
+          {
+            "date": "2026-08-25",
+            "open": 349.58,
+            "high": 357.0,
+            "low": 349.2,
+            "close": 350.25,
+            "volume": 29816700,
+            "is_anomaly": false,
+            "bb_upper": 364.31,
+            "bb_middle": 332.27,
+            "bb_lower": 300.23,
+            "sma_50": 363.73
+          },
+          {
+            "date": "2026-08-26",
+            "open": 345.27,
+            "high": 351.93,
+            "low": 342.53,
+            "close": 345.82,
+            "volume": 28573000,
+            "is_anomaly": false,
+            "bb_upper": 362.91,
+            "bb_middle": 334.64,
+            "bb_lower": 306.38,
+            "sma_50": 362.42
+          },
+          {
+            "date": "2026-08-27",
+            "open": 346.16,
+            "high": 355.74,
+            "low": 345.45,
+            "close": 354.81,
+            "volume": 30136200,
+            "is_anomaly": false,
+            "bb_upper": 363.81,
+            "bb_middle": 336.94,
+            "bb_lower": 310.07,
+            "sma_50": 361.43
+          },
+          {
+            "date": "2026-08-28",
+            "open": 357.1,
+            "high": 358.8,
+            "low": 345.2,
+            "close": 348.75,
+            "volume": 32972200,
+            "is_anomaly": false,
+            "bb_upper": 363.26,
+            "bb_middle": 338.82,
+            "bb_lower": 314.38,
+            "sma_50": 360.47
+          },
+          {
+            "date": "2026-08-31",
+            "open": 347.21,
+            "high": 368.92,
+            "low": 347.15,
+            "close": 367.95,
+            "volume": 61732300,
+            "is_anomaly": false,
+            "bb_upper": 367.47,
+            "bb_middle": 341.11,
+            "bb_lower": 314.75,
+            "sma_50": 359.82
+          },
+          {
+            "date": "2026-09-01",
+            "open": 360.9,
+            "high": 362.7,
+            "low": 352.96,
+            "close": 356.09,
+            "volume": 36193900,
+            "is_anomaly": false,
+            "bb_upper": 368.88,
+            "bb_middle": 342.55,
+            "bb_lower": 316.22,
+            "sma_50": 358.84
+          },
+          {
+            "date": "2026-09-02",
+            "open": 360.41,
+            "high": 360.62,
+            "low": 349.92,
+            "close": 357.01,
+            "volume": 33951900,
+            "is_anomaly": false,
+            "bb_upper": 369.45,
+            "bb_middle": 344.32,
+            "bb_lower": 319.2,
+            "sma_50": 358.35
+          },
+          {
+            "date": "2026-09-03",
+            "open": 365.82,
+            "high": 384.04,
+            "low": 365.82,
+            "close": 376.37,
+            "volume": 63601000,
+            "is_anomaly": false,
+            "bb_upper": 373.32,
+            "bb_middle": 347.16,
+            "bb_lower": 321.01,
+            "sma_50": 358.37
+          },
+          {
+            "date": "2026-09-04",
+            "open": 362.07,
+            "high": 364.69,
+            "low": 351.32,
+            "close": 354.08,
+            "volume": 65018200,
+            "is_anomaly": false,
+            "bb_upper": 373.23,
+            "bb_middle": 348.44,
+            "bb_lower": 323.65,
+            "sma_50": 357.95
+          },
+          {
+            "date": "2026-09-08",
+            "open": 357.1,
+            "high": 370.0,
+            "low": 355.75,
+            "close": 368.16,
+            "volume": 51078800,
+            "is_anomaly": false,
+            "bb_upper": 375.14,
+            "bb_middle": 350.3,
+            "bb_lower": 325.46,
+            "sma_50": 357.72
+          },
+          {
+            "date": "2026-09-09",
+            "open": 368.25,
+            "high": 375.44,
+            "low": 366.0,
+            "close": 367.81,
+            "volume": 32564300,
+            "is_anomaly": false,
+            "bb_upper": 376.63,
+            "bb_middle": 352.05,
+            "bb_lower": 327.47,
+            "sma_50": 356.84
+          },
+          {
+            "date": "2026-09-10",
+            "open": 360.6,
+            "high": 369.21,
+            "low": 357.68,
+            "close": 363.56,
+            "volume": 29667200,
+            "is_anomaly": false,
+            "bb_upper": 376.03,
+            "bb_middle": 353.86,
+            "bb_lower": 331.68,
+            "sma_50": 355.7
+          },
+          {
+            "date": "2026-09-11",
+            "open": 364.2,
+            "high": 368.66,
+            "low": 361.6,
+            "close": 365.44,
+            "volume": 30153000,
+            "is_anomaly": false,
+            "bb_upper": 376.86,
+            "bb_middle": 355.13,
+            "bb_lower": 333.4,
+            "sma_50": 354.5
+          },
+          {
+            "date": "2026-09-14",
+            "open": 359.78,
+            "high": 367.73,
+            "low": 357.04,
+            "close": 358.97,
+            "volume": 32477200,
+            "is_anomaly": false,
+            "bb_upper": 376.89,
+            "bb_middle": 355.96,
+            "bb_lower": 335.04,
+            "sma_50": 353.81
+          },
+          {
+            "date": "2026-09-15",
+            "open": 358.75,
+            "high": 362.39,
+            "low": 354.05,
+            "close": 356.58,
+            "volume": 30317700,
+            "is_anomaly": false,
+            "bb_upper": 376.22,
+            "bb_middle": 356.83,
+            "bb_lower": 337.43,
+            "sma_50": 352.54
+          },
+          {
+            "date": "2026-09-16",
+            "open": 357.93,
+            "high": 365.1,
+            "low": 354.89,
+            "close": 358.08,
+            "volume": 32177400,
+            "is_anomaly": false,
+            "bb_upper": 374.86,
+            "bb_middle": 357.89,
+            "bb_lower": 340.92,
+            "sma_50": 351.65
+          },
+          {
+            "date": "2026-09-17",
+            "open": 367.48,
+            "high": 374.12,
+            "low": 363.22,
+            "close": 366.2,
+            "volume": 38924100,
+            "is_anomaly": false,
+            "bb_upper": 375.68,
+            "bb_middle": 358.64,
+            "bb_lower": 341.6,
+            "sma_50": 351.09
+          },
+          {
+            "date": "2026-09-18",
+            "open": 369.0,
+            "high": 370.9,
+            "low": 360.75,
+            "close": 364.27,
+            "volume": 51922300,
+            "is_anomaly": false,
+            "bb_upper": 375.56,
+            "bb_middle": 359.6,
+            "bb_lower": 343.64,
+            "sma_50": 350.25
+          },
+          {
+            "date": "2026-09-21",
+            "open": 371.64,
+            "high": 378.36,
+            "low": 371.07,
+            "close": 375.3,
+            "volume": 36599600,
+            "is_anomaly": false,
+            "bb_upper": 377.62,
+            "bb_middle": 360.22,
+            "bb_lower": 342.82,
+            "sma_50": 349.6
+          },
+          {
+            "date": "2026-09-22",
+            "open": 379.07,
+            "high": 380.42,
+            "low": 372.88,
+            "close": 378.9,
+            "volume": 28229900,
+            "is_anomaly": false,
+            "bb_upper": 380.16,
+            "bb_middle": 361.72,
+            "bb_lower": 343.28,
+            "sma_50": 349.28
+          },
+          {
+            "date": "2026-09-23",
+            "open": 380.1,
+            "high": 386.7,
+            "low": 377.58,
+            "close": 380.12,
+            "volume": 33522500,
+            "is_anomaly": false,
+            "bb_upper": 382.56,
+            "bb_middle": 363.21,
+            "bb_lower": 343.87,
+            "sma_50": 348.96
+          },
+          {
+            "date": "2026-09-24",
+            "open": 377.35,
+            "high": 383.33,
+            "low": 375.7,
+            "close": 377.94,
+            "volume": 26165700,
+            "is_anomaly": false,
+            "bb_upper": 383.4,
+            "bb_middle": 364.82,
+            "bb_lower": 346.24,
+            "sma_50": 348.63
+          },
+          {
+            "date": "2026-09-25",
+            "open": 384.62,
+            "high": 386.83,
+            "low": 367.67,
+            "close": 372.11,
+            "volume": 45999500,
+            "is_anomaly": false,
+            "bb_upper": 383.91,
+            "bb_middle": 365.68,
+            "bb_lower": 347.46,
+            "sma_50": 348.25
+          },
+          {
+            "date": "2026-09-28",
+            "open": 368.06,
+            "high": 369.43,
+            "low": 356.8,
+            "close": 357.45,
+            "volume": 39452900,
+            "is_anomaly": false,
+            "bb_upper": 383.01,
+            "bb_middle": 366.12,
+            "bb_lower": 349.23,
+            "sma_50": 347.78
+          },
+          {
+            "date": "2026-09-29",
+            "open": 358.4,
+            "high": 358.74,
+            "low": 351.67,
+            "close": 352.84,
+            "volume": 32492400,
+            "is_anomaly": false,
+            "bb_upper": 383.24,
+            "bb_middle": 365.36,
+            "bb_lower": 347.49,
+            "sma_50": 347.45
+          },
+          {
+            "date": "2026-09-30",
+            "open": 352.11,
+            "high": 355.22,
+            "low": 345.88,
+            "close": 354.81,
+            "volume": 39235800,
+            "is_anomaly": false,
+            "bb_upper": 383.32,
+            "bb_middle": 365.3,
+            "bb_lower": 347.28,
+            "sma_50": 346.96
+          },
+          {
+            "date": "2026-10-01",
+            "open": 356.81,
+            "high": 359.79,
+            "low": 353.8,
+            "close": 354.11,
+            "volume": 31080800,
+            "is_anomaly": false,
+            "bb_upper": 383.5,
+            "bb_middle": 365.15,
+            "bb_lower": 346.81,
+            "sma_50": 346.57
+          },
+          {
+            "date": "2026-10-02",
+            "open": 360.08,
+            "high": 374.6,
+            "low": 359.41,
+            "close": 370.59,
+            "volume": 55330100,
+            "is_anomaly": false,
+            "bb_upper": 382.64,
+            "bb_middle": 364.87,
+            "bb_lower": 347.09,
+            "sma_50": 347.58
+          },
+          {
+            "date": "2026-10-05",
+            "open": 369.0,
+            "high": 381.59,
+            "low": 364.91,
+            "close": 378.73,
+            "volume": 42232700,
+            "is_anomaly": false,
+            "bb_upper": 384.14,
+            "bb_middle": 366.1,
+            "bb_lower": 348.06,
+            "sma_50": 348.9
+          },
+          {
+            "date": "2026-10-06",
+            "open": 381.98,
+            "high": 383.33,
+            "low": 378.52,
+            "close": 380.68,
+            "volume": 27735400,
+            "is_anomaly": false,
+            "bb_upper": 385.9,
+            "bb_middle": 366.72,
+            "bb_lower": 347.55,
+            "sma_50": 350.33
+          },
+          {
+            "date": "2026-10-07",
+            "open": 378.45,
+            "high": 382.35,
+            "low": 374.43,
+            "close": 377.81,
+            "volume": 25594600,
+            "is_anomaly": false,
+            "bb_upper": 387.03,
+            "bb_middle": 367.22,
+            "bb_lower": 347.42,
+            "sma_50": 351.73
+          },
+          {
+            "date": "2026-10-08",
+            "open": 374.12,
+            "high": 375.96,
+            "low": 368.03,
+            "close": 375.0,
+            "volume": 28394900,
+            "is_anomaly": false,
+            "bb_upper": 387.82,
+            "bb_middle": 367.8,
+            "bb_lower": 347.78,
+            "sma_50": 353.27
+          },
+          {
+            "date": "2026-10-09",
+            "open": 382.38,
+            "high": 388.56,
+            "low": 379.71,
+            "close": 382.7,
+            "volume": 38952400,
+            "is_anomaly": false,
+            "bb_upper": 389.71,
+            "bb_middle": 368.66,
+            "bb_lower": 347.61,
+            "sma_50": 354.74
+          },
+          {
+            "date": "2026-10-12",
+            "open": 382.61,
+            "high": 382.7,
+            "low": 377.58,
+            "close": 378.03,
+            "volume": 20244300,
+            "is_anomaly": false,
+            "bb_upper": 390.54,
+            "bb_middle": 369.61,
+            "bb_lower": 348.68,
+            "sma_50": 356.08
+          },
+          {
+            "date": "2026-10-13",
+            "open": 372.33,
+            "high": 377.05,
+            "low": 371.3,
+            "close": 375.23,
+            "volume": 18393000,
+            "is_anomaly": false,
+            "bb_upper": 390.68,
+            "bb_middle": 370.54,
+            "bb_lower": 350.41,
+            "sma_50": 357.14
+          },
+          {
+            "date": "2026-10-14",
+            "open": 371.16,
+            "high": 371.39,
+            "low": 363.82,
+            "close": 367.16,
+            "volume": 31001400,
+            "is_anomaly": false,
+            "bb_upper": 390.34,
+            "bb_middle": 371.0,
+            "bb_lower": 351.65,
+            "sma_50": 357.94
+          },
+          {
+            "date": "2026-10-15",
+            "open": 360.57,
+            "high": 363.75,
+            "low": 355.23,
+            "close": 362.44,
+            "volume": 26728300,
+            "is_anomaly": false,
+            "bb_upper": 390.42,
+            "bb_middle": 370.81,
+            "bb_lower": 351.2,
+            "sma_50": 358.76
+          },
+          {
+            "date": "2026-10-16",
+            "open": 369.15,
+            "high": 370.5,
+            "low": 349.33,
+            "close": 354.72,
+            "volume": 62067300,
+            "is_anomaly": false,
+            "bb_upper": 391.05,
+            "bb_middle": 370.33,
+            "bb_lower": 349.62,
+            "sma_50": 359.46
+          },
+          {
+            "date": "2026-10-19",
+            "open": 357.5,
+            "high": 369.58,
+            "low": 354.47,
+            "close": 368.06,
+            "volume": 38817900,
+            "is_anomaly": false,
+            "bb_upper": 390.58,
+            "bb_middle": 369.97,
+            "bb_lower": 349.37,
+            "sma_50": 360.25
+          },
+          {
+            "date": "2026-10-20",
+            "open": 370.28,
+            "high": 377.59,
+            "low": 363.64,
+            "close": 373.71,
+            "volume": 32123300,
+            "is_anomaly": false,
+            "bb_upper": 389.97,
+            "bb_middle": 369.71,
+            "bb_lower": 349.45,
+            "sma_50": 361.11
+          },
+          {
+            "date": "2026-10-21",
+            "open": 381.43,
+            "high": 388.84,
+            "low": 380.51,
+            "close": 386.47,
+            "volume": 48875800,
+            "is_anomaly": false,
+            "bb_upper": 391.16,
+            "bb_middle": 370.03,
+            "bb_lower": 348.9,
+            "sma_50": 362.18
+          },
+          {
+            "date": "2026-10-22",
+            "open": 374.29,
+            "high": 388.86,
+            "low": 373.71,
+            "close": 374.58,
+            "volume": 51610900,
+            "is_anomaly": false,
+            "bb_upper": 390.77,
+            "bb_middle": 369.86,
+            "bb_lower": 348.95,
+            "sma_50": 363.12
+          },
+          {
+            "date": "2026-10-23",
+            "open": 373.2,
+            "high": 377.32,
+            "low": 365.27,
+            "close": 372.22,
+            "volume": 34763000,
+            "is_anomaly": false,
+            "bb_upper": 390.78,
+            "bb_middle": 369.87,
+            "bb_lower": 348.95,
+            "sma_50": 363.77
+          },
+          {
+            "date": "2026-10-26",
+            "open": 383.83,
+            "high": 397.27,
+            "low": 383.73,
+            "close": 391.62,
+            "volume": 53090200,
+            "is_anomaly": false,
+            "bb_upper": 393.76,
+            "bb_middle": 371.58,
+            "bb_lower": 349.39,
+            "sma_50": 364.76
+          },
+          {
+            "date": "2026-10-27",
+            "open": 397.76,
+            "high": 408.45,
+            "low": 395.25,
+            "close": 407.46,
+            "volume": 45333200,
+            "is_anomaly": false,
+            "bb_upper": 399.96,
+            "bb_middle": 374.31,
+            "bb_lower": 348.65,
+            "sma_50": 366.12
+          },
+          {
+            "date": "2026-10-28",
+            "open": 410.16,
+            "high": 410.85,
+            "low": 397.18,
+            "close": 404.22,
+            "volume": 35598800,
+            "is_anomaly": false,
+            "bb_upper": 403.99,
+            "bb_middle": 376.78,
+            "bb_lower": 349.56,
+            "sma_50": 367.47
+          },
+          {
+            "date": "2026-10-29",
+            "open": 405.63,
+            "high": 406.98,
+            "low": 400.5,
+            "close": 403.3,
+            "volume": 22858300,
+            "is_anomaly": false,
+            "bb_upper": 406.72,
+            "bb_middle": 379.24,
+            "bb_lower": 351.75,
+            "sma_50": 368.51
+          },
+          {
+            "date": "2026-10-30",
+            "open": 393.22,
+            "high": 404.22,
+            "low": 387.52,
+            "close": 399.81,
+            "volume": 41737200,
+            "is_anomaly": false,
+            "bb_upper": 409.33,
+            "bb_middle": 380.7,
+            "bb_lower": 352.07,
+            "sma_50": 369.6
+          },
+          {
+            "date": "2026-11-02",
+            "open": 404.66,
+            "high": 414.23,
+            "low": 397.61,
+            "close": 403.82,
+            "volume": 43141100,
+            "is_anomaly": false,
+            "bb_upper": 412.36,
+            "bb_middle": 381.95,
+            "bb_lower": 351.54,
+            "sma_50": 370.42
+          },
+          {
+            "date": "2026-11-03",
+            "open": 406.25,
+            "high": 406.5,
+            "low": 396.53,
+            "close": 398.5,
+            "volume": 26647700,
+            "is_anomaly": false,
+            "bb_upper": 414.13,
+            "bb_middle": 382.84,
+            "bb_lower": 351.56,
+            "sma_50": 371.41
+          },
+          {
+            "date": "2026-11-04",
+            "open": 379.8,
+            "high": 392.04,
+            "low": 375.5,
+            "close": 385.19,
+            "volume": 47805800,
+            "is_anomaly": false,
+            "bb_upper": 414.42,
+            "bb_middle": 383.21,
+            "bb_lower": 352.0,
+            "sma_50": 372.11
+          },
+          {
+            "date": "2026-11-05",
+            "open": 374.12,
+            "high": 374.3,
+            "low": 338.15,
+            "close": 343.69,
+            "volume": 79675500,
+            "is_anomaly": true,
+            "bb_upper": 417.4,
+            "bb_middle": 381.65,
+            "bb_lower": 345.89,
+            "sma_50": 372.07
+          },
+          {
+            "date": "2026-11-06",
+            "open": 348.92,
+            "high": 363.84,
+            "low": 347.6,
+            "close": 358.22,
+            "volume": 36730400,
+            "is_anomaly": false,
+            "bb_upper": 417.67,
+            "bb_middle": 380.42,
+            "bb_lower": 343.18,
+            "sma_50": 372.14
+          },
+          {
+            "date": "2026-11-09",
+            "open": 360.25,
+            "high": 382.2,
+            "low": 360.02,
+            "close": 378.05,
+            "volume": 36341400,
+            "is_anomaly": false,
+            "bb_upper": 417.67,
+            "bb_middle": 380.42,
+            "bb_lower": 343.18,
+            "sma_50": 372.72
+          },
+          {
+            "date": "2026-11-10",
+            "open": 370.85,
+            "high": 380.0,
+            "low": 370.4,
+            "close": 379.78,
+            "volume": 23999800,
+            "is_anomaly": false,
+            "bb_upper": 417.82,
+            "bb_middle": 380.65,
+            "bb_lower": 343.48,
+            "sma_50": 372.96
+          },
+          {
+            "date": "2026-11-11",
+            "open": 386.58,
+            "high": 395.43,
+            "low": 386.35,
+            "close": 390.84,
+            "volume": 27872700,
+            "is_anomaly": false,
+            "bb_upper": 418.7,
+            "bb_middle": 381.83,
+            "bb_lower": 344.97,
+            "sma_50": 373.65
+          },
+          {
+            "date": "2026-11-12",
+            "open": 386.36,
+            "high": 401.22,
+            "low": 385.2,
+            "close": 397.45,
+            "volume": 29186300,
+            "is_anomaly": false,
+            "bb_upper": 419.89,
+            "bb_middle": 383.59,
+            "bb_lower": 347.28,
+            "sma_50": 374.46
+          },
+          {
+            "date": "2026-11-13",
+            "open": 401.68,
+            "high": 404.4,
+            "low": 385.83,
+            "close": 390.22,
+            "volume": 32268400,
+            "is_anomaly": false,
+            "bb_upper": 419.11,
+            "bb_middle": 385.36,
+            "bb_lower": 351.61,
+            "sma_50": 374.74
+          }
+        ],
+        "time_machine_actual_return_pct": null,
+        "max_drawdown_5d_pct": null,
+        "regime": {
+          "state": 1,
+          "label": "HIGH_VOLATILITY",
+          "prob_high_vol": 0.99,
+          "state_probabilities": {},
+          "kelly_scale_factor": 1.15
+        },
+        "garch_volatility_forecast_pct": 49.87
+      }
+    },
+    {
+      "node": "news",
+      "data": {
+        "ticker": "TSLA",
+        "aggregate_sentiment_score": -0.2,
+        "ema_smoothed_sentiment": 0.013,
+        "headlines": [
+          {
+            "title": "Tesla (TSLA) Forms Special Committee To Review Possible All Stock Merger - Yahoo Finance",
+            "label": "neutral",
+            "score": 0.936,
+            "published_at": "Wed, 11 Nov 2026 18:11:31 GMT",
+            "net_polarity": 0.006,
+            "heuristic_routing": "FINBERT_DIRECT",
+            "lm_matches": {
+              "pos": [],
+              "neg": []
+            }
+          },
+          {
+            "title": "SpaceX and Tesla Talks on Record Merger Are Said to Progress - Yahoo Finance",
+            "label": "neutral",
+            "score": 0.918,
+            "published_at": "Thu, 12 Nov 2026 20:22:35 GMT",
+            "net_polarity": 0.036,
+            "heuristic_routing": "FINBERT_DIRECT",
+            "lm_matches": {
+              "pos": [
+                "record"
+              ],
+              "neg": []
+            }
+          },
+          {
+            "title": "Tesla (TSLA) Stock Gets Fair Value Bump As Analysts Split On AI And SpaceX - Yahoo Finance",
+            "label": "positive",
+            "score": 0.895,
+            "published_at": "Sun, 25 Oct 2026 07:00:00 GMT",
+            "net_polarity": 0.83,
+            "heuristic_routing": "FINBERT_DIRECT",
+            "lm_matches": {
+              "pos": [],
+              "neg": []
+            }
+          },
+          {
+            "title": "Why Tesla (TSLA) Stock Is Trading Up Today - Yahoo Finance",
+            "label": "neutral",
+            "score": 0.616,
+            "published_at": "Fri, 02 Oct 2026 07:00:00 GMT",
+            "net_polarity": 0.208,
+            "heuristic_routing": "DAMPENED_AMBIGUOUS",
+            "lm_matches": {
+              "pos": [],
+              "neg": []
+            }
+          },
+          {
+            "title": "TSLA Stock Trades Flat After Hours Following Drop In Q3 Revenue, Earnings, And Heavy AI Spending - Yahoo Finance",
+            "label": "negative",
+            "score": 0.971,
+            "published_at": "Wed, 21 Oct 2026 07:00:00 GMT",
+            "net_polarity": -0.962,
+            "heuristic_routing": "FINBERT_DIRECT",
+            "lm_matches": {
+              "pos": [],
+              "neg": []
+            }
+          },
+          {
+            "title": "TSLA Stock Reverses After-Hours Gains As Tesla Cuts Full-Year Capex Guidance To $20B, Musk Tempers Optimus Timeline - Yahoo Finance",
+            "label": "negative",
+            "score": 0.937,
+            "published_at": "Wed, 21 Oct 2026 07:00:00 GMT",
+            "net_polarity": -0.914,
+            "heuristic_routing": "FINBERT_DIRECT",
+            "lm_matches": {
+              "pos": [
+                "gains"
+              ],
+              "neg": []
+            }
+          },
+          {
+            "title": "Tesla (TSLA) Stock Is Up, What You Need To Know - Yahoo Finance",
+            "label": "neutral",
+            "score": 0.851,
+            "published_at": "Wed, 19 Aug 2026 07:00:00 GMT",
+            "net_polarity": 0.104,
+            "heuristic_routing": "FINBERT_DIRECT",
+            "lm_matches": {
+              "pos": [],
+              "neg": []
+            }
+          },
+          {
+            "title": "TSLA Stock Slips Overnight As Safety Regulator Scrutinizes Cybercab \u2014 Retail Fumes Over Event Blackout - Yahoo Finance",
+            "label": "negative",
+            "score": 0.941,
+            "published_at": "Thu, 03 Sep 2026 07:00:00 GMT",
+            "net_polarity": -0.926,
+            "heuristic_routing": "FINBERT_DIRECT",
+            "lm_matches": {
+              "pos": [],
+              "neg": []
+            }
+          }
+        ],
+        "news_available": true,
+        "aspect_sentiment": {
+          "risk_solvency": 0.0,
+          "liquidity_cashflow": 0.0,
+          "margin_health": 0.0
+        },
+        "composite_aspect_score": 0.0,
+        "tone_shift_index": 1.35,
+        "tone_shift_regime": "RAPID_IMPROVEMENT",
+        "aspect_relevance": {
+          "risk_solvency": 0,
+          "liquidity_cashflow": 0,
+          "margin_health": 0
+        }
+      }
+    },
+    {
+      "node": "bull",
+      "data": {
+        "bull_thesis": "\u2022 Trend regime is BULLISH with 5-day momentum at 8.93%, supporting an active Half-Kelly capacity allocation of 4.5%.\n\u2022 RSI-14 sits at 49.53 with contained 95% daily VaR of -5.08%, providing an asymmetrical entry window against 49.76% annualized vol.\n\u2022 Aggregate news sentiment reads -0.2 with 1 price/volume anomalies reflecting institutional accumulation."
+      }
+    },
+    {
+      "node": "bear",
+      "data": {
+        "bear_thesis": "\u2022 Tail risk is severe: 95% daily VaR of -5.08% with 49.76% annualized vol exposes any 4.5% allocation to fat-tail liquidation.\n\u2022 14-day RSI sits at 49.53; any momentum stalling will trigger abrupt mean-reversion and trap retail longs chasing 390.22.\n\u2022 1 price/volume anomalies in 10 sessions combined with headline sentiment (-0.2) flag institutional distribution risk."
+      }
+    },
+    {
+      "node": "cro",
+      "data": {
+        "action": "LONG",
+        "verdict": "LONG",
+        "raw_confidence": 84,
+        "confidence": 92,
+        "recommended_allocation_pct": 5.17,
+        "stop_loss_pct": 9.31,
+        "kill_switch_reason": "Breakdown below 20-day SMA or ATR trailing stop (9.31%).",
+        "verdict_summary": "Institutional LONG execution approved: Trend structure is constructive (SMA20: BULLISH, Close: 390.22, RSI: 49.53) with news sentiment -0.2. Half-Kelly capacity allocated at 5.17% with stop loss at 9.31%.",
+        "rolling_accuracy_telemetry": {
+          "rolling_hit_rate_pct": 65.0,
+          "resolved_count": 0,
+          "confidence_multiplier": 1.0,
+          "allocation_multiplier": 1.0,
+          "status": "CALIBRATION_NEUTRAL (Insufficient sample)",
+          "recent_history": [],
+          "raw_confidence": 84,
+          "calibrated_confidence": 84
+        },
+        "bayesian_calibration": {
+          "raw_ai_confidence": 84,
+          "calibrated_confidence": 92,
+          "posterior_mean_accuracy_pct": 87.1,
+          "credible_lower_bound_pct": 64.3,
+          "credible_upper_bound_pct": 99.2,
+          "bayesian_allocation_multiplier": 1.2,
+          "alpha": 6.77,
+          "beta": 1.0,
+          "sample_updates": 7,
+          "forgetting_factor_lambda": 0.85,
+          "temperature_scaling": {
+            "raw_probability": 0.84,
+            "temperature": 0.72,
+            "raw_logit": 1.6582,
+            "scaled_logit": 2.3031,
+            "temperature_scaled_probability": 0.9091
+          },
+          "regime_gating": {
+            "regime_name": "LOW_VOL_TRENDING",
+            "regime_status": "CLEAN_TRENDING_PROMOTED",
+            "is_suppressed": false,
+            "suppression_reason": null,
+            "regime_scale_factor": 1.02,
+            "raw_input_confidence": 90,
+            "gated_confidence": 92,
+            "cleared_high_confidence": true,
+            "p_trending": 0.424,
+            "p_panic": 0.265,
+            "p_choppy": 0.311
+          }
+        },
+        "temperature_scaling": {
+          "raw_probability": 0.84,
+          "temperature": 0.72,
+          "raw_logit": 1.6582,
+          "scaled_logit": 2.3031,
+          "temperature_scaled_probability": 0.9091
+        },
+        "regime_gating": {
+          "regime_name": "LOW_VOL_TRENDING",
+          "regime_status": "CLEAN_TRENDING_PROMOTED",
+          "is_suppressed": false,
+          "suppression_reason": null,
+          "regime_scale_factor": 1.02,
+          "raw_input_confidence": 90,
+          "gated_confidence": 92,
+          "cleared_high_confidence": true,
+          "p_trending": 0.424,
+          "p_panic": 0.265,
+          "p_choppy": 0.311
+        },
+        "top_drivers": {
+          "positive": [
+            {
+              "feature": "close_gt_sma20",
+              "value": true,
+              "impact": "+28.4%"
+            },
+            {
+              "feature": "sentiment_score",
+              "value": -0.2,
+              "impact": "+22.1%"
+            },
+            {
+              "feature": "momentum_5d",
+              "value": 8.93,
+              "impact": "+14.2%"
+            }
+          ],
+          "negative": [
+            {
+              "feature": "daily_VaR_95",
+              "value": -5.08,
+              "impact": "-31.2%"
+            },
+            {
+              "feature": "volatility",
+              "value": 49.76,
+              "impact": "-24.5%"
+            },
+            {
+              "feature": "isolation_forest_anomalies",
+              "value": 1,
+              "impact": "-20.8%"
+            }
+          ]
+        },
+        "calibrated_probabilities": {
+          "DOWN": 0.12,
+          "FLAT": 0.22,
+          "UP": 0.66
+        },
+        "conformal_prediction_set": [
+          "LONG"
+        ],
+        "confidence_breakdown": {
+          "raw_model_confidence": 84,
+          "bayesian_expected_accuracy_pct": 87.1,
+          "credible_interval_90": [
+            64.3,
+            99.2
+          ],
+          "bayesian_allocation_multiplier": 1.2,
+          "rolling_accuracy_multiplier": 1.0,
+          "rolling_hit_rate_pct": 65.0,
+          "agreement_penalty": 0.0,
+          "anomaly_penalty": 3.5,
+          "regime_penalty": 5.0,
+          "regime_scale_factor": 1.02,
+          "is_regime_suppressed": false,
+          "forgetting_factor_lambda": 0.85,
+          "temperature_scaled_prob": 0.9091,
+          "calibrated_confidence": 92
+        },
+        "hmm_regime": {
+          "active_state": 0,
+          "regime_name": "LOW_VOL_TRENDING",
+          "probabilities": {
+            "P_Trending": 0.424,
+            "P_Panic": 0.265,
+            "P_Choppy": 0.311
+          },
+          "regime_vol_annual_pct": 45.26,
+          "volatility_multiplier": 0.9,
+          "kelly_scale_factor": 1.15,
+          "stop_loss_multiplier": 1.0,
+          "state_parameters": {
+            "trending_annual_vol": 33.08,
+            "panic_annual_vol": 72.16,
+            "choppy_annual_vol": 38.96
+          }
+        },
+        "temporal_anomaly": {
+          "is_temporal_anomaly": false,
+          "temporal_anomaly_score": 0.401,
+          "calibrated_anomaly_confidence": 0.0154,
+          "reconstruction_error": 0.6655,
+          "threshold": 1.1061,
+          "iqr": 0.2725,
+          "feature_breakdown": {
+            "return_1d": 0.2942,
+            "volume_zscore": 0.0448,
+            "parkinson_spread": 0.8219,
+            "rsi_deviation": 0.0404,
+            "macd_ratio": 0.0423
+          },
+          "recent_10d_temporal_count": 0,
+          "temperature_scaling": {
+            "reconstruction_error": 0.6655,
+            "threshold": 1.1061,
+            "iqr": 0.2725,
+            "normalized_excess_logit": -2.9103,
+            "temperature": 0.7,
+            "calibrated_anomaly_probability": 0.0154,
+            "cleared_high_confidence": false
+          }
+        },
+        "aspect_sentiment": {
+          "risk_solvency": 0.0,
+          "liquidity_cashflow": 0.0,
+          "margin_health": 0.0
+        },
+        "tone_shift_index": 1.35,
+        "tone_shift_regime": "RAPID_IMPROVEMENT"
       }
     }
   ]

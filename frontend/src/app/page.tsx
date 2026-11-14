@@ -11,6 +11,7 @@ import {
   Activity,
   CheckCircle2,
   PieChart,
+  Flame,
   Clock,
   Play,
   RotateCcw,
@@ -577,7 +578,14 @@ export default function TerminalPage() {
             >
               <PieChart className="h-3.5 w-3.5 text-[#06B6D4]" />
               <span>Portfolio Risk</span>
-              <span className="px-1 py-0.2 rounded text-[9px] bg-[#06B6D4]/20 text-[#06B6D4] font-bold">
+            </Link>
+            <Link
+              href="/stress-test"
+              className="flex items-center gap-1 px-2.5 py-1 rounded text-[#94A3B8] hover:text-white hover:bg-[#12141C] transition-colors"
+            >
+              <Flame className="h-3.5 w-3.5 text-[#F43F5E]" />
+              <span>Stress Testing</span>
+              <span className="px-1 py-0.2 rounded text-[9px] bg-[#F43F5E]/20 text-[#F43F5E] font-bold">
                 NEW
               </span>
             </Link>

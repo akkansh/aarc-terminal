@@ -27,6 +27,7 @@ import {
   X,
   Lock,
   Sparkles,
+  Flame,
 } from 'lucide-react';
 
 interface HoldingEnriched {
@@ -397,7 +398,7 @@ export default function PortfolioRiskPage() {
         </div>
 
         {/* NAVIGATION PILLS */}
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <Link
             href="/"
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono bg-[#12141C] border border-[#1E2230] text-[#94A3B8] hover:text-white hover:border-[#334155] transition-colors"
@@ -410,6 +411,17 @@ export default function PortfolioRiskPage() {
             <PieChart className="h-3.5 w-3.5" />
             <span>Portfolio Risk Dashboard</span>
           </div>
+
+          <Link
+            href="/stress-test"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono bg-[#12141C] border border-[#1E2230] text-[#94A3B8] hover:text-white hover:border-[#334155] transition-colors"
+          >
+            <Flame className="h-3.5 w-3.5 text-[#F43F5E]" />
+            <span>Stress Testing</span>
+            <span className="px-1 py-0.2 rounded text-[9px] bg-[#F43F5E]/20 text-[#F43F5E] font-bold">
+              NEW
+            </span>
+          </Link>
         </div>
       </header>
 
