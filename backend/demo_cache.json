@@ -882,21 +882,9 @@
       "node": "news",
       "data": {
         "ticker": "RELIANCE.NS",
-        "aggregate_sentiment_score": 0.37,
-        "ema_smoothed_sentiment": 0.17,
+        "aggregate_sentiment_score": 0.36,
+        "ema_smoothed_sentiment": 0.325,
         "headlines": [
-          {
-            "title": "Reliance Industries Limited (RELIANCE.NS) stock price, news, quote and history - Yahoo Finance Australia",
-            "label": "neutral",
-            "score": 0.951,
-            "published_at": "Thu, 12 Nov 2026 18:57:34 GMT",
-            "net_polarity": -0.003,
-            "heuristic_routing": "FINBERT_DIRECT",
-            "lm_matches": {
-              "pos": [],
-              "neg": []
-            }
-          },
           {
             "title": "What\u2019s left of Jio Financial when you strip away Reliance? - The Ken",
             "label": "neutral",
@@ -910,11 +898,11 @@
             }
           },
           {
-            "title": "Jio Financial Share Price: Jio Platforms Link, Q2, Key Levels - Univest",
-            "label": "neutral",
-            "score": 0.928,
-            "published_at": "Tue, 27 Oct 2026 07:00:00 GMT",
-            "net_polarity": 0.042,
+            "title": "Reliance Industries (NSEI:RELIANCE) Stock Fair Value Edges Higher After Analyst Fine Tuning - Yahoo Finance",
+            "label": "positive",
+            "score": 0.941,
+            "published_at": "Wed, 17 Jun 2026 07:00:00 GMT",
+            "net_polarity": 0.908,
             "heuristic_routing": "FINBERT_DIRECT",
             "lm_matches": {
               "pos": [],
@@ -922,11 +910,11 @@
             }
           },
           {
-            "title": "Reliance Industries (NSEI:RELIANCE) Stock Fair Value Edges Higher After Analyst Fine Tuning - Yahoo Finance",
-            "label": "positive",
-            "score": 0.941,
-            "published_at": "Wed, 17 Jun 2026 07:00:00 GMT",
-            "net_polarity": 0.908,
+            "title": "Jio Financial Share Price: Jio Platforms Link, Q2, Key Levels - Univest",
+            "label": "neutral",
+            "score": 0.928,
+            "published_at": "Tue, 27 Oct 2026 07:00:00 GMT",
+            "net_polarity": 0.042,
             "heuristic_routing": "FINBERT_DIRECT",
             "lm_matches": {
               "pos": [],
@@ -974,11 +962,23 @@
             }
           },
           {
-            "title": "EXCLUSIVE: Ambani's Reliance Jio considers 2.5% public offering in 2026 India IPO, sources say - Reuters",
+            "title": "Reliance Home Finance Ltd. Share Price Today | Reliance Home Fin Live NSE/BSE - Value Research",
             "label": "neutral",
-            "score": 0.899,
-            "published_at": "Fri, 09 Jan 2026 08:00:00 GMT",
-            "net_polarity": 0.077,
+            "score": 0.938,
+            "published_at": "Fri, 25 Mar 2022 10:34:03 GMT",
+            "net_polarity": -0.005,
+            "heuristic_routing": "FINBERT_DIRECT",
+            "lm_matches": {
+              "pos": [],
+              "neg": []
+            }
+          },
+          {
+            "title": "Reliance Industries Limited (RELIANCE.NS) stock price, news, quote and history - Yahoo Finance Singapore",
+            "label": "neutral",
+            "score": 0.949,
+            "published_at": "Sat, 20 May 2017 02:48:52 GMT",
+            "net_polarity": -0.006,
             "heuristic_routing": "FINBERT_DIRECT",
             "lm_matches": {
               "pos": [],
@@ -993,8 +993,8 @@
           "margin_health": 0.0
         },
         "composite_aspect_score": 0.0,
-        "tone_shift_index": -1.48,
-        "tone_shift_regime": "SHARP_DETERIORATION",
+        "tone_shift_index": -0.23,
+        "tone_shift_regime": "STABLE",
         "aspect_relevance": {
           "risk_solvency": 0,
           "liquidity_cashflow": 0,
@@ -1005,13 +1005,13 @@
     {
       "node": "bull",
       "data": {
-        "bull_thesis": "\u2022 Trend regime is BULLISH with 5-day momentum at 2.0%, supporting an active Half-Kelly capacity allocation of 9.54%.\n\u2022 RSI-14 sits at 80.89 with contained 95% daily VaR of -2.49%, providing an asymmetrical entry window against 26.2% annualized vol.\n\u2022 Aggregate news sentiment reads 0.37 with 1 price/volume anomalies reflecting institutional accumulation."
+        "bull_thesis": "\u2022 Trend regime is BULLISH with 5-day momentum at 2.0%, supporting an active Half-Kelly capacity allocation of 9.54%.\n\u2022 RSI-14 sits at 80.89 with contained 95% daily VaR of -2.49%, providing an asymmetrical entry window against 26.2% annualized vol.\n\u2022 Aggregate news sentiment reads 0.36 with 1 price/volume anomalies reflecting institutional accumulation."
       }
     },
     {
       "node": "bear",
       "data": {
-        "bear_thesis": "\u2022 Tail risk is severe: 95% daily VaR of -2.49% with 26.2% annualized vol exposes any 9.54% allocation to fat-tail liquidation.\n\u2022 14-day RSI sits at 80.89; any momentum stalling will trigger abrupt mean-reversion and trap retail longs chasing 1339.7.\n\u2022 1 price/volume anomalies in 10 sessions combined with headline sentiment (0.37) flag institutional distribution risk."
+        "bear_thesis": "\u2022 Tail risk is severe: 95% daily VaR of -2.49% with 26.2% annualized vol exposes any 9.54% allocation to fat-tail liquidation.\n\u2022 14-day RSI sits at 80.89; any momentum stalling will trigger abrupt mean-reversion and trap retail longs chasing 1339.7.\n\u2022 1 price/volume anomalies in 10 sessions combined with headline sentiment (0.36) flag institutional distribution risk."
       }
     },
     {
@@ -1020,7 +1020,7 @@
         "action": "SHORT",
         "verdict": "SHORT",
         "raw_confidence": 88,
-        "confidence": 94,
+        "confidence": 96,
         "recommended_allocation_pct": 10.97,
         "stop_loss_pct": 4.94,
         "kill_switch_reason": "Continuation of parabolic squeeze above 2x ATR trailing stop (4.94%).",
@@ -1037,14 +1037,14 @@
         },
         "bayesian_calibration": {
           "raw_ai_confidence": 88,
-          "calibrated_confidence": 94,
-          "posterior_mean_accuracy_pct": 76.1,
-          "credible_lower_bound_pct": 51.0,
-          "credible_upper_bound_pct": 94.5,
-          "bayesian_allocation_multiplier": 1.0,
-          "alpha": 6.91,
-          "beta": 2.17,
-          "sample_updates": 2,
+          "calibrated_confidence": 96,
+          "posterior_mean_accuracy_pct": 87.1,
+          "credible_lower_bound_pct": 64.3,
+          "credible_upper_bound_pct": 99.2,
+          "bayesian_allocation_multiplier": 1.2,
+          "alpha": 6.77,
+          "beta": 1.0,
+          "sample_updates": 7,
           "forgetting_factor_lambda": 0.85,
           "temperature_scaling": {
             "raw_probability": 0.88,
@@ -1059,8 +1059,8 @@
             "is_suppressed": false,
             "suppression_reason": null,
             "regime_scale_factor": 1.08,
-            "raw_input_confidence": 87,
-            "gated_confidence": 94,
+            "raw_input_confidence": 92,
+            "gated_confidence": 96,
             "cleared_high_confidence": true,
             "p_trending": 0.861,
             "p_panic": 0.02,
@@ -1080,8 +1080,8 @@
           "is_suppressed": false,
           "suppression_reason": null,
           "regime_scale_factor": 1.08,
-          "raw_input_confidence": 87,
-          "gated_confidence": 94,
+          "raw_input_confidence": 92,
+          "gated_confidence": 96,
           "cleared_high_confidence": true,
           "p_trending": 0.861,
           "p_panic": 0.02,
@@ -1096,7 +1096,7 @@
             },
             {
               "feature": "sentiment_score",
-              "value": 0.37,
+              "value": 0.36,
               "impact": "+22.1%"
             },
             {
@@ -1133,12 +1133,12 @@
         ],
         "confidence_breakdown": {
           "raw_model_confidence": 88,
-          "bayesian_expected_accuracy_pct": 76.1,
+          "bayesian_expected_accuracy_pct": 87.1,
           "credible_interval_90": [
-            51.0,
-            94.5
+            64.3,
+            99.2
           ],
-          "bayesian_allocation_multiplier": 1.0,
+          "bayesian_allocation_multiplier": 1.2,
           "rolling_accuracy_multiplier": 1.0,
           "rolling_hit_rate_pct": 65.0,
           "agreement_penalty": 0.0,
@@ -1148,7 +1148,7 @@
           "is_regime_suppressed": false,
           "forgetting_factor_lambda": 0.85,
           "temperature_scaled_prob": 0.9409,
-          "calibrated_confidence": 94
+          "calibrated_confidence": 96
         },
         "hmm_regime": {
           "active_state": 0,
@@ -1198,8 +1198,8 @@
           "liquidity_cashflow": 0.0,
           "margin_health": 0.0
         },
-        "tone_shift_index": -1.48,
-        "tone_shift_regime": "SHARP_DETERIORATION"
+        "tone_shift_index": -0.23,
+        "tone_shift_regime": "STABLE"
       }
     }
   ],

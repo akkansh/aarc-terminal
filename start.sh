@@ -14,7 +14,7 @@ BACKEND_PID=$!
 
 echo "Starting AARC Frontend on http://localhost:3000..."
 cd "$DIR/frontend"
-npm run start -- -p 3000 &
+npm run start -- -H 0.0.0.0 &
 FRONTEND_PID=$!
 
 trap "kill $BACKEND_PID $FRONTEND_PID 2>/dev/null || true; exit" SIGINT SIGTERM EXIT

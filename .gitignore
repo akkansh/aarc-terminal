@@ -11,3 +11,4 @@ backend/.venv/
 backend/data_cache/
 .pytest_cache/
 .DS_Store
+backend/broker_session.json

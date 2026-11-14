@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 # Ensure .env is loaded before anything else
 ROOT_ENV_PATH = Path(__file__).resolve().parent.parent / ".env"
 load_dotenv(dotenv_path=ROOT_ENV_PATH, override=True)
-from fastapi import FastAPI, Query, HTTPException, Body, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, Query, HTTPException, Body, WebSocket, WebSocketDisconnect, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from sse_starlette.sse import EventSourceResponse
@@ -18,6 +18,7 @@ from backend.tools.quant_math import analyze_ticker_quant
 from backend.tools.sentiment_nlp import analyze_ticker_sentiment
 from backend.calibration.bayesian_calibrator import BetaBinomialConfidenceCalibrator
 from backend.data.news_stream import NewsStreamBroker
+from backend.portfolio.router import portfolio_router
 import yfinance as yf
 
 app = FastAPI(
@@ -34,6 +35,26 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Register Portfolio Risk & Broker Gateway Router
+app.include_router(portfolio_router, prefix="/api/portfolio", tags=["portfolio"])
+
+
+@app.get("/callback")
+def root_oauth_callback(
+    request: Request,
+    request_token: Optional[str] = Query(default=None),
+    status_param: Optional[str] = Query(default=None, alias="status"),
+    action: Optional[str] = Query(default=None),
+):
+    """Fallback root callback endpoint matching redirect URIs set to http://localhost:8000/callback."""
+    from backend.portfolio.router import direct_backend_oauth_callback
+    return direct_backend_oauth_callback(
+        request=request,
+        request_token=request_token,
+        status_param=status_param,
+        action=action,
+    )
 
 CACHE_FILE = Path(__file__).resolve().parent / "demo_cache.json"
 

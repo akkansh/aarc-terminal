@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
 import {
   TrendingUp,
   TrendingDown,
@@ -9,6 +10,7 @@ import {
   AlertTriangle,
   Activity,
   CheckCircle2,
+  PieChart,
   Clock,
   Play,
   RotateCcw,
@@ -562,7 +564,25 @@ export default function TerminalPage() {
           </div>
         </div>
 
-        <div className="flex items-center gap-3 text-xs mono-nums">
+        <div className="flex flex-wrap items-center gap-3 text-xs mono-nums">
+          {/* NAVIGATION TABS */}
+          <div className="flex items-center gap-1.5 bg-[#090A0F] border border-[#1E2230] rounded-lg p-1">
+            <div className="flex items-center gap-1 px-2.5 py-1 rounded bg-[#10B981]/15 border border-[#10B981]/40 text-[#10B981] font-semibold">
+              <Activity className="h-3.5 w-3.5" />
+              <span>Risk Committee</span>
+            </div>
+            <Link
+              href="/portfolio"
+              className="flex items-center gap-1 px-2.5 py-1 rounded text-[#94A3B8] hover:text-white hover:bg-[#12141C] transition-colors"
+            >
+              <PieChart className="h-3.5 w-3.5 text-[#06B6D4]" />
+              <span>Portfolio Risk</span>
+              <span className="px-1 py-0.2 rounded text-[9px] bg-[#06B6D4]/20 text-[#06B6D4] font-bold">
+                NEW
+              </span>
+            </Link>
+          </div>
+
           <div className="flex items-center gap-2 bg-[#12141C] border border-[#1E2230] px-3 py-1.5 rounded-md">
             <span className="h-2 w-2 rounded-full bg-[#10B981] animate-pulse"></span>
             <span className="text-[#94A3B8]">MODEL:</span>
